@@ -27,7 +27,7 @@
                       "location": {
                         "type": "HttpServerLocation",
                         "relativeUrl": {
-                          "value": "@{concat('/RobsonCDToledo/torre-de-controle/main/dados/origem/', item())}\n",
+                          "value": "@{concat(pipeline().parameters.url_base, '/', item())}",
                           "type": "Expression"
                         }
                       }
@@ -94,7 +94,7 @@
     "parameters": {
       "url_base": {
         "type": "string",
-        "defaultValue": "https://github.com/RobsonCDToledo/torre-de-controle/tree/main/dados/origem"
+        "defaultValue": "/RobsonCDToledo/torre-de-controle/main/dados/origem"
       },
       "arquivos": {
         "type": "array",
