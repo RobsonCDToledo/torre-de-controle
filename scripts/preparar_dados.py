@@ -10,6 +10,10 @@ Duas responsabilidades, deliberadamente pequenas:
 Nenhuma transformação de conteúdo acontece aqui. Limpeza, tipagem e agregação pertencem
 à camada silver, dentro do Fabric, onde ficam visíveis e versionadas.
 
+Por isso a conversão lê todas as colunas como texto: inferir tipo já é decidir sobre o
+conteúdo, e a decisão seria da biblioteca, não do projeto. O Parquet resultante é um
+recipiente do que o CSV continha, literalmente.
+
 Uso:
     python scripts/preparar_dados.py
 """
@@ -62,7 +66,11 @@ def converter_geolocalizacao() -> None:
         return
 
     print(f"  lendo {GEO_CSV} ({mb(csv):.1f} MB)...")
-    df = pd.read_csv(csv)
+    # dtype=str desliga a inferencia de tipo do pandas. Sem isso, o prefixo de CEP
+    # "01037" e lido como inteiro 1037, e 24,6% do arquivo perde o zero a esquerda —
+    # o que quebra a juncao com clientes e vendedores tres camadas adiante.
+    # A tipagem pertence a silver; aqui so muda o formato do arquivo.
+    df = pd.read_csv(csv, dtype=str)
     df.to_parquet(parquet, engine="pyarrow", compression="snappy", index=False)
 
     reducao = (1 - mb(parquet) / mb(csv)) * 100
