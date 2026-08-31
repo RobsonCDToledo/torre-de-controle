@@ -21,8 +21,9 @@ from pathlib import Path
 
 try:
     import pandas as pd
+    import pyarrow.parquet as pq
 except ImportError:
-    sys.exit("Falta o pandas. Instale com: pip install pandas pyarrow")
+    sys.exit("Falta o pandas ou o pyarrow. Instale com: pip install pandas pyarrow")
 
 ORIGEM = Path(__file__).resolve().parent.parent / "dados" / "origem"
 
@@ -88,7 +89,9 @@ def validar() -> bool:
 
         try:
             if nome.endswith(".parquet"):
-                linhas = len(pd.read_parquet(caminho, columns=[]))
+                # num_rows vem do rodape do arquivo: contagem exata, sem carregar os dados.
+                # Ler com columns=[] devolve zero linhas no pandas 3, mascarando arquivo vazio.
+                linhas = pq.ParquetFile(caminho).metadata.num_rows
             else:
                 linhas = sum(1 for _ in caminho.open(encoding="utf-8")) - 1
         except Exception as exc:  # noqa: BLE001 - queremos reportar, nao interromper
