@@ -1,0 +1,27 @@
+# O CSV de geolocalização não vai para o Git — apenas a versão Parquet.
+# Ver dados/origem/README.md para o porquê.
+dados/origem/olist_geolocation_dataset.csv
+
+# Download bruto do Kaggle
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Power BI
+*.pbix
+.pbi/
+**/.pbi/localSettings.json
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
+
+# Segredos — nunca commitar
+.env
+kaggle.json
+*.pbitool.json
