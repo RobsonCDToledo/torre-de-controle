@@ -126,7 +126,8 @@ torre-de-controle/
 │   ├── 01-como-replicar.md        passo a passo de recursos e alternativas
 │   ├── dicionario-de-dados.md     catálogo de tabelas, campos e medidas
 │   └── decisoes/                  registros de decisão de arquitetura (ADR)
-├── fabric/                sincronizado com o workspace via integração Git
+├── fabric/                espelha a hierarquia de pastas do workspace via integração Git
+│   ├── lakehouses/        lh_bronze, lh_silver e lh_gold
 │   ├── pipelines/         definição do pipeline de ingestão
 │   ├── dataflows/         Dataflow Gen2 (bronze → silver)
 │   ├── notebooks/         gold e machine learning
