@@ -1,0 +1,115 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "items": {
+            "value": "@pipeline().parameters.arquivos",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "BinarySource",
+                  "formatSettings": {
+                    "type": "BinaryReadSettings"
+                  },
+                  "storeSettings": {
+                    "type": "HttpReadSettings",
+                    "requestMethod": "GET"
+                  },
+                  "datasetSettings": {
+                    "type": "Binary",
+                    "typeProperties": {
+                      "location": {
+                        "type": "HttpServerLocation",
+                        "relativeUrl": {
+                          "value": "@{concat('/RobsonCDToledo/torre-de-controle/main/dados/origem/', item())}\n",
+                          "type": "Expression"
+                        }
+                      }
+                    },
+                    "externalReferences": {
+                      "connection": "ed84201d-3148-4c73-ba5f-d321305d6632"
+                    },
+                    "annotations": []
+                  }
+                },
+                "sink": {
+                  "type": "BinarySink",
+                  "storeSettings": {
+                    "type": "LakehouseWriteSettings"
+                  },
+                  "datasetSettings": {
+                    "type": "Binary",
+                    "typeProperties": {
+                      "location": {
+                        "type": "LakehouseLocation",
+                        "folderPath": {
+                          "value": "@{concat('olist/', formatDateTime(pipeline().TriggerTime, 'yyyy-MM-dd'))}",
+                          "type": "Expression"
+                        },
+                        "fileName": {
+                          "value": "@item()",
+                          "type": "Expression"
+                        }
+                      }
+                    },
+                    "linkedService": {
+                      "name": "lh_bronze",
+                      "properties": {
+                        "type": "Lakehouse",
+                        "typeProperties": {
+                          "artifactId": "b9a954bf-6de3-82d0-43b0-c5775e8ea3ef",
+                          "workspaceId": "00000000-0000-0000-0000-000000000000",
+                          "rootFolder": "Files"
+                        },
+                        "annotations": []
+                      }
+                    },
+                    "annotations": []
+                  }
+                },
+                "enableStaging": false
+              },
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureInput": false,
+                "secureOutput": false
+              },
+              "name": "Copiar_Dados",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "Para_cada_arquivo",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "url_base": {
+        "type": "string",
+        "defaultValue": "https://github.com/RobsonCDToledo/torre-de-controle/tree/main/dados/origem"
+      },
+      "arquivos": {
+        "type": "array",
+        "defaultValue": [
+          "olist_orders_dataset.csv",
+          "olist_order_items_dataset.csv",
+          "olist_order_reviews_dataset.csv",
+          "olist_order_payments_dataset.csv",
+          "olist_customers_dataset.csv",
+          "olist_products_dataset.csv",
+          "olist_sellers_dataset.csv",
+          "product_category_name_translation.csv",
+          "olist_geolocation_dataset.parquet"
+        ]
+      }
+    }
+  }
+}

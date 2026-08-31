@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_ingestao_olist"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f2474dd8-abf4-95f6-467d-65d351b4c411"
+  }
+}
