@@ -16,8 +16,6 @@ atribuída, integração Git conectada **antes de qualquer artefato**, três Lak
 e o pipeline de ingestão levando os nove arquivos para a bronze.
 
 **Entrega:** o pipeline roda de ponta a ponta e a bronze tem dado particionado por data.
-**Post:** por que o arquivo de geolocalização virou Parquet — decisão de engenharia contada
-em cinco linhas.
 
 ---
 
@@ -28,8 +26,6 @@ deduplicação por chave natural, colunas de rastro, tabelas de rejeitados para 
 nas regras. Agregação da geolocalização ao centroide por prefixo de CEP.
 
 **Entrega:** oito tabelas silver, com regras de qualidade documentadas.
-**Post:** o milhão de linhas que virou dezenove mil — e por que a agregação pertence à
-silver, não à origem.
 
 ---
 
@@ -39,8 +35,6 @@ Notebook PySpark construindo o esquema estrela: dois fatos, cinco dimensões, ch
 substitutas e `dim_calendario` gerada. Indicadores de entrega materializados.
 
 **Entrega:** modelo dimensional consultável pelo endpoint SQL.
-**Post:** por que dois grãos de fato em vez de um — o erro de OTD que acontece quando se
-achata tudo no grão de item.
 
 ---
 
@@ -50,7 +44,6 @@ Modelo semântico em Direct Lake sobre a gold. Medidas DAX, hierarquias, formata
 técnicas ocultas. Painel Executivo de Entregas construído sobre ele.
 
 **Entrega:** primeiro painel publicado, com o modelo versionado em TMDL.
-**Post:** Direct Lake na prática — o que muda quando o modelo não precisa de atualização.
 
 ---
 
@@ -61,7 +54,6 @@ liberado. Dicionário de dados completo. Sinônimos, descrições de campo e esq
 configurados para Q&A. Painel de Frete e Rotas, sobre o mesmo modelo.
 
 **Entrega:** um analista externo consegue responder uma pergunta nova sem pedir ajuda.
-**Post:** self-service não é dar acesso ao dado — é dar acesso ao *significado* do dado.
 
 ---
 
@@ -72,8 +64,6 @@ atraso, registro no MLflow, escrita das predições de volta na gold e comparaç
 previsto e realizado no painel.
 
 **Entrega:** modelo registrado, com métricas e importância de atributos.
-**Post:** o atributo que eu tive de jogar fora — vazamento temporal explicado com o caso
-real do `order_delivered_carrier_date`.
 
 ---
 
