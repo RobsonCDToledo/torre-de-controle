@@ -1,0 +1,181 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {
+    "allowModernEvaluationEngine": true
+  },
+  "name": "df_bronze_para_silver",
+  "queryGroups": [
+    {
+      "id": "ebe9a987-9729-4a0b-a662-b135522166c9",
+      "name": "Origem",
+      "description": "Dados que vieram do lakehouse de camada bronze"
+    },
+    {
+      "id": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "name": "Tabelas_Silver",
+      "description": "tabelas já tratadas e prontas para serem carregadas no lakehouse Silver",
+      "order": 1
+    },
+    {
+      "id": "be79b4bf-a63d-44e1-9aba-813e984e746b",
+      "name": "Particoes",
+      "description": ""
+    },
+    {
+      "id": "017de657-5652-4219-b6fb-b49340adb323",
+      "name": "rejeitados",
+      "description": "dados que foram rejeitados da tabela bronze por não fazerem parte do processo atual de analise"
+    },
+    {
+      "id": "6ab73e42-5a74-4052-b149-40e81446d781",
+      "name": "dados_base",
+      "description": ""
+    }
+  ],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "bronze_particao": {
+      "queryId": "fc167ecc-f39e-4118-af50-719e18205cef",
+      "queryName": "bronze_particao",
+      "queryGroupId": "ebe9a987-9729-4a0b-a662-b135522166c9",
+      "loadEnabled": false
+    },
+    "clientes": {
+      "queryId": "1d7361e5-7a0c-4175-b167-69db80e377ba",
+      "queryName": "clientes",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "particao_data": {
+      "queryId": "87382774-d8e2-4797-956d-55e09d100913",
+      "queryName": "particao_data",
+      "queryGroupId": "be79b4bf-a63d-44e1-9aba-813e984e746b",
+      "loadEnabled": false
+    },
+    "bronze_particao_atual": {
+      "queryId": "9cbc9b7e-8ada-4e6e-916c-78e6a9bdcd5f",
+      "queryName": "bronze_particao_atual",
+      "queryGroupId": "be79b4bf-a63d-44e1-9aba-813e984e746b",
+      "loadEnabled": false
+    },
+    "itens_pedido": {
+      "queryId": "bdc4f479-e6e0-4590-b695-22914951c5b0",
+      "queryName": "itens_pedido",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "vendedores": {
+      "queryId": "de79315f-f2b8-49dc-bd2c-426f97cc1cf8",
+      "queryName": "vendedores",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "produtos": {
+      "queryId": "b493d4ac-423f-4e17-ab3d-4b00d698c6b4",
+      "queryName": "produtos",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "pedidos": {
+      "queryId": "9a079e23-c427-4cfc-bdad-1ec60b4781ea",
+      "queryName": "pedidos",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "pagamentos": {
+      "queryId": "4294842e-3f03-4791-a59c-fe9460b3da03",
+      "queryName": "pagamentos",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "avaliacoes": {
+      "queryId": "b5419d54-dab3-41c5-81cd-2b22d9e61753",
+      "queryName": "avaliacoes",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "geografia": {
+      "queryId": "119a7c93-154d-4d5e-84f5-9f5efc1db201",
+      "queryName": "geografia",
+      "queryGroupId": "2da0516e-951d-421e-96c6-3b0367e1c176",
+      "loadEnabled": false
+    },
+    "geografia_rejeitados": {
+      "queryId": "b82a9885-98b0-4ae4-88fc-9de2d1cb02b9",
+      "queryName": "geografia_rejeitados",
+      "queryGroupId": "017de657-5652-4219-b6fb-b49340adb323",
+      "loadEnabled": false
+    },
+    "geografia_base": {
+      "queryId": "39e5753c-2a62-4d1c-8e29-60d0f1273add",
+      "queryName": "geografia_base",
+      "queryGroupId": "6ab73e42-5a74-4052-b149-40e81446d781"
+    },
+    "geografia_rejeitados_DataDestination": {
+      "queryId": "459a1ef4-7000-46c2-8a6d-a005ecfbd9de",
+      "queryName": "geografia_rejeitados_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "geografia_DataDestination": {
+      "queryId": "291e08cf-6088-4533-bc92-f66fd44dac6b",
+      "queryName": "geografia_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "avaliacoes_DataDestination": {
+      "queryId": "a00dc535-5b00-4044-8445-09addd1c9c44",
+      "queryName": "avaliacoes_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "pagamentos_DataDestination": {
+      "queryId": "448c2cf1-d29b-4d12-9d2d-65c6320f0cbb",
+      "queryName": "pagamentos_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "pedidos_DataDestination": {
+      "queryId": "37ae2861-a15d-4f7a-9fd2-e00fa1548c54",
+      "queryName": "pedidos_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "produtos_DataDestination": {
+      "queryId": "4b400a69-fd7b-43dc-81e4-c2a0c42a61bc",
+      "queryName": "produtos_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "vendedores_DataDestination": {
+      "queryId": "93d86d61-91a4-4bc6-9fcd-eeabe37793fa",
+      "queryName": "vendedores_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "itens_pedido_DataDestination": {
+      "queryId": "3da4196b-0a08-448d-a3ed-33963589e06d",
+      "queryName": "itens_pedido_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "clientes_DataDestination": {
+      "queryId": "45b5a285-a767-4e94-ba64-753e0d97be69",
+      "queryName": "clientes_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "connections": [
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"8cf310b4-d4e8-46c0-9e38-1d28f59c1bb6\",\"DatasourceId\":\"90174c1f-ccc4-4db1-b661-1f1e7e57a2ad\"}"
+    },
+    {
+      "path": "https://onelake.dfs.fabric.microsoft.com/528a4166-a694-4105-90bd-d6509fcc0536/5e8ea3ef-c577-43b0-82d0-6de3b9a954bf/Files/olist",
+      "kind": "AzureDataLakeStorage",
+      "connectionId": "{\"ClusterId\":\"8cf310b4-d4e8-46c0-9e38-1d28f59c1bb6\",\"DatasourceId\":\"7f2a400b-97bc-4e59-8386-b44e66c4e862\"}"
+    }
+  ]
+}
