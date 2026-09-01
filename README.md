@@ -145,7 +145,7 @@ Construído em seis fases, cada uma com entrega publicável. Acompanhe em
 [planejamento/cronograma.md](planejamento/cronograma.md).
 
 - [x] **Fase 1** · Fundação — repositório, dados de origem, workspace, integração Git, ingestão para bronze
-- [ ] **Fase 2** · Silver — Dataflow Gen2, tipagem, limpeza, regras de qualidade
+- [x] **Fase 2** · Silver — Dataflow Gen2, tipagem, limpeza, regras de qualidade
 - [ ] **Fase 3** · Gold — notebook, esquema estrela, dimensão calendário
 - [ ] **Fase 4** · Semântica — Direct Lake, medidas DAX, Painel Executivo
 - [ ] **Fase 5** · Self-service — RLS, endosso, dicionário, perguntas nativas, Painel de Frete
