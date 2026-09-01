@@ -110,30 +110,14 @@ let
   ComRastro            = Table.AddColumn(ComOrigem, "_ingerido_em", each DataParticao, type date)
 in
     ComRastro;
-shared particao_data = /*  bronze_particao_atual
-    ------------------------------------------------------------------
-    Devolve o conteudo da particao mais recente da camada bronze.
-
-    Consulta base: as oito consultas da silver referenciam esta, para que
-    os identificadores de workspace e lakehouse existam num unico lugar.
-    Se o workspace for recriado, ha uma linha a corrigir, nao oito.
+shared particao_data = /*  particao_data
+    A data da particao mais recente, como texto "yyyy-MM-dd".
+    Acessor sobre bronze_particao. Alimenta a coluna _ingerido_em das oito.
 */
 let
-    // Lakehouse.Contents liga a consulta ao item do Fabric, e nao a um
-    // caminho de armazenamento: o vinculo sobrevive a recriacao do item.
-    Fonte          = Lakehouse.Contents(null),
-    Workspace      = Fonte{[workspaceId = "528a4166-a694-4105-90bd-d6509fcc0536"]}[Data],
-    Bronze         = Workspace{[lakehouseId = "5e8ea3ef-c577-43b0-82d0-6de3b9a954bf"]}[Data],
-    Arquivos       = Bronze{[Id = "Files", ItemKind = "Folder"]}[Data],
-    Particoes      = Arquivos{[Name = "olist"]}[Content],
-
-    // O pipeline nomeia a particao como yyyy-MM-dd. E o formato ISO que faz
-    // a maior string ser tambem a data mais recente. Se o pipeline mudar
-    // para dd-MM-yyyy, esta linha passa a escolher a pasta errada e nao
-    // levanta erro nenhum — o dado e que vem velho.
-    UltimaParticao = List.Max(Particoes[Name])
+    Source = bronze_particao[Name]
 in
-    UltimaParticao;
+    Source;
 shared bronze_particao_atual = /*  bronze_particao_atual
     Os nove arquivos da particao mais recente. Acessor sobre bronze_particao.
     As oito consultas da silver escolhem o seu arquivo daqui.
