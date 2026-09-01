@@ -28,3 +28,18 @@ kaggle.json
 
 # Diario de construcao — material interno do case de consultoria, nao e peca de portfolio.
 docs/diario-de-construcao.md
+
+# Material de organizacao pessoal do projeto — nao e peca de portfolio.
+docs/archive/
+
+# Arquivos .pq de trabalho do Power Query. A fonte da verdade e o Dataflow
+# versionado pela integracao Git em fabric/dataflows/ — manter os dois no
+# repositorio faria o projeto contar duas historias sobre o mesmo codigo.
+scripts/silver/
+scripts/gold/
+
+# Logs de atualizacao e artefatos de depuracao exportados do Fabric.
+trash/
+
+# Arquivos de bloqueio do Office (~$documento.xlsx)
+~$*
