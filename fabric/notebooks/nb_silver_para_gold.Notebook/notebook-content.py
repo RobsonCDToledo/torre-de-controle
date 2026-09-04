@@ -376,11 +376,98 @@ dim_calendario.write.mode('overwrite').option('overwriteSchema', 'true').saveAsT
 
 # MARKDOWN ********************
 
-# # Dim_Vendedor
+# # dim_vendedor
+# 
+# **Grão:** Um vendedor por linha.  
+# **Origem:** silver.vendedores - 3.095 linhas   
+# **Chave natural:** id_vendedor  
+# **Alimenta:** `fato_item_pedido` via `sk_vendedor`. A UF daqui é a **origem** da rota;
+# o destino vem de `dim_cliente` através de `fato_entrega`.  
+# **Validação:** 3.095 linhas, `sk_vendedor` de 1 a 3.095 sem buraco.
+# 
+
 
 # CELL ********************
 
-# Vou escrever aqui o código da dim_vendedor
+# Chama e monta a tabela com a chave sk_vendedor
+
+dim_vendedor = spark.sql(f"""
+    SELECT ROW_NUMBER() OVER (ORDER BY id_vendedor) AS sk_vendedor,
+    id_vendedor,
+    prefixo_cep,
+    cidade,
+    uf
+    FROM {SILVER}.vendedores
+""")
+
+# Escreve a tabela no banco
+dim_vendedor.write.mode('overwrite').option('overwriteSchema', 'true').saveAsTable('dim_vendedor')
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# # dim_geografia
+# 
+# - **Grão:** um prefixo de CEP
+# - **Origem:** `silver.geografia` — 19.011 linhas
+# - **Chave natural:** `prefixo_cep`
+# 
+# **Alimenta os dois fatos, em papéis opostos:** `fato_entrega` pelo `sk_geografia_destino`,
+# que é o endereço do cliente, e `fato_item_pedido` pelo `sk_geografia_origem`, que é o do
+# vendedor. O par das duas UFs é o que define uma rota.
+# 
+# **Decisões desta célula**
+# 
+# `regiao` não existe na origem — deriva da UF por `CASE`. É o agrupamento que a análise usa
+# antes de descer ao par de estados.
+# 
+# O `CASE` vai **sem `ELSE`**. As 27 UFs estão completas hoje, então qualquer valor que caia
+# fora é genuinamente desconhecido, e nulo o torna visível. `ELSE uf` colocaria "SP" na coluna
+# `regiao` sem que ninguém percebesse — falha disfarçada de dado.
+# 
+# **Herdado da silver, não decidido aqui**
+# 
+# O centroide é mediana e não média, e cidade e UF são o valor mais frequente do prefixo.
+# As duas regras e os números que as sustentam estão no
+# [dicionário](../../docs/dicionario-de-dados.md).
+# 
+# **Quatro prefixos não existem nesta dimensão** — `18243`, `78131`, `83252` e `95130` —
+# porque todas as coordenadas deles são inválidas na origem. Junção nula ali é limite do
+# dataset, não falha do pipeline. Afeta 1 cliente e 0 vendedores.
+# 
+# **Validação:** 19.011 linhas e **nenhuma `regiao` nula**. Nulo ali significa UF fora das 27,
+# e o `CASE` sem `ELSE` devolve isso em silêncio — vale um `WHERE regiao IS NULL` depois de
+# gravar.
+
+
+# CELL ********************
+
+# Chama e monta a tabela com a chave sk_geografia
+
+dim_geografia = spark.sql(f"""
+    SELECT ROW_NUMBER() OVER (ORDER BY prefixo_cep) AS sk_geografia,
+    prefixo_cep,
+    latitude,
+    longitude,
+    cidade,
+    uf,
+    CASE
+        WHEN uf IN ('AC','AP','AM','PA','RO','RR','TO') THEN 'Norte'
+        WHEN uf IN ('AL','BA','CE','MA','PB','PE','PI','RN','SE') THEN 'Nordeste'
+        WHEN uf IN ('DF','GO','MT','MS') THEN 'Centro-Oeste'
+        WHEN uf IN ('ES','MG','RJ','SP') THEN 'Sudeste'
+        WHEN uf IN ('PR','RS','SC') THEN 'Sul'
+    END AS regiao
+    FROM {SILVER}.geografia
+""")
+# Escreve a tabela no banco
+dim_geografia.write.mode('overwrite').option('overwriteSchema', 'true').saveAsTable('dim_geografia')
 
 # METADATA ********************
 
@@ -406,7 +493,8 @@ dim_calendario.write.mode('overwrite').option('overwriteSchema', 'true').saveAsT
 # ═══════════════════════════════════════════════════════════════════
 comentarios = {
     "dim_calendario": "Um dia por linha, 2016 a 2018. Gerada. Dimensao de papel duplo: compra, previsao e entrega.",
-    #"dim_geografia":  "Um centroide por prefixo de CEP. Serve destino do cliente e origem do vendedor.",
+    "dim_vendedor": "Um vendedor por linha, contendo dados de Cidade, Uf e Prefixo do CEP.",
+    "dim_geografia": "Um centroide por prefixo de CEP. Serve destino do cliente e origem do vendedor."
     #"dim_cliente":    "Uma pessoa por linha (id_cliente_unico), nao um id_cliente. Geografia do pedido mais recente.",
     # ...
 }
