@@ -91,7 +91,7 @@ vendedores diferentes. Sem esse grão, custo de frete por rota fica errado.
 | `dim_calendario` | Dia | Gerada, não derivada da origem. Cobre 2016–2018 com folga. Colunas em português, com ano, trimestre, mês, semana, dia da semana, feriado e flag de dia útil |
 | `dim_cliente` | `customer_unique_id` | Note: a origem tem dois identificadores. `customer_id` muda a cada pedido; `customer_unique_id` é a pessoa. A dimensão usa o segundo |
 | `dim_vendedor` | `seller_id` | Cidade, UF e prefixo de CEP |
-| `dim_produto` | `product_id` | Categoria traduzida para português, peso, dimensões e volume calculado |
+| `dim_produto` | `product_id` | Categoria legível derivada do próprio código da origem, peso, dimensões e volume calculado |
 | `dim_geografia` | Prefixo de CEP | Centroide de latitude e longitude, cidade, UF e região. É aqui que o milhão de linhas de geolocalização vira cerca de 19 mil |
 
 ### Por que duas tabelas de fato e não uma
