@@ -35,14 +35,17 @@
 # até a silver, o dado era fiel à origem em conteúdo.
 # 
 # ---
-# 
-# ## O que este notebook constrói
+# ## Pré-requisitos
 # 
 # **Conecta com lh_gold**
+#  
+#  Anexar o lh_gold
+#  No painel esquerdo do notebook, na seção Lakehouses (Explorer), clique em + Adicionar → Lakehouse existente → lh_gold.
+#  Depois de conectado ao LakeHouse gold, tornar ele o default.  e usar o silver apenas para fazer call das tabelas silver. 
 # 
-# Anexar o lh_gold
-# No painel esquerdo do notebook, na seção Lakehouses (Explorer), clique em + Adicionar → Lakehouse existente → lh_gold.
-# Depois de conectado ao LakeHouse gold, tornar ele o default.  e usar o silver apenas para fazer call das tabelas silver. 
+# ---
+# 
+# ## O que este notebook constrói
 # 
 # **Cinco dimensões**
 # 
@@ -101,16 +104,43 @@
 
 # MARKDOWN ********************
 
-# # dim_calendario
+# ## Configurações do Notebook
 
 # CELL ********************
 
-# Dim_calendario
-
 from pyspark.sql import functions as F
+from pyspark.sql.window import Window
 from datetime import date, datetime
 
-# ============================================================
+SILVER = "`Torre-de-Controle`.lh_silver.dbo"
+
+def silver(tabela):
+    return spark.read.table(f"{SILVER}.{tabela}")
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# # dim_calendario
+# 
+# **Grão:** um dia. **Origem:** gerada, 2016-01-01 a 2018-12-31.
+# **Alimenta:** `fato_entrega` em três papéis — compra, prevista e entrega.
+# 
+# **Decisões:** `sk_data` no formato `yyyyMMdd`, única exceção à regra de chave
+# sequencial. Feriados calculados pelo cômputo da Páscoa em vez de lista fixa,
+# para que a janela de datas possa mudar sem reescrever a célula.
+# 
+# **Validação:** 1.096 linhas — 366 de 2016, bissexto, mais 365 de cada outro ano.
+
+
+# CELL ********************
+
 # Parâmetros de período automaticos
 #
 # ano_atual  = date.today().year
@@ -124,16 +154,6 @@ from datetime import date, datetime
 # end = "2018-12-31"
 #
 # ============================================================
-
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
 
 # Datas Manuais aplicadas para analise dos dados do projeto atual 
 
@@ -199,21 +219,21 @@ def feriados_do_ano(ano: int):
     corpus_christi   = pascoa + pd_timedelta(60)
 
     fixos = [
-        (date(ano, 1, 1),   "Confraternização Universal"),
-        (date(ano, 4, 21),  "Tiradentes"),
-        (date(ano, 5, 1),   "Dia do Trabalhador"),
-        (date(ano, 9, 7),   "Independência do Brasil"),
-        (date(ano, 10, 12), "Nossa Senhora Aparecida"),
-        (date(ano, 11, 2),  "Finados"),
-        (date(ano, 11, 15), "Proclamação da República"),
-        (date(ano, 12, 25), "Natal"),
+        (date(ano, 1, 1),   'Confraternização Universal'),
+        (date(ano, 4, 21),  'Tiradentes'),
+        (date(ano, 5, 1),   'Dia do Trabalhador'),
+        (date(ano, 9, 7),   'Independência do Brasil'),
+        (date(ano, 10, 12), 'Nossa Senhora Aparecida'),
+        (date(ano, 11, 2),  'Finados'),
+        (date(ano, 11, 15), 'Proclamação da República'),
+        (date(ano, 12, 25), 'Natal'),
     ]
     moveis = [
-        (sexta_santa,      "Sexta-feira Santa"),
-        (pascoa,           "Páscoa"),
-        (segunda_carnaval, "Segunda-feira de Carnaval"),
-        (terca_carnaval,   "Terça-feira de Carnaval"),
-        (corpus_christi,   "Corpus Christi"),
+        (sexta_santa,      'Sexta-feira Santa'),
+        (pascoa,           'Páscoa'),
+        (segunda_carnaval, 'Segunda-feira de Carnaval'),
+        (terca_carnaval,   'Terça-feira de Carnaval'),
+        (corpus_christi,   'Corpus Christi'),
     ]
     return fixos + moveis
 
@@ -223,7 +243,7 @@ from datetime import timedelta as pd_timedelta
 anos = list(range(start.year, end.year + 1))
 lista_feriados = [f for ano in anos for f in feriados_do_ano(ano)]
 
-feriados_df = spark.createDataFrame(lista_feriados, ["data", "nome_feriado"])
+feriados_df = spark.createDataFrame(lista_feriados, ['data', 'nome_feriado'])
 
 
 # METADATA ********************
@@ -237,12 +257,12 @@ feriados_df = spark.createDataFrame(lista_feriados, ["data", "nome_feriado"])
 
 # Dicionario com meses e dias em PT-BR
 
-meses_pt = {1:"Janeiro",2:"Fevereiro",3:"Março",4:"Abril",5:"Maio",6:"Junho",
-            7:"Julho",8:"Agosto",9:"Setembro",10:"Outubro",11:"Novembro",12:"Dezembro"}
+meses_pt = {1:'Janeiro',2:'Fevereiro',3:'Março',4:'Abril',5:'Maio',6:'Junho',
+            7:'Julho',8:'Agosto',9:'Setembro',10:'Outubro',11:'Novembro',12:'Dezembro'}
 
 # dayofweek do Spark: 1=Domingo ... 7=Sábado
-dias_pt = {1:"Domingo",2:"Segunda-feira",3:"Terça-feira",4:"Quarta-feira",
-           5:"Quinta-feira",6:"Sexta-feira",7:"Sábado"}
+dias_pt = {1:'Domingo',2:'Segunda-feira',3:'Terça-feira',4:'Quarta-feira',
+           5:'Quinta-feira',6:'Sexta-feira',7:'Sábado'}
 
 # mapear Meses e dias para acrescentar na tabela
 
@@ -271,11 +291,11 @@ calendar_auto = (calendar_auto
         F.ceil((F.dayofyear('data') + F.dayofweek(F.trunc('data', 'year')) -1)/ 7))
     .withColumn('semana_mes',
         F.ceil((F.dayofmonth('data') + F.dayofweek(F.trunc('data', 'month')) -1)/ 7))
-    .withColumn("dia", F.dayofmonth("data"))
-    .withColumn("nome_do_dia", mapa_dia[F.dayofweek("data")])
+    .withColumn('dia', F.dayofmonth('data'))
+    .withColumn('nome_do_dia', mapa_dia[F.dayofweek('data')])
 )
 
-# Coluna abreviada de trimestre (add "Sufixo º Tri")
+# Coluna abreviada de trimestre (add 'Sufixo º Tri')
 calendar_auto = (calendar_auto
     .withColumn('trimestre', F.concat(F.col('_num_trimestre'), F.lit('ºTri'))))
 
@@ -284,20 +304,22 @@ calendar_auto = (calendar_auto
     .withColumn('mes_abreviado', F.substring('nome_do_mes', 1, 3))
     .withColumn('dia_semana_abreviado', F.substring('nome_do_dia',1 ,3)))
 
-# trimestre_do_ano no padrão "1ºTri-26"
+# trimestre_do_ano no padrão '1ºTri-26'
 calendar_auto = (calendar_auto
-    .withColumn("trimestre_do_ano",
-    F.concat(F.col("trimestre"), F.lit("-"), F.substring(F.col("Ano").cast("string"), 3, 2)))
+    .withColumn('trimestre_do_ano',
+    F.concat(F.col('trimestre'), F.lit('-'), F.substring(F.col('ano').cast('string'), 3, 2)))
 )
-# Nome da semana do mês ("1º - Sem" ... "6º - Sem")
+# Nome da semana do mês ('1º - Sem' ... '6º - Sem')
 calendar_auto = (calendar_auto
-.withColumn("semana_do_mes",
-    F.concat(F.col("semana_mes").cast("string"), F.lit("º - Sem")))
+.withColumn('semana_do_mes',
+    F.concat(F.col('semana_mes').cast('string'), F.lit('º - Sem')))
 )
 
 # Remover coluna de trimestre inutilizavel
 
-calendar_auto = calendar_auto.drop("_num_trimestre")
+calendar_auto = calendar_auto.drop('_num_trimestre')
+
+
 
 # METADATA ********************
 
@@ -311,16 +333,15 @@ calendar_auto = calendar_auto.drop("_num_trimestre")
 # Join da tabela calendário criada acima com as colunas de feriado e dia util. 
 
 calendar_auto = (calendar_auto
-    .join(feriados_df, on="data", how="left")
-    .withColumn("feriado", F.when(F.col("nome_feriado").isNotNull(), "Sim").otherwise("Não"))
-    .withColumn("nome_feriado", F.coalesce(F.col("nome_feriado"), F.lit("")))
-    .withColumn("fim_de_semana",
-        F.when(F.dayofweek("data").isin(1, 7), "Sim").otherwise("Não"))
-    .withColumn("tipo_dia",
-        F.when(F.col("feriado") == "Sim", "Feriado")
-         .when(F.col("fim_de_semana") == "Sim", "Fim de Semana")
-         .otherwise("Dia Útil"))
-    .withColumn("dia_util", F.when(F.col("tipo_dia") == "Dia Útil", 1).otherwise(0))
+    .join(feriados_df, on='data', how='left')
+    .withColumn('feriado', F.col('nome_feriado').isNotNull())
+    .withColumn('nome_feriado', F.coalesce(F.col('nome_feriado'), F.lit('')))
+    .withColumn('fim_de_semana', F.dayofweek('data').isin(1, 7))
+    .withColumn('tipo_dia',
+        F.when(F.col('feriado'), 'Feriado')
+        .when(F.col('fim_de_semana'), 'Fim de Semana')
+        .otherwise('Dia Útil'))
+    .withColumn('dia_util', F.col('tipo_dia') == 'Dia Útil')
 )
 
 # METADATA ********************
@@ -343,26 +364,8 @@ dim_calendario = calendar_auto.select(
 )
 
 # Escreve a tabela no banco
-
 dim_calendario.write.mode('overwrite').option('overwriteSchema', 'true').saveAsTable('dim_calendario')
 
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# Adiciona um comentario sobre a tabela 
-
-spark.sql("""
-    COMMENT ON TABLE dim_calendario IS
-    'Um dia por linha, de 2016-01-01 a 2018-12-31. Gerada, nao derivada da origem.
-     Dimensao de papel duplo: serve compra, previsao e entrega em fato_entrega.'
-""")
 
 # METADATA ********************
 
@@ -378,6 +381,38 @@ spark.sql("""
 # CELL ********************
 
 # Vou escrever aqui o código da dim_vendedor
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# # Comentarios tabelas 
+# 
+
+
+# CELL ********************
+
+# ═══════════════════════════════════════════════════════════════════
+# Documentação das tabelas
+#
+# As descrições ficam na tabela Delta, não só no notebook — assim elas
+# viajam para o endpoint SQL e para o modelo semântico. É a promessa de
+# self-service da Fase 5 começando aqui.
+# ═══════════════════════════════════════════════════════════════════
+comentarios = {
+    "dim_calendario": "Um dia por linha, 2016 a 2018. Gerada. Dimensao de papel duplo: compra, previsao e entrega.",
+    #"dim_geografia":  "Um centroide por prefixo de CEP. Serve destino do cliente e origem do vendedor.",
+    #"dim_cliente":    "Uma pessoa por linha (id_cliente_unico), nao um id_cliente. Geografia do pedido mais recente.",
+    # ...
+}
+for tabela, texto in comentarios.items():
+    spark.sql(f"COMMENT ON TABLE {tabela} IS '{texto}'")
+
 
 # METADATA ********************
 
