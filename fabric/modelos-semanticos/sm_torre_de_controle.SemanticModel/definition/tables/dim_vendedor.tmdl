@@ -1,0 +1,63 @@
+table dim_vendedor
+	lineageTag: 89ef5c29-b3a3-4774-a13f-19c8ed7ff989
+	sourceLineageTag: [dbo].[dim_vendedor]
+
+	column sk_vendedor
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 369a4769-739e-4644-93b4-47c80d54859f
+		sourceLineageTag: sk_vendedor
+		summarizeBy: none
+		sourceColumn: sk_vendedor
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_vendedor
+		dataType: string
+		isHidden
+		lineageTag: 1f9cb8fc-92e2-4dc8-b59d-5d6898a61d97
+		sourceLineageTag: id_vendedor
+		summarizeBy: none
+		sourceColumn: id_vendedor
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column prefixo_cep
+		dataType: string
+		lineageTag: 90b9e6ee-c4c7-4201-bc3e-04ef120804cb
+		sourceLineageTag: prefixo_cep
+		summarizeBy: none
+		sourceColumn: prefixo_cep
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: 4aa12342-e6d6-4aa7-b726-4ea243d02635
+		sourceLineageTag: cidade
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf
+		dataType: string
+		lineageTag: 6bd69d11-9a23-496c-a2fe-cb56191315be
+		sourceLineageTag: uf
+		summarizeBy: none
+		sourceColumn: uf
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_vendedor = entity
+		mode: directLake
+		source
+			entityName: dim_vendedor
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

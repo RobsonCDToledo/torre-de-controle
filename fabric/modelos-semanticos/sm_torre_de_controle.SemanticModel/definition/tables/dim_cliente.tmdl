@@ -1,0 +1,63 @@
+table dim_cliente
+	lineageTag: 53384877-92cc-4d9a-82df-8e723750e9aa
+	sourceLineageTag: [dbo].[dim_cliente]
+
+	column sk_cliente
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3d87776f-3e08-4276-9974-903aea694afb
+		sourceLineageTag: sk_cliente
+		summarizeBy: none
+		sourceColumn: sk_cliente
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_cliente_unico
+		dataType: string
+		isHidden
+		lineageTag: 6e29b834-6451-4a00-84e2-ffde00781351
+		sourceLineageTag: id_cliente_unico
+		summarizeBy: none
+		sourceColumn: id_cliente_unico
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column prefixo_cep
+		dataType: string
+		lineageTag: b0c8982d-01b2-4844-9ea6-af9be599f508
+		sourceLineageTag: prefixo_cep
+		summarizeBy: none
+		sourceColumn: prefixo_cep
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: f673a0a6-515e-48d4-bd7d-5418b555bb8f
+		sourceLineageTag: cidade
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf
+		dataType: string
+		lineageTag: d54f9bee-b4bc-4621-b086-138e94b06dd1
+		sourceLineageTag: uf
+		summarizeBy: none
+		sourceColumn: uf
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_cliente = entity
+		mode: directLake
+		source
+			entityName: dim_cliente
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

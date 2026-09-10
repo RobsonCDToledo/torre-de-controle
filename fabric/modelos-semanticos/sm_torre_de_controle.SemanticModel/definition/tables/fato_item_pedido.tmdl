@@ -1,0 +1,179 @@
+table fato_item_pedido
+	lineageTag: bd1f04c7-1d8c-45b9-86ab-9e3fae31ad19
+	sourceLineageTag: [dbo].[fato_item_pedido]
+
+	column sk_item
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8151ddd5-7cf9-4a9e-aaeb-4580a495965e
+		sourceLineageTag: sk_item
+		summarizeBy: none
+		sourceColumn: sk_item
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column id_pedido
+		dataType: string
+		isHidden
+		lineageTag: 60938841-6a65-4310-9f32-5a01de457160
+		sourceLineageTag: id_pedido
+		summarizeBy: none
+		sourceColumn: id_pedido
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column numero_item
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0cf2a989-9e76-4290-873c-0f93e65eebf1
+		sourceLineageTag: numero_item
+		summarizeBy: none
+		sourceColumn: numero_item
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column sk_pedido
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5fedc4ed-2b41-4a00-941f-b03ec6099b19
+		sourceLineageTag: sk_pedido
+		summarizeBy: none
+		sourceColumn: sk_pedido
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column sk_produto
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 80ff954f-498d-4a41-93c1-f6e6746ba995
+		sourceLineageTag: sk_produto
+		summarizeBy: none
+		sourceColumn: sk_produto
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_vendedor
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: edd21c64-08fd-484f-8eb8-3992bb829509
+		sourceLineageTag: sk_vendedor
+		summarizeBy: none
+		sourceColumn: sk_vendedor
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_geografia_origem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d8686220-034c-4cc9-a807-19fbf2e1ce10
+		sourceLineageTag: sk_geografia_origem
+		summarizeBy: none
+		sourceColumn: sk_geografia_origem
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_data_limite_envio
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4da337b9-5056-4fba-a24d-e4920b87b3ff
+		sourceLineageTag: sk_data_limite_envio
+		summarizeBy: none
+		sourceColumn: sk_data_limite_envio
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column preco
+		dataType: double
+		lineageTag: 42cb5fef-a16c-4ce7-a504-b2eeee74d982
+		sourceLineageTag: preco
+		summarizeBy: none
+		sourceColumn: preco
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column valor_frete
+		dataType: double
+		isHidden
+		lineageTag: 88a38623-0682-4a8e-8ce0-ebcb9c58ac13
+		sourceLineageTag: valor_frete
+		summarizeBy: none
+		sourceColumn: valor_frete
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column peso_gramas
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d33383a1-58a5-4eee-b69e-7b2fab2c4568
+		sourceLineageTag: peso_gramas
+		summarizeBy: none
+		sourceColumn: peso_gramas
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column volume_cm3
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0519ca37-d471-421e-afa1-7409131a4475
+		sourceLineageTag: volume_cm3
+		summarizeBy: none
+		sourceColumn: volume_cm3
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	partition fato_item_pedido = entity
+		mode: directLake
+		source
+			entityName: fato_item_pedido
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

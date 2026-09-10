@@ -1,0 +1,86 @@
+table dim_geografia
+	lineageTag: b99a9818-9010-47fc-807a-7bb8d2ed1f5c
+	sourceLineageTag: [dbo].[dim_geografia]
+
+	column sk_geografia
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ee461f1b-0908-4d97-bb9d-0fedc564b3d0
+		sourceLineageTag: sk_geografia
+		summarizeBy: none
+		sourceColumn: sk_geografia
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column prefixo_cep
+		dataType: string
+		lineageTag: d6eeb89d-c2cb-477e-b7e1-8abcf21ed0c4
+		sourceLineageTag: prefixo_cep
+		summarizeBy: none
+		sourceColumn: prefixo_cep
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		lineageTag: d0fc5240-1f13-4511-859a-f19bc9a23e41
+		sourceLineageTag: latitude
+		summarizeBy: none
+		sourceColumn: latitude
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column longitude
+		dataType: double
+		lineageTag: b7899016-48f8-4f21-938e-2d5f8a54b6ed
+		sourceLineageTag: longitude
+		summarizeBy: none
+		sourceColumn: longitude
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cidade
+		dataType: string
+		lineageTag: b41f2a23-c7b2-4432-9c27-0fdfa6dff943
+		sourceLineageTag: cidade
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf
+		dataType: string
+		lineageTag: 0ce438d0-417a-41a8-ae0b-84323f9cfbcc
+		sourceLineageTag: uf
+		summarizeBy: none
+		sourceColumn: uf
+
+		annotation SummarizationSetBy = Automatic
+
+	column regiao
+		dataType: string
+		lineageTag: 30e1735e-44fa-4773-b096-e04141805190
+		sourceLineageTag: regiao
+		summarizeBy: none
+		sourceColumn: regiao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_geografia = entity
+		mode: directLake
+		source
+			entityName: dim_geografia
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

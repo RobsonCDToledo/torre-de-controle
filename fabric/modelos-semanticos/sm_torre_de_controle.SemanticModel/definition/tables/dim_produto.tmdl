@@ -1,0 +1,134 @@
+table dim_produto
+	lineageTag: 64090f74-3f9e-4627-9039-15032f10ae54
+	sourceLineageTag: [dbo].[dim_produto]
+
+	column sk_produto
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 931ab3fe-9443-4206-9483-2abddad9c88f
+		sourceLineageTag: sk_produto
+		summarizeBy: none
+		sourceColumn: sk_produto
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_produto
+		dataType: string
+		isHidden
+		lineageTag: db014196-3f41-4b3f-a13f-508d53976861
+		sourceLineageTag: id_produto
+		summarizeBy: none
+		sourceColumn: id_produto
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: 9b5c8d1a-4c90-4324-9f46-550fb51389f8
+		sourceLineageTag: categoria
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria_rotulo
+		dataType: string
+		lineageTag: b2bb1981-19b7-4feb-a9e1-18f47d65c30b
+		sourceLineageTag: categoria_rotulo
+		summarizeBy: none
+		sourceColumn: categoria_rotulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column tamanho_nome
+		dataType: int64
+		formatString: 0
+		lineageTag: 8420333f-993c-4a62-9253-0a2e2d0cc579
+		sourceLineageTag: tamanho_nome
+		summarizeBy: none
+		sourceColumn: tamanho_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column tamanho_descricao
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e95bb9c-5840-434a-9dbf-1a8bb166dd4a
+		sourceLineageTag: tamanho_descricao
+		summarizeBy: none
+		sourceColumn: tamanho_descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_fotos
+		dataType: int64
+		formatString: 0
+		lineageTag: c1eff4b2-c7b1-4a71-ad5f-c4ade9043386
+		sourceLineageTag: qtd_fotos
+		summarizeBy: none
+		sourceColumn: qtd_fotos
+
+		annotation SummarizationSetBy = Automatic
+
+	column peso_gramas
+		dataType: int64
+		formatString: 0
+		lineageTag: 0001b0d3-911e-41ed-bbce-0f642932c747
+		sourceLineageTag: peso_gramas
+		summarizeBy: none
+		sourceColumn: peso_gramas
+
+		annotation SummarizationSetBy = Automatic
+
+	column comprimento_cm
+		dataType: int64
+		formatString: 0
+		lineageTag: 521cb3f1-e180-4f20-9510-8d598070e7f5
+		sourceLineageTag: comprimento_cm
+		summarizeBy: none
+		sourceColumn: comprimento_cm
+
+		annotation SummarizationSetBy = Automatic
+
+	column altura_cm
+		dataType: int64
+		formatString: 0
+		lineageTag: 9152f505-75ec-49fb-a1c4-c1a590277f7d
+		sourceLineageTag: altura_cm
+		summarizeBy: none
+		sourceColumn: altura_cm
+
+		annotation SummarizationSetBy = Automatic
+
+	column largura_cm
+		dataType: int64
+		formatString: 0
+		lineageTag: a020d4d2-cffe-4144-8894-8161f5cb7773
+		sourceLineageTag: largura_cm
+		summarizeBy: none
+		sourceColumn: largura_cm
+
+		annotation SummarizationSetBy = Automatic
+
+	column volume_cm3
+		dataType: int64
+		formatString: 0
+		lineageTag: c9dbf721-b9aa-4eaf-98e3-4f6a73c24fa4
+		sourceLineageTag: volume_cm3
+		summarizeBy: none
+		sourceColumn: volume_cm3
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_produto = entity
+		mode: directLake
+		source
+			entityName: dim_produto
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

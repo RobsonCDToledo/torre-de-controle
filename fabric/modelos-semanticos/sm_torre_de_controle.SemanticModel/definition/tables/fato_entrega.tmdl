@@ -1,0 +1,248 @@
+table fato_entrega
+	lineageTag: 4fb6ae73-56de-4184-8bed-26a46e3e9301
+	sourceLineageTag: [dbo].[fato_entrega]
+
+	column sk_pedido
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: aebc5bad-67cd-45a0-afe5-282c70d4cbf0
+		sourceLineageTag: sk_pedido
+		summarizeBy: none
+		sourceColumn: sk_pedido
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column id_pedido
+		dataType: string
+		isHidden
+		lineageTag: 366fc827-ac12-4cb8-aef3-31b5cba1c7b2
+		sourceLineageTag: id_pedido
+		summarizeBy: none
+		sourceColumn: id_pedido
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_cliente
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b8d8e66d-2c71-47de-be5a-d2ef8100a919
+		sourceLineageTag: sk_cliente
+		summarizeBy: none
+		sourceColumn: sk_cliente
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_geografia_destino
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9ce93bc2-f2ef-4323-a114-dba497b095e3
+		sourceLineageTag: sk_geografia_destino
+		summarizeBy: none
+		sourceColumn: sk_geografia_destino
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_data_compra
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 90967948-c8bf-4712-b7cc-886274278863
+		sourceLineageTag: sk_data_compra
+		summarizeBy: none
+		sourceColumn: sk_data_compra
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sk_data_prevista
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 94d2ccc8-8524-49f1-b552-7a8f63631c67
+		sourceLineageTag: sk_data_prevista
+		summarizeBy: none
+		sourceColumn: sk_data_prevista
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column sk_data_entrega
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3b504d27-125a-401a-9bb6-124fe3a2bb8d
+		sourceLineageTag: sk_data_entrega
+		summarizeBy: none
+		sourceColumn: sk_data_entrega
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column status_pedido
+		dataType: string
+		lineageTag: d3b38496-92b9-40db-bd6c-46ffbe8f775e
+		sourceLineageTag: status_pedido
+		summarizeBy: none
+		sourceColumn: status_pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_ate_aprovacao
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ae003f94-f960-426b-8c5a-10d01cb9fabe
+		sourceLineageTag: dias_ate_aprovacao
+		summarizeBy: none
+		sourceColumn: dias_ate_aprovacao
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column dias_ate_coleta
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c5c969ce-4046-42fd-998d-a311a10e9b84
+		sourceLineageTag: dias_ate_coleta
+		summarizeBy: none
+		sourceColumn: dias_ate_coleta
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column lead_time_dias
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7f8a0a56-7d01-4e60-86cf-dba34ba1b7fd
+		sourceLineageTag: lead_time_dias
+		summarizeBy: none
+		sourceColumn: lead_time_dias
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column dias_de_atraso
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 812070ff-e3f7-4667-9e0c-cae2672146ae
+		sourceLineageTag: dias_de_atraso
+		summarizeBy: none
+		sourceColumn: dias_de_atraso
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column entregue_no_prazo
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7f96f09f-5c88-49e5-bf85-e156aeae047d
+		sourceLineageTag: entregue_no_prazo
+		summarizeBy: none
+		sourceColumn: entregue_no_prazo
+
+		annotation SummarizationSetBy = Automatic
+
+	column nota
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6a42d6a0-dfbf-469f-afd5-ff2956592d62
+		sourceLineageTag: nota
+		summarizeBy: none
+		sourceColumn: nota
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column valor_itens
+		dataType: double
+		isHidden
+		lineageTag: 40405ea8-88e1-45bf-89b2-769c9691c1e8
+		sourceLineageTag: valor_itens
+		summarizeBy: none
+		sourceColumn: valor_itens
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column valor_frete
+		dataType: double
+		isHidden
+		lineageTag: 4cb67e50-a2d6-44e6-b480-23cad8bfe824
+		sourceLineageTag: valor_frete
+		summarizeBy: none
+		sourceColumn: valor_frete
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column qtd_itens
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a79cdd29-86bd-4546-a53b-99d12789a17c
+		sourceLineageTag: qtd_itens
+		summarizeBy: none
+		sourceColumn: qtd_itens
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	partition fato_entrega = entity
+		mode: directLake
+		source
+			entityName: fato_entrega
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

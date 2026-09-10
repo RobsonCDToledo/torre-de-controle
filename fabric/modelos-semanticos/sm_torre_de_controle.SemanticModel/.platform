@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "sm_torre_de_controle"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3dc4cfbd-1f1a-be29-456a-6890b7d3268c"
+  }
+}

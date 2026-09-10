@@ -1,0 +1,270 @@
+table dim_calendario
+	lineageTag: 7e788ec8-8051-4d67-96b0-3ced75979df2
+	sourceLineageTag: [dbo].[dim_calendario]
+	dataCategory: Time
+
+	column sk_data
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 362001ac-202c-40de-b91e-1086cdb6af1e
+		sourceLineageTag: sk_data
+		summarizeBy: none
+		sourceColumn: sk_data
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column data
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: f737b6de-87a9-402c-b4ee-58430882e886
+		sourceLineageTag: data
+		summarizeBy: none
+		sourceColumn: data
+
+		changedProperty = DataType
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 71ca4e7b-31bf-4c19-938c-2dbcd298413a
+		sourceLineageTag: ano
+		summarizeBy: none
+		sourceColumn: ano
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column anotrimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 5bea3a10-1474-40f4-a97e-9c8e6eccda25
+		sourceLineageTag: anotrimestre
+		summarizeBy: none
+		sourceColumn: anotrimestre
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column trimestre
+		dataType: string
+		lineageTag: 107b05de-6c81-4427-afe9-f7a8cd2df759
+		sourceLineageTag: trimestre
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre_do_ano
+		dataType: string
+		lineageTag: 33f26750-89f1-41d6-a125-ae60b49924bf
+		sourceLineageTag: trimestre_do_ano
+		summarizeBy: none
+		sourceColumn: trimestre_do_ano
+		sortByColumn: anotrimestre
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 1a5bba61-d2ed-4d4f-a98d-28574fdcd099
+		sourceLineageTag: mes
+		summarizeBy: none
+		sourceColumn: mes
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column anomes
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e2c71c0-9042-4735-838d-545e7335d91f
+		sourceLineageTag: anomes
+		summarizeBy: none
+		sourceColumn: anomes
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column nome_do_mes
+		dataType: string
+		lineageTag: 58114ca5-e11a-4b38-94b6-7eeb0dd44a5d
+		sourceLineageTag: nome_do_mes
+		summarizeBy: none
+		sourceColumn: nome_do_mes
+		sortByColumn: mes
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_abreviado
+		dataType: string
+		lineageTag: d8870fec-65b6-48e7-8cc7-568168318d23
+		sourceLineageTag: mes_abreviado
+		summarizeBy: none
+		sourceColumn: mes_abreviado
+		sortByColumn: mes
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column semana_ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e4ead1d-3906-48f4-934a-91da803bd62d
+		sourceLineageTag: semana_ano
+		summarizeBy: none
+		sourceColumn: semana_ano
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column semana_mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 8aad5159-e256-4523-9b74-711de79949c7
+		sourceLineageTag: semana_mes
+		summarizeBy: none
+		sourceColumn: semana_mes
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column semana_do_mes
+		dataType: string
+		lineageTag: a7fc5d39-49ca-4561-a707-cac891ef8644
+		sourceLineageTag: semana_do_mes
+		summarizeBy: none
+		sourceColumn: semana_do_mes
+		sortByColumn: semana_mes
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 06ffd112-74cd-45f0-889c-34613d163ab0
+		sourceLineageTag: dia
+		summarizeBy: none
+		sourceColumn: dia
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column nome_do_dia
+		dataType: string
+		lineageTag: 4fd0625e-76b3-4b78-bed1-1ab54f0f9f99
+		sourceLineageTag: nome_do_dia
+		summarizeBy: none
+		sourceColumn: nome_do_dia
+		sortByColumn: num_dia_semana
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana_abreviado
+		dataType: string
+		lineageTag: 53ee9297-1b8c-4463-a9f9-59e0d9f9440d
+		sourceLineageTag: dia_semana_abreviado
+		summarizeBy: none
+		sourceColumn: dia_semana_abreviado
+		sortByColumn: num_dia_semana
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column feriado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4809c86c-0400-4808-a064-575cef5fc123
+		sourceLineageTag: feriado
+		summarizeBy: none
+		sourceColumn: feriado
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_feriado
+		dataType: string
+		lineageTag: 7fdfeb66-a45d-4521-ac9a-54e4e5670d74
+		sourceLineageTag: nome_feriado
+		summarizeBy: none
+		sourceColumn: nome_feriado
+
+		annotation SummarizationSetBy = Automatic
+
+	column fim_de_semana
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 54a84984-e380-4838-be70-f75781dde367
+		sourceLineageTag: fim_de_semana
+		summarizeBy: none
+		sourceColumn: fim_de_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_dia
+		dataType: string
+		lineageTag: 8e53edd3-3672-4985-b820-d329984a8688
+		sourceLineageTag: tipo_dia
+		summarizeBy: none
+		sourceColumn: tipo_dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_util
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f441061b-13af-4dee-b54f-6767365921c7
+		sourceLineageTag: dia_util
+		summarizeBy: none
+		sourceColumn: dia_util
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_dia_semana
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9297c608-e3c6-4393-a4a3-7a7847f3742d
+		sourceLineageTag: num_dia_semana
+		summarizeBy: none
+		sourceColumn: num_dia_semana
+
+		changedProperty = SummarizeBy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	partition dim_calendario = entity
+		mode: directLake
+		source
+			entityName: dim_calendario
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+

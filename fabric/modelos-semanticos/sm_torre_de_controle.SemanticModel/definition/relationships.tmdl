@@ -1,0 +1,38 @@
+relationship b3924bd3-c210-21b5-6912-7ab74614d7cd
+	fromColumn: fato_entrega.sk_data_compra
+	toColumn: dim_calendario.sk_data
+
+relationship dba923e1-5fd2-2424-b1ca-3c285db55d0b
+	isActive: false
+	fromColumn: fato_entrega.sk_data_prevista
+	toColumn: dim_calendario.sk_data
+
+relationship 68a08a13-a03f-4000-3fd3-d1a3f13fc232
+	isActive: false
+	fromColumn: fato_entrega.sk_data_entrega
+	toColumn: dim_calendario.sk_data
+
+relationship 84e09156-cea2-cd9a-e4be-0cfb581a62ba
+	fromColumn: fato_item_pedido.sk_data_limite_envio
+	toColumn: dim_calendario.sk_data
+
+relationship 1af61dd1-78fb-23d6-62c4-2394ae4b60b1
+	fromColumn: fato_entrega.sk_cliente
+	toColumn: dim_cliente.sk_cliente
+
+relationship 78697cf7-1166-859c-36c9-c21cc12ca0ae
+	fromColumn: fato_entrega.sk_geografia_destino
+	toColumn: dim_geografia.sk_geografia
+
+relationship e98ee768-7b79-a3f2-c3f0-00280fa5d43c
+	fromColumn: fato_item_pedido.sk_geografia_origem
+	toColumn: dim_geografia.sk_geografia
+
+relationship 9b6910c3-e3d5-ce93-8109-806f962f6af2
+	fromColumn: fato_item_pedido.sk_produto
+	toColumn: dim_produto.sk_produto
+
+relationship 7ef8af5e-5914-c4ff-e2b6-e343584d49ae
+	fromColumn: fato_item_pedido.sk_vendedor
+	toColumn: dim_vendedor.sk_vendedor
+
