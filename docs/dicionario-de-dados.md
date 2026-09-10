@@ -191,8 +191,8 @@ cobrindo o pedido inteiro. Nenhum valor negativo.
 | `id_avaliacao` | string | Metade da chave natural. **Sozinho não é chave** — 98.410 distintos para 99.224 linhas |
 | `id_pedido` | string | Outra metade da chave. Junta com `pedidos` |
 | `nota` | int | De 1 a 5, sem valores fora da faixa |
-| `titulo_comentario` | string | **87.656 nulos** — a maioria não escreve título |
-| `comentario` | string | **58.247 nulos** — a maioria dá nota sem comentar |
+| `titulo_comentario` | string | **87.658 nulos** — a maioria não escreve título |
+| `comentario` | string | **58.274 nulos** — a maioria dá nota sem comentar |
 | `data_avaliacao` | datetime | Diária na prática: apenas 2 horários distintos em 99.224 linhas |
 | `data_resposta` | datetime | Resposta do vendedor. Timestamp real, 53.278 horários distintos |
 
@@ -205,6 +205,12 @@ limpeza. Nenhuma linha é rejeitada.
 
 Os nulos nos comentários são esperados e não indicam falha de carga. A caixa do texto é
 preservada como o cliente escreveu: comentário em maiúsculas carrega sinal.
+
+**Os nulos da silver são maiores que os da origem, de propósito.** O CSV tem 87.656 títulos e
+58.247 comentários vazios; a silver registra 87.658 e 58.274. A diferença são 2 títulos e 27
+comentários que continham **apenas espaço, tabulação ou caractere de controle**. O
+`Text.Clean` e o `Text.Trim` os esvaziam, e o passo seguinte converte vazio para nulo, porque
+texto sem conteúdo visível não é texto. É regra da camada, não defeito de carga.
 
 > **Consequência para a fase 3:** com 547 pedidos tendo mais de uma nota, não existe "a nota
 > do pedido". A `fato_entrega`, que é por pedido, precisará de uma regra declarada — média,
@@ -307,28 +313,116 @@ qualidade das coordenadas.
 ### `fato_entrega`
 
 **Propósito:** um pedido e sua história de entrega. Base de todos os indicadores de prazo.
-**Grão:** um pedido.
-**Origem:** `silver.pedidos`, enriquecida por `silver.itens_pedido`.
+**Grão:** um pedido — 99.441 linhas, igual a `silver.pedidos`.
+**Origem:** `silver.pedidos`, enriquecida por `silver.itens_pedido` e `silver.avaliacoes`.
 
 | Campo | Tipo | Definição |
 |---|---|---|
 | `sk_pedido` | bigint | Chave substituta |
 | `id_pedido` | string | Chave natural da origem, mantida para rastreio |
-| `dias_de_atraso` | int | Dias entre entrega real e prevista. Negativo indica entrega adiantada |
+| `sk_cliente` | bigint | Junta com `dim_cliente`. Sem nulos |
+| `sk_geografia_destino` | bigint | Junta com `dim_geografia`. É o endereço do cliente |
+| `sk_data_compra` | int | `yyyyMMdd`. Marco zero do funil |
+| `sk_data_prevista` | int | `yyyyMMdd`. Prazo prometido ao cliente |
+| `sk_data_entrega` | int | `yyyyMMdd`. **Nulo em 2.965 pedidos** não entregues |
+| `status_pedido` | string | Oito valores da origem |
+| `dias_ate_aprovacao` | int | Compra até aprovação do pagamento |
+| `dias_ate_coleta` | int | Compra até coleta pela transportadora |
+| `lead_time_dias` | int | Compra até entrega ao cliente |
+| `dias_de_atraso` | int | Entrega real menos prevista. Negativo indica entrega adiantada |
 | `entregue_no_prazo` | boolean | Verdadeiro quando a entrega ocorreu até a data prevista. Base do OTD |
-| | | _(completar na fase 3)_ |
+| `nota` | int | De 1 a 5. Avaliação mais recente do pedido — ver ADR-002. **Nulo em 768 pedidos** |
+| `valor_itens` | decimal | Soma do preço dos itens. Total: **13.591.643,70** |
+| `valor_frete` | decimal | Soma do frete dos itens. Total: **2.251.909,54** |
+| `qtd_itens` | int | Contagem de linhas de item |
 
-**Regras conhecidas:** pedidos sem `data_entrega_real` não entram no cálculo de OTD — são
-pedidos em trânsito, cancelados ou indisponíveis. Contá-los como atrasados inflaria o
-indicador.
+**Pedido não entregue não é pedido atrasado.** Os 2.965 sem `data_entrega_real` têm
+`sk_data_entrega`, `dias_de_atraso` e `entregue_no_prazo` **nulos**, nunca falso e nunca zero.
+Falso significaria "atrasou", e pedido em trânsito ainda não atrasou. É o que faz o
+denominador do OTD ser **96.476** e não 99.441.
+
+**A comparação de prazo é feita em data, não em timestamp.** `data_entrega_prevista` vem com
+hora `00:00:00` e `data_entrega_real` com hora real. Comparar as duas cruas marcaria como
+atrasada toda entrega feita no dia do prazo depois da meia-noite. O fato aplica `DATE()` nos
+dois lados.
+
+**775 pedidos não têm nenhum item**, então `valor_itens`, `valor_frete` e `qtd_itens` ficam
+nulos — nunca zero, que diria "pedido de R$ 0,00" e contaminaria ticket médio e frete sobre
+faturamento. A quebra por status explica 767 deles: 603 `unavailable` e 164 `canceled`. Os
+outros 8 são anomalia da origem — 5 `created`, 2 `invoiced` e **1 `shipped`**, este último
+sem explicação de negócio possível.
+
+---
 
 ### `fato_item_pedido`
 
-_(preencher na fase 3)_
+**Propósito:** o item de um pedido, com preço e frete próprios. Grão do custo de frete por
+rota.
+**Grão:** um item de um pedido — 112.650 linhas, igual a `silver.itens_pedido`.
+**Origem:** `silver.itens_pedido`.
+
+| Campo | Tipo | Definição |
+|---|---|---|
+| `sk_item` | bigint | Chave substituta |
+| `id_pedido`, `numero_item` | string, int | Chave natural composta, mantida para rastreio |
+| `sk_pedido` | bigint | Junta com `fato_entrega`. **Sem nulos** — nulo aqui seria fato órfão |
+| `sk_produto` | bigint | Junta com `dim_produto`. Sem nulos |
+| `sk_vendedor` | bigint | Junta com `dim_vendedor`. Sem nulos |
+| `sk_geografia_origem` | bigint | Junta com `dim_geografia`. É o endereço do vendedor. **Nulo em 253 linhas** |
+| `sk_data_limite_envio` | int | `yyyyMMdd`. Prazo do vendedor para despachar |
+| `preco` | decimal | Preço do item. Total: **13.591.643,70** |
+| `valor_frete` | decimal | Frete rateado no item. Total: **2.251.909,54** |
+| `peso_gramas`, `volume_cm3` | int | Materializados da `dim_produto` — ver abaixo |
+
+**A chave natural é `id_pedido` + `numero_item`, nunca `id_pedido` + `id_produto`.** O mesmo
+produto aparece várias vezes no mesmo pedido, que é como a origem representa quantidade;
+deduplicar por produto apagaria 10.225 linhas, 9% da tabela.
+
+**`peso_gramas` e `volume_cm3` são desnormalização deliberada.** Custo por quilo é medida de
+linha de item, e buscá-los na dimensão custaria uma junção em toda consulta de frete. Ficam
+nulos nas **18 linhas** dos 2 produtos sem dimensão física.
+
+**253 linhas não têm geografia de origem** — 7 vendedores cujo prefixo de CEP **nunca esteve
+no arquivo de geolocalização**. É lacuna de cobertura da origem, e não rejeição por regra
+nossa: os 31 de `geografia_rejeitados` são população diferente, medida e descartada por
+coordenada inválida. Os 7 estão em cinco UFs, sem concentração. A `dim_vendedor` mantém
+cidade e UF deles, então análise de rota por par de estados não é afetada — só o mapa.
+
+---
 
 ### Dimensões
 
-_(preencher na fase 3)_
+| Tabela | Grão | Linhas | Chave natural | Observação |
+|---|---|---|---|---|
+| `dim_calendario` | um dia | 1.096 | `data` | Gerada, 2016-01-01 a 2018-12-31. `sk_data` é `yyyyMMdd` — única chave inteligente do modelo |
+| `dim_cliente` | uma pessoa | 96.096 | `id_cliente_unico` | SCD tipo 1. A geografia é a do pedido mais recente |
+| `dim_vendedor` | um vendedor | 3.095 | `id_vendedor` | Cidade, UF e prefixo de CEP |
+| `dim_produto` | um produto | 32.951 | `id_produto` | 610 sem categoria, 2 sem dimensão física |
+| `dim_geografia` | um prefixo de CEP | 19.011 | `prefixo_cep` | Centroide em mediana. Serve os dois fatos em papéis opostos |
+
+**Todas as chaves substitutas vêm de `ROW_NUMBER()` ordenado pela chave natural**, nunca de
+`monotonically_increasing_id()`. A gold é reconstruída inteira a cada execução, com o modelo
+semântico publicado em cima dela, então a chave precisa ser determinística. Onde a escolha da
+linha depende de ordenação — a `dim_cliente` e a nota da `fato_entrega` —, há sempre um
+critério de desempate que nunca empata.
+
+**`dim_calendario` é dimensão de papel duplo.** Compra, prazo prometido e entrega apontam
+para ela através de `sk_data_compra`, `sk_data_prevista` e `sk_data_entrega`. É por isso que
+o fato guarda a data como **chave** e não como data: `sk_data_compra = 20170315` se lê como
+identificador e não convida ninguém a agregar por ele direto no fato.
+
+**`dim_cliente` é tipo 1, e o histórico se perde.** 250 pessoas têm mais de um prefixo de CEP,
+122 mais de uma cidade e 39 mais de uma UF ao longo dos pedidos. O risco é contido porque o
+**fato guarda a geografia do próprio pedido** — `sk_geografia_destino` vem do CEP daquele
+`id_cliente`, não do CEP atual da pessoa. Análise de rota usa o fato e continua correta; a
+dimensão responde "onde esta pessoa está hoje".
+
+**`categoria_rotulo` da `dim_produto` deriva do código da origem** por
+`INITCAP(REPLACE(categoria, '_', ' '))`. O `product_category_name_translation.csv` foi
+descartado: traduz do português para o inglês, direção oposta à do projeto, e não virou
+tabela silver — usá-lo obrigaria o notebook da gold a ler da bronze, pulando uma camada. O
+rótulo fica imperfeito (`Cama Mesa Banho`, não `Cama, Mesa e Banho`), e a limitação é
+registrada aqui em vez de escondida.
 
 ---
 
