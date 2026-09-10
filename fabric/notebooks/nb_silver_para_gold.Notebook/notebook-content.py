@@ -110,7 +110,7 @@
 
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 SILVER = "`Torre-de-Controle`.lh_silver.dbo"
 
@@ -155,10 +155,9 @@ def silver(tabela):
 #
 # ============================================================
 
-# Datas Manuais aplicadas para analise dos dados do projeto atual 
-
-start = datetime.strptime('2016-01-01','%Y-%m-%d')
-end   = datetime.strptime('2018-12-31','%Y-%m-%d')
+# Datas manuais aplicadas para análise dos dados do projeto atual
+start = date(2016, 1, 1)
+end   = date(2018, 12, 31)
 
 # METADATA ********************
 
@@ -292,6 +291,7 @@ calendar_auto = (calendar_auto
     .withColumn('semana_mes',
         F.ceil((F.dayofmonth('data') + F.dayofweek(F.trunc('data', 'month')) -1)/ 7))
     .withColumn('dia', F.dayofmonth('data'))
+    .withColumn('num_dia_semana', ((F.dayofweek('data') + 5) % 7) + 1)
     .withColumn('nome_do_dia', mapa_dia[F.dayofweek('data')])
 )
 
@@ -335,7 +335,6 @@ calendar_auto = calendar_auto.drop('_num_trimestre')
 calendar_auto = (calendar_auto
     .join(feriados_df, on='data', how='left')
     .withColumn('feriado', F.col('nome_feriado').isNotNull())
-    .withColumn('nome_feriado', F.coalesce(F.col('nome_feriado'), F.lit('')))
     .withColumn('fim_de_semana', F.dayofweek('data').isin(1, 7))
     .withColumn('tipo_dia',
         F.when(F.col('feriado'), 'Feriado')
@@ -359,7 +358,7 @@ dim_calendario = calendar_auto.select(
     "ano", "anotrimestre", "trimestre", "trimestre_do_ano",
     "mes", "anomes", "nome_do_mes", "mes_abreviado",
     "semana_ano", "semana_mes", "semana_do_mes",
-    "dia", "nome_do_dia", "dia_semana_abreviado",
+    "dia", "num_dia_semana", "nome_do_dia", "dia_semana_abreviado",
     "feriado", "nome_feriado", "fim_de_semana", "tipo_dia", "dia_util",
 )
 
@@ -378,9 +377,10 @@ dim_calendario.write.mode('overwrite').option('overwriteSchema', 'true').saveAsT
 
 # # dim_vendedor
 # 
-# **Grão:** Um vendedor por linha.  
-# **Origem:** silver.vendedores - 3.095 linhas   
-# **Chave natural:** id_vendedor  
+# - **Grão:** Um vendedor por linha.  
+# - **Origem:** silver.vendedores - 3.095 linhas   
+# - **Chave natural:** id_vendedor 
+#  
 # **Alimenta:** `fato_item_pedido` via `sk_vendedor`. A UF daqui é a **origem** da rota;
 # o destino vem de `dim_cliente` através de `fato_entrega`.  
 # **Validação:** 3.095 linhas, `sk_vendedor` de 1 a 3.095 sem buraco.
@@ -810,9 +810,7 @@ fato_item_pedido.write.mode('overwrite').option('overwriteSchema', 'true').saveA
 
 # MARKDOWN ********************
 
-# # Comentarios tabelas 
-# 
-
+# # COMENTARIOS DAS TABELAS
 
 # CELL ********************
 
@@ -832,7 +830,7 @@ comentarios = {
     "dim_vendedor":     "Um vendedor por linha (3.095), com cidade, UF e prefixo de CEP. É a origem da rota.",
     "dim_produto":      "Um produto por linha (32.951). categoria_rotulo deriva do código da origem; 610 produtos não têm categoria e 2 não têm dimensão física.",
     "dim_geografia":    "Um centroide por prefixo de CEP (19.011), em mediana de latitude e longitude. Serve os dois fatos: destino do cliente e origem do vendedor.",
-    "fato_entrega":     "Um pedido por linha (99.441). Base de OTD, lead time e atraso. Pedido não entregue tem data, atraso e prazo no prazo nulos — 2.965 casos. A nota é a avaliação mais recente, conforme ADR-002.",
+    "fato_entrega":     "Um pedido por linha (99.441). Base de OTD, lead time e atraso. Pedido não entregue tem data, atraso e entregue_no_prazo nulos — 2.965 casos. A nota é a avaliação mais recente, conforme ADR-002.",
     "fato_item_pedido": "Um item de pedido por linha (112.650). É o grão do preço e do frete. Chave natural id_pedido + numero_item, nunca id_pedido + id_produto.",
 }
 
