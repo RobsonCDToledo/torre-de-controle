@@ -584,19 +584,24 @@ let
   // carrega sinal — 3% dos comentarios estao em caixa alta, e sao os
   // clientes irritados. Trim e Clean resolvem o defeito real: 23% dos
   // comentarios preenchidos tem espaco sobrando nas pontas.
-    PadronizarTexto = Table.TransformColumns(DeduplicarBase, {
+  PadronizarTexto = Table.TransformColumns(DeduplicarBase, {
                        {"titulo_comentario", each if _ = null then null else Text.Trim(Text.Clean(_)), type text},
                        {"comentario",        each if _ = null then null else Text.Trim(Text.Clean(_)), type text}
                     }),
 
-  // precisa virar nulo aqui. A ordem inversa deixaria o espaco sobreviver.
-  VaziosParaNulo  = Table.ReplaceValue(PadronizarTexto, "", null, Replacer.ReplaceValue, {"titulo_comentario", "comentario"}),
+  // Csv.Document devolve texto vazio para campo vazio, nunca nulo. Vem depois
+  // do trim de proposito: comentario que era so espaco vira "" ali e precisa
+  // virar nulo aqui. A ordem inversa deixaria o espaco sobreviver.
+  VaziosParaNulo  = Table.ReplaceValue(PadronizarTexto, "", null, Replacer.ReplaceValue,
+                      {"titulo_comentario", "comentario"}),
 
+  // Rastro. A data vem da particao da bronze, nao do momento em que este
+  // Dataflow rodou: e a silver que se reconstroi, o dado foi ingerido uma vez.
   DataParticao    = Date.FromText(particao_data),
   ComOrigem       = Table.AddColumn(VaziosParaNulo, "_origem_arquivo", each NomeArquivo, type text),
   ComRastro       = Table.AddColumn(ComOrigem, "_ingerido_em", each DataParticao, type date)
 in
-    ComRastro;
+  ComRastro;
 [DataDestinations = {[Definition = [Kind = "Reference", QueryName = "geografia_DataDestination", IsNewTarget = true], Settings = [Kind = "Automatic", TypeSettings = [Kind = "Table"]]]}]
 shared geografia = /*  geografia
     Um centroide por prefixo de CEP. Grao: prefixo de CEP.
