@@ -346,13 +346,20 @@ let
 
   // Sem duplicata na origem hoje. O passo fica porque declara a chave natural
   // no codigo e protege contra mudanca futura na origem.
-  DeduplicarBase       = Table.Distinct(TipagemdosDados, {"id_produto"}),
+  DeduplicarBase  = Table.Distinct(TipagemdosDados, {"id_produto"}),
+
+  // Csv.Document devolve texto vazio para campo vazio, nunca nulo. A tipagem
+  // converte "" em nulo quando a coluna vira numero — por isso peso e tamanhos
+  // ja chegam nulos — mas deixa "" intacto no texto. Sem este passo, os 610
+  // produtos sem categoria mentem que tem valor, e um IS NULL na silver
+  // devolve zero.
+  VaziosParaNulo  = Table.ReplaceValue(DeduplicarBase, "", null, Replacer.ReplaceValue, {"categoria"}),
 
   // Rastro. A data vem da particao da bronze, nao do momento em que este
   // Dataflow rodou: e a silver que se reconstroi, o dado foi ingerido uma vez.
-  DataParticao         = Date.FromText(particao_data),
-  ComOrigem            = Table.AddColumn(DeduplicarBase, "_origem_arquivo", each NomeArquivo, type text),
-  ComRastro            = Table.AddColumn(ComOrigem, "_ingerido_em", each DataParticao, type date)
+  DataParticao    = Date.FromText(particao_data),
+  ComOrigem       = Table.AddColumn(VaziosParaNulo, "_origem_arquivo", each NomeArquivo, type text),
+  ComRastro       = Table.AddColumn(ComOrigem, "_ingerido_em", each DataParticao, type date)
 in
     ComRastro;
 [DataDestinations = {[Definition = [Kind = "Reference", QueryName = "pedidos_DataDestination", IsNewTarget = true], Settings = [Kind = "Automatic", TypeSettings = [Kind = "Table"]]]}]
@@ -577,16 +584,17 @@ let
   // carrega sinal — 3% dos comentarios estao em caixa alta, e sao os
   // clientes irritados. Trim e Clean resolvem o defeito real: 23% dos
   // comentarios preenchidos tem espaco sobrando nas pontas.
-  PadronizarTexto = Table.TransformColumns(DeduplicarBase, {
+    PadronizarTexto = Table.TransformColumns(DeduplicarBase, {
                        {"titulo_comentario", each if _ = null then null else Text.Trim(Text.Clean(_)), type text},
                        {"comentario",        each if _ = null then null else Text.Trim(Text.Clean(_)), type text}
                     }),
-                    
-  // Rastro. A data vem da particao da bronze, nao do momento em que este
-  // Dataflow rodou: e a silver que se reconstroi, o dado foi ingerido uma vez.
-  DataParticao         = Date.FromText(particao_data),
-  ComOrigem            = Table.AddColumn(DeduplicarBase, "_origem_arquivo", each NomeArquivo, type text),
-  ComRastro            = Table.AddColumn(ComOrigem, "_ingerido_em", each DataParticao, type date)
+
+  // precisa virar nulo aqui. A ordem inversa deixaria o espaco sobreviver.
+  VaziosParaNulo  = Table.ReplaceValue(PadronizarTexto, "", null, Replacer.ReplaceValue, {"titulo_comentario", "comentario"}),
+
+  DataParticao    = Date.FromText(particao_data),
+  ComOrigem       = Table.AddColumn(VaziosParaNulo, "_origem_arquivo", each NomeArquivo, type text),
+  ComRastro       = Table.AddColumn(ComOrigem, "_ingerido_em", each DataParticao, type date)
 in
     ComRastro;
 [DataDestinations = {[Definition = [Kind = "Reference", QueryName = "geografia_DataDestination", IsNewTarget = true], Settings = [Kind = "Automatic", TypeSettings = [Kind = "Table"]]]}]
