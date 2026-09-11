@@ -119,9 +119,9 @@ table fato_item_pedido
 		summarizeBy: none
 		sourceColumn: preco
 
-		changedProperty = DataType
-
 		changedProperty = SummarizeBy
+
+		changedProperty = DataType
 
 		changedProperty = FormatString
 
@@ -136,11 +136,11 @@ table fato_item_pedido
 		summarizeBy: none
 		sourceColumn: valor_frete
 
-		changedProperty = DataType
-
 		changedProperty = SummarizeBy
 
 		changedProperty = IsHidden
+
+		changedProperty = DataType
 
 		changedProperty = FormatString
 

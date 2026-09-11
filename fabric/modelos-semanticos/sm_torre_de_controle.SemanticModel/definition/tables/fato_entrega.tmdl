@@ -201,11 +201,11 @@ table fato_entrega
 		summarizeBy: none
 		sourceColumn: valor_itens
 
-		changedProperty = DataType
-
 		changedProperty = SummarizeBy
 
 		changedProperty = IsHidden
+
+		changedProperty = DataType
 
 		changedProperty = FormatString
 
@@ -220,11 +220,11 @@ table fato_entrega
 		summarizeBy: none
 		sourceColumn: valor_frete
 
-		changedProperty = DataType
-
 		changedProperty = SummarizeBy
 
 		changedProperty = IsHidden
+
+		changedProperty = DataType
 
 		changedProperty = FormatString
 
