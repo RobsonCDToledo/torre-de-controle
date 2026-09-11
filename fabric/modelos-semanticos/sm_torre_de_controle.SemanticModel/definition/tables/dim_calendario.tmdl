@@ -261,6 +261,27 @@ table dim_calendario
 
 		annotation SummarizationSetBy = User
 
+	hierarchy Ano/Trimestre/Mês/Dia
+		lineageTag: ece5e93f-a6a5-4215-b9bd-bee6ac5a04e0
+
+		level ano
+			lineageTag: 23b4e599-9636-429e-9fa6-cf5c32e5022b
+			column: ano
+
+		level trimestre_do_ano
+			lineageTag: 025c96a2-dc5a-4f8a-b81e-36841a44e45c
+			column: trimestre_do_ano
+
+		level nome_do_mes
+			lineageTag: 9672d202-b337-4a09-a230-6881b4560745
+			column: nome_do_mes
+
+		level dia
+			lineageTag: aa93e8e7-eebb-47da-8400-98aa54089a04
+			column: dia
+
+		changedProperty = Name
+
 	partition dim_calendario = entity
 		mode: directLake
 		source
