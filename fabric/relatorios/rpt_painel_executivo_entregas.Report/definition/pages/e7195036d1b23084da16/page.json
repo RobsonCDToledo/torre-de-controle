@@ -1,0 +1,110 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e7195036d1b23084da16",
+  "displayName": "Page 1",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F5F5'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F5F5'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "inputBoxColor": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F5F5'"
+                  }
+                }
+              }
+            }
+          },
+          "headerSize": {
+            "expr": {
+              "Literal": {
+                "Value": "10L"
+              }
+            }
+          },
+          "borderColor": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F5F5'"
+                  }
+                }
+              }
+            }
+          },
+          "backgroundColor": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F5F5'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "filterCard": [
+      {
+        "properties": {
+          "inputBoxColor": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F5F5F5'"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "selector": {
+          "id": "Available"
+        }
+      }
+    ]
+  }
+}

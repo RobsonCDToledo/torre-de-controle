@@ -430,10 +430,28 @@ registrada aqui em vez de escondida.
 
 | Medida | Definição de negócio | Cuidado |
 |---|---|---|
+| `Total de Pedidos` | Quantidade de pedidos — contagem de linhas de `fato_entrega` | — |
+| `Pedidos Entregues` | Pedidos que chegaram ao destino | Filtra por `entregue_no_prazo` não nulo, não por `sk_data_entrega` — os dois ficam nulos juntos para pedido não entregue, mas o primeiro carrega o significado de negócio |
+| `Pedidos no Prazo` | Pedidos entregues até a data prometida ao cliente | — |
+| `Pedidos Cancelados` | Pedidos com status "canceled" | — |
 | `OTD %` | Pedidos entregues até a data prevista sobre pedidos entregues | Denominador exclui pedidos não entregues |
-| `Lead time médio` | Média de dias entre compra e entrega | Sensível a outliers — considerar mediana em paralelo |
-| `Frete sobre faturamento` | Soma de frete sobre soma do valor dos itens | Razão de somas, nunca média de razões |
-| | | _(completar na fase 4)_ |
+| `Lead Time Médio` | Média de dias entre compra e entrega | Sensível a outliers — considerar mediana em paralelo |
+| `Lead Time Mediano` | Mediana de dias entre compra e entrega | Complementa a média quando outliers distorcem o indicador |
+| `Frete sobre Faturamento` | Soma de frete sobre soma do valor dos itens | Razão de somas, nunca média de razões — calcular por pedido e tirar a média distorce a favor de pedidos pequenos |
+| `Valor de Itens` | Soma do valor dos itens do pedido | — |
+| `Valor de Frete` | Soma do valor de frete do pedido | — |
+| `Ticket Médio` | Valor médio de itens por pedido | — |
+| `Dias até Aprovação (méd)` | Média de dias entre compra e aprovação do pagamento | — |
+| `Dias até Coleta (méd)` | Média de dias entre aprovação e coleta pela transportadora | — |
+| `Dias de Transporte (méd)` | Média de dias em trânsito, da coleta à entrega | Calculada por pedido antes de tirar a média — subtrair duas médias já prontas não dá o mesmo resultado (desigualdade de Jensen) |
+| `Dias de Atraso (méd)` | Média de dias de atraso entre os pedidos atrasados | Filtra `dias_de_atraso > 0`, não apenas não-nulo — pedido adiantado não entra |
+| `Nota Média` | Média da avaliação do cliente | Nula em 768 pedidos sem avaliação — `AVERAGE` já ignora nulos |
+| `Pedidos Entregues (por Data de Entrega)` | `Pedidos Entregues` reagrupado pelo mês em que a entrega aconteceu, não pelo mês da compra | Usa o relacionamento inativo `sk_data_entrega`, via `USERELATIONSHIP` |
+| `OTD % (por Data de Entrega)` | `OTD %` reagrupado pelo mês da entrega | Mesma técnica de `USERELATIONSHIP` — necessária para a evolução mensal fazer sentido pelo mês em que a entrega ocorreu |
+| `Valor de Frete (Item)` | Soma do frete no grão de item, de `fato_item_pedido` | — |
+| `Peso Total (kg)` | Soma do peso dos itens, convertido de gramas | — |
+| `Custo por Quilo` | Valor de frete por quilo transportado | Escopo do Painel de Frete e Rotas (fase 5) — já existe no modelo, mas só passa a ser usada quando esse painel for construído |
+| `Dias de Atraso (méd) por Vendedor` | `Dias de Atraso (méd)` filtrado pelo vendedor, mesmo sem relacionamento físico entre os fatos | Ponte virtual via `TREATAS` — evita reabrir a ambiguidade que motivou remover o relacionamento direto entre `fato_entrega` e `fato_item_pedido` |
 
 ---
 
