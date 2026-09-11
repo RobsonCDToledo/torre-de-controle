@@ -26,6 +26,7 @@ table dim_geografia
 
 	column latitude
 		dataType: double
+		dataCategory: Latitude
 		lineageTag: d0fc5240-1f13-4511-859a-f19bc9a23e41
 		sourceLineageTag: latitude
 		summarizeBy: none
@@ -33,18 +34,23 @@ table dim_geografia
 
 		changedProperty = SummarizeBy
 
+		changedProperty = DataCategory
+
 		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column longitude
 		dataType: double
+		dataCategory: Longitude
 		lineageTag: b7899016-48f8-4f21-938e-2d5f8a54b6ed
 		sourceLineageTag: longitude
 		summarizeBy: none
 		sourceColumn: longitude
 
 		changedProperty = SummarizeBy
+
+		changedProperty = DataCategory
 
 		annotation SummarizationSetBy = User
 

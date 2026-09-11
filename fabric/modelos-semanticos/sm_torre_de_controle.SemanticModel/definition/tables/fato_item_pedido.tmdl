@@ -112,33 +112,39 @@ table fato_item_pedido
 		annotation SummarizationSetBy = Automatic
 
 	column preco
-		dataType: double
+		dataType: decimal
+		formatString: #,0.00
 		lineageTag: 42cb5fef-a16c-4ce7-a504-b2eeee74d982
 		sourceLineageTag: preco
 		summarizeBy: none
 		sourceColumn: preco
 
+		changedProperty = DataType
+
 		changedProperty = SummarizeBy
+
+		changedProperty = FormatString
 
 		annotation SummarizationSetBy = User
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column valor_frete
-		dataType: double
+		dataType: decimal
 		isHidden
+		formatString: #,0.00
 		lineageTag: 88a38623-0682-4a8e-8ce0-ebcb9c58ac13
 		sourceLineageTag: valor_frete
 		summarizeBy: none
 		sourceColumn: valor_frete
 
+		changedProperty = DataType
+
 		changedProperty = SummarizeBy
 
 		changedProperty = IsHidden
 
-		annotation SummarizationSetBy = User
+		changedProperty = FormatString
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation SummarizationSetBy = User
 
 	column peso_gramas
 		dataType: int64

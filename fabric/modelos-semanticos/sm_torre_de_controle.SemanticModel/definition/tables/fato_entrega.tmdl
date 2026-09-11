@@ -193,36 +193,42 @@ table fato_entrega
 		annotation SummarizationSetBy = User
 
 	column valor_itens
-		dataType: double
+		dataType: decimal
 		isHidden
+		formatString: #,0.00
 		lineageTag: 40405ea8-88e1-45bf-89b2-769c9691c1e8
 		sourceLineageTag: valor_itens
 		summarizeBy: none
 		sourceColumn: valor_itens
 
+		changedProperty = DataType
+
 		changedProperty = SummarizeBy
 
 		changedProperty = IsHidden
 
+		changedProperty = FormatString
+
 		annotation SummarizationSetBy = User
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column valor_frete
-		dataType: double
+		dataType: decimal
 		isHidden
+		formatString: #,0.00
 		lineageTag: 4cb67e50-a2d6-44e6-b480-23cad8bfe824
 		sourceLineageTag: valor_frete
 		summarizeBy: none
 		sourceColumn: valor_frete
 
+		changedProperty = DataType
+
 		changedProperty = SummarizeBy
 
 		changedProperty = IsHidden
 
-		annotation SummarizationSetBy = User
+		changedProperty = FormatString
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation SummarizationSetBy = User
 
 	column qtd_itens
 		dataType: int64
