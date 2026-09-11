@@ -94,7 +94,7 @@ table _medidas
 			
 				DIVIDE(
 					[Valor de Itens],
-					[Valor de Frete],
+					[Total de Pedidos],
 					0
 				)
 			```
@@ -188,10 +188,9 @@ table _medidas
 			    [OTD %],
 			    USERELATIONSHIP(fato_entrega[sk_data_entrega], dim_calendario[sk_data])
 			)
+		formatString: #,0.00%;-#,0.00%;#,0.00%
 		displayFolder: Fato entrega\Troca Relacionamento
 		lineageTag: 68ea6516-91d9-4316-b8bf-1c9be3cbb284
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Valor de Frete (Item)' = SUM(fato_item_pedido[valor_frete])
 		formatString: "R$"\ #,0.0;-"R$"\ #,0.0;"R$"\ #,0.0
@@ -201,7 +200,7 @@ table _medidas
 		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
 
 	measure 'Peso Total (kg)' = SUM(fato_item_pedido[peso_gramas]) / 1000
-		formatString: 0.00
+		formatString: #,0.00
 		displayFolder: Fato item pedido\Financeiro e Frete
 		lineageTag: 165bef96-38fc-4b64-8219-745c9c6bff74
 
@@ -213,13 +212,13 @@ table _medidas
 					0
 				)
 			```
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
 		displayFolder: Fato item pedido\Financeiro e Frete
 		lineageTag: be5ed125-eeca-4a10-8fc3-9f1f98432557
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
 
-	measure 'Dias de Atraso Médio (por Vendedor)' = ```
+	measure 'Dias de Atraso (méd) (por Vendedor)' = ```
 			
 				CALCULATE(
 					[Dias de Atraso (méd)],
