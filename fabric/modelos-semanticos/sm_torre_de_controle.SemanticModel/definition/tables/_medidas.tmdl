@@ -232,6 +232,83 @@ table _medidas
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: d978d479-7a24-4e29-a529-dd753283f40b
 
+	measure 'Lead Time Médio Format' = FORMAT([Lead Time Médio], "#.0 Dias")
+		displayFolder: Formatações
+		lineageTag: db79e04f-d3f4-4e5c-98a4-31ea36b58ae1
+
+	measure 'Dias em Atraso (Format)' = FORMAT([Dias de Atraso (méd)], "#.0 Dias")
+		displayFolder: Formatações
+		lineageTag: b6455c3f-6860-4eca-b2ae-6c71ffe1126d
+
+	measure 'OTD % (Text Color)' =
+			
+			VAR vValor = [OTD %]
+			
+			RETURN
+				SWITCH(
+					TRUE(),
+					vValor >= 0.95, "#047857",
+					vValor >= 0.85, "#B45309",
+					vValor <  0.85, "#B91C1C"
+				)
+		displayFolder: Formatações
+		lineageTag: a679a618-24a0-42e1-8c23-cc7a5ce8fb97
+
+	measure 'OTD % (Background Color)' =
+			
+			VAR vValor = [OTD %]
+			
+			RETURN
+				SWITCH(
+					TRUE(),
+					vValor >= 0.95, "#ECFDF5",
+					vValor >= 0.85, "#FFFBEB",
+					vValor <  0.85, "#FEF2F2"
+				)
+		displayFolder: Formatações
+		lineageTag: 1badc47d-9b5a-4149-8402-5a6db4878591
+
+	measure 'Meta OTD' = 0.95
+		displayFolder: Formatações
+		lineageTag: d73f44fa-6a1a-45de-ad94-42ebdd417940
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'OTD % (por Data de Entrega) — Rótulo Final' =
+			
+			VAR UltimoPontoComDados =
+			    CALCULATE(
+			        MAX(dim_calendario[sk_data]),
+			        FILTER(
+			            ALLSELECTED(dim_calendario),
+			            NOT ISBLANK([OTD % (por Data de Entrega)])
+			        )
+			    )
+			RETURN
+			IF(
+			    MAX(dim_calendario[sk_data]) = UltimoPontoComDados,
+			    [OTD % (por Data de Entrega)],
+			    BLANK()
+			)
+		displayFolder: Formatações
+		lineageTag: 7fb26f18-43d1-4ded-b2b1-5502fc003af8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'OTD % (Legend)' =
+			
+			VAR vValor = [OTD %]
+			
+			RETURN
+				SWITCH(
+					TRUE(),
+					vValor >= 0.95, "Bom!",
+					vValor >= 0.85, "Atenção!",
+					vValor <  0.85, "Crítico!"
+				)
+		displayFolder: Formatações
+		lineageTag: 9137b9aa-740e-4078-8edd-d39acad907c5
+
 	partition _medidas = m
 		mode: import
 		source =
