@@ -121,9 +121,16 @@ Resumo do mínimo necessário:
 ```
 torre-de-controle/
 ├── dados/origem/          arquivos brutos servidos ao pipeline via raw.githubusercontent
+├── design/                design system do Painel Executivo — paleta, tema PBI, mockup
+│   ├── theme/             theme_torre_de_controle.json, pronto pra importar no Desktop
+│   ├── mockups/           mockup do painel (Design Components, 16x9)
+│   ├── design-system.html          referência navegável (paleta, tipografia, componentes)
+│   └── paleta-e-uso.md    raciocínio e validação de cor por trás do tema
 ├── docs/
 │   ├── 00-arquitetura.md          desenho completo e contrato de cada camada
 │   ├── 01-como-replicar.md        passo a passo de recursos e alternativas
+│   ├── 02-replicar-funcoes-dax.md catálogo de medidas DAX do modelo semântico
+│   ├── 03-design-visual.md        processo de design visual, do zero ao Figma
 │   ├── dicionario-de-dados.md     catálogo de tabelas, campos e medidas
 │   └── decisoes/                  registros de decisão de arquitetura (ADR)
 ├── fabric/                espelha a hierarquia de pastas do workspace via integração Git

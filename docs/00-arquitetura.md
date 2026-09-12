@@ -129,10 +129,14 @@ Materializados na gold ou calculados em DAX no modelo semântico, conforme o cus
 relatórios — requisito do projeto e boa prática: um modelo, muitos relatórios.
 
 **Painel Executivo de Entregas** — OTD, lead time, evolução mensal, mapa por UF de destino,
-decomposição de atraso por etapa e por rota.
+decomposição de atraso por etapa e por UF de origem do vendedor. "Por rota" (UF origem → UF
+destino) saiu do escopo da fase 4 — `fato_entrega` não tem UF de origem, e não há como
+construí-la em DAX dentro do Direct Lake (ver `ADR-003-uf-de-origem-do-pedido.md`).
 
 **Painel de Frete e Rotas** — custo de frete por rota UF origem → UF destino, frete sobre
-faturamento, custo por quilo, dispersão e outliers, top rotas por custo.
+faturamento, custo por quilo, dispersão e outliers, top rotas por custo. Pré-requisito: a gold
+ganha a coluna `uf_origem` em `fato_entrega` (fase 5, critério de desempate na ADR-003) antes
+de qualquer visual "por rota" existir.
 
 **Self-service** — o modelo publicado com permissão de build, endosso aplicado, RLS por UF,
 mais o endpoint SQL da gold para quem prefere consultar direto. Detalhado em

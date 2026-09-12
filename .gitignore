@@ -32,6 +32,16 @@ docs/diario-de-construcao.md
 # Material de organizacao pessoal do projeto — nao e peca de portfolio.
 docs/archive/
 
+# Mockups de referencia de terceiros usados so pra extrair paleta/estilo —
+# nao sao autorais, nao sao peca de portfolio. Ver design/paleta-e-uso.md.
+design/img/
+
+# Canvas de design (Claude Design) — o HTML seedado (~2MB, payload do editor
+# embutido) nao entra no Git; a fonte legivel (.dc.html/canvas.json) fica
+# versionada, o artefato publicado vive no link citado em docs/03-design-visual.md.
+design/mockups/*.html
+!design/mockups/*.dc.html
+
 # Arquivos .pq de trabalho do Power Query. A fonte da verdade e o Dataflow
 # versionado pela integracao Git em fabric/dataflows/ — manter os dois no
 # repositorio faria o projeto contar duas historias sobre o mesmo codigo.
@@ -40,6 +50,9 @@ scripts/gold/
 
 # Logs de atualizacao e artefatos de depuracao exportados do Fabric.
 trash/
+
+# Arquivos de configuração do Visual Studio Code
+.vscode/
 
 # Arquivos de bloqueio do Office (~$documento.xlsx)
 ~$*

@@ -9,6 +9,15 @@
         "page": "2.3.1"
       },
       "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Torre_de_Controle0023014448150961986.json",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
     }
   },
   "objects": {
@@ -48,6 +57,22 @@
           "name": "Fluent2-CY26SU08",
           "path": "BaseThemes/Fluent2-CY26SU08.json",
           "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Painel_Executivo_de_Entregas2889295269903811.png",
+          "path": "Painel_Executivo_de_Entregas2889295269903811.png",
+          "type": "Image"
+        },
+        {
+          "name": "Torre_de_Controle0023014448150961986.json",
+          "path": "Torre_de_Controle0023014448150961986.json",
+          "type": "CustomTheme"
         }
       ]
     }

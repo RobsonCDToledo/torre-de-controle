@@ -1,0 +1,587 @@
+<title>Design System Torre de Controle</title>
+<style>
+  :root {
+    --bg-page: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --ink: #0F172A;
+    --ink-secondary: #64748B;
+    --ink-muted: #94A3B8;
+    --border: #E2E8F0;
+    --border-strong: #CBD5E1;
+    --primary: #4F46E5;
+    --primary-dark: #4338CA;
+    --primary-tint: #EEF2FF;
+    --secondary: #06B6D4;
+    --lavender: #C7D2FE;
+    --good-bg: #ECFDF5; --good-text: #047857; --good-border: #A7F3D0; --good-raw: #10B981;
+    --warn-bg: #FFFBEB; --warn-text: #B45309; --warn-border: #FDE68A; --warn-raw: #F59E0B;
+    --bad-bg: #FEF2F2;  --bad-text: #B91C1C;  --bad-border: #FECACA;  --bad-raw: #EF4444;
+    --series-1: #4F46E5; --series-2: #06B6D4; --series-3: #EB6834;
+    --series-4: #4A3AA7; --series-5: #E87BA4; --series-6: #64748B;
+    --radius-card: 12px;
+    --radius-pill: 999px;
+    --radius-bar: 5px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg-page);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+  }
+  a { color: var(--primary); }
+  a:hover { color: var(--primary-dark); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- Nav ---- */
+  .topnav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(248, 250, 252, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topnav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: var(--ink); }
+  .brand-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--primary); display: inline-block; }
+  .navlinks { display: flex; gap: 4px; flex-wrap: wrap; }
+  .navlinks a {
+    color: var(--ink-secondary); text-decoration: none; font-size: 13px; font-weight: 600;
+    padding: 6px 10px; border-radius: 7px;
+  }
+  .navlinks a:hover { color: var(--primary); background: var(--primary-tint); }
+
+  /* ---- Hero ---- */
+  .hero { padding-block: 48px 40px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--primary); margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin: 0 0 14px; font-size: clamp(28px, 4vw, 40px); font-weight: 700; text-wrap: balance;
+    max-width: 18ch;
+  }
+  .hero p { max-width: 62ch; color: var(--ink-secondary); font-size: 15px; margin: 0 0 24px; }
+  .meta-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .meta-chip {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; font-size: 12.5px; min-width: 150px;
+  }
+  .meta-chip .k { display: block; color: var(--ink-muted); font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+  .meta-chip .v { color: var(--ink); font-weight: 600; }
+
+  /* ---- Sections ---- */
+  section { padding-block: 44px; border-top: 1px solid var(--border); scroll-margin-top: 72px; }
+  .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+  .section-title { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+  .section-intro { color: var(--ink-secondary); font-size: 14px; max-width: 68ch; margin: 0 0 28px; }
+
+  .tag {
+    display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 2px 8px; border-radius: var(--radius-pill); margin-left: 8px; vertical-align: middle;
+    background: var(--primary-tint); color: var(--primary-dark); border: 1px solid var(--lavender);
+  }
+
+  /* ---- Swatches ---- */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .swatch-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
+  .swatch-fill { height: 72px; display: flex; align-items: flex-end; }
+  .swatch-fill span { font-size: 12px; font-weight: 600; padding: 6px 10px; }
+  .swatch-body { padding: 12px 14px 14px; }
+  .swatch-name { font-weight: 700; font-size: 13.5px; margin-bottom: 2px; }
+  .swatch-hex { font-family: "Consolas", "SFMono-Regular", monospace; font-size: 12px; color: var(--ink-secondary); margin-bottom: 6px; }
+  .swatch-use { font-size: 12px; color: var(--ink-muted); line-height: 1.4; }
+
+  /* ---- Series strip ---- */
+  .series-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .series-swatch { border-radius: 10px; padding: 14px 10px; text-align: center; color: #fff; }
+  .series-swatch .n { font-size: 10px; font-weight: 700; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.05em; }
+  .series-swatch .h { font-family: monospace; font-size: 11.5px; margin-top: 4px; }
+  .series-note { margin-top: 14px; font-size: 12.5px; color: var(--ink-muted); }
+
+  /* ---- Typography scale ---- */
+  .type-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
+    padding: 16px 0; border-bottom: 1px solid var(--border);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-sample { color: var(--ink); }
+  .type-meta { text-align: right; flex: none; }
+  .type-token { font-family: monospace; font-size: 12px; color: var(--primary); font-weight: 700; }
+  .type-desc { font-size: 12px; color: var(--ink-muted); max-width: 26ch; }
+
+  /* ---- Style tokens (radius/shadow/icon) ---- */
+  .style-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .style-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px; }
+  .style-card h4 { margin: 0 0 10px; font-size: 13.5px; }
+  .radius-demo { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .radius-box { background: var(--primary-tint); border: 1px solid var(--lavender); }
+
+  /* ---- Component mocks ---- */
+  .mock-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; align-items: start; }
+  .kpi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px; }
+  .kpi-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-secondary); margin-bottom: 10px; }
+  .kpi-value { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: var(--radius-pill); border: 1px solid;
+  }
+  .status-good { background: var(--good-bg); color: var(--good-text); border-color: var(--good-border); }
+  .status-warn { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+  .status-bad { background: var(--bad-bg); color: var(--bad-text); border-color: var(--bad-border); }
+
+  .bar-track { background: var(--border); border-radius: var(--radius-bar); height: 16px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: var(--radius-bar); }
+
+  .mini-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .mini-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted); font-weight: 700; padding: 0 10px 10px; }
+  .mini-table td { padding: 9px 10px; border-top: 1px solid var(--border); }
+  .mini-table tr:first-child td { border-top: none; }
+  .mini-table .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+  .dash-header-mock { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .dash-header-mock .title { font-weight: 700; font-size: 16px; }
+  .filter-pill { background: var(--bg-page); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: var(--ink-secondary); }
+
+  /* ---- JSON block ---- */
+  .json-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px; }
+  .json-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 12px; flex-wrap: wrap; }
+  .json-toolbar p { margin: 0; font-size: 12.5px; color: var(--ink-muted); }
+  #copy-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 8px;
+    padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  #copy-btn:hover { background: var(--primary-dark); }
+  #copy-btn:focus-visible { outline: 2px solid var(--primary-dark); outline-offset: 2px; }
+  #theme-json {
+    width: 100%; min-height: 260px; resize: vertical;
+    background: #0F172A; color: #E2E8F0; border: none; border-radius: 8px;
+    padding: 16px; font-family: "Consolas", "SFMono-Regular", monospace; font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  /* ---- Recommendations ---- */
+  .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .rec-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; }
+  .rec-card h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; font-size: 14px; }
+  .rec-card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .rec-card li { display: flex; gap: 10px; font-size: 13.5px; color: var(--ink); align-items: flex-start; }
+  .rec-icon { flex: none; margin-top: 2px; }
+  .fidelity-banner {
+    margin-top: 20px; display: flex; align-items: center; gap: 12px;
+    background: var(--good-bg); border: 1px solid var(--good-border); border-radius: var(--radius-card);
+    padding: 14px 18px; font-size: 13.5px; color: var(--good-text); font-weight: 600;
+  }
+
+  footer { padding-block: 32px 56px; }
+  footer p { font-size: 12px; color: var(--ink-muted); max-width: 70ch; }
+
+  @media (max-width: 640px) {
+    .series-strip { grid-template-columns: repeat(3, 1fr); }
+    .navlinks { display: none; }
+  }
+</style>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <span class="brand-mark"><span class="brand-dot"></span>Torre de Controle · Design System</span>
+    <div class="navlinks">
+      <a href="#identidade">Identidade</a>
+      <a href="#paleta-institucional">Paleta</a>
+      <a href="#paleta-dashboard">Dashboard</a>
+      <a href="#paleta-series">Séries</a>
+      <a href="#tipografia">Tipografia</a>
+      <a href="#estilo">Estilo</a>
+      <a href="#componentes">Componentes</a>
+      <a href="#tokens">Tokens</a>
+      <a href="#recomendacoes">Recomendações</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section class="hero" id="identidade" style="border-top:none;">
+    <span class="eyebrow">Bloco 1 — Identidade de marca</span>
+    <h1>Design System — Torre de Controle</h1>
+    <p>
+      Diferente do uso padrão deste roteiro — extrair identidade do site de uma empresa —, aqui
+      formalizamos a identidade que nós mesmos definimos para o projeto: uma plataforma de dados
+      de logística/e-commerce (grão Olist), construída para demonstrar Fabric moderno em
+      portfólio público. A "fonte de análise" é o que já está decidido em
+      <code>design/paleta-e-uso.md</code> e <code>design/theme/theme_torre_de_controle.json</code>,
+      mais a paleta de referência em <code>design/img/data-visualization-palette.png</code>
+      (Tailwind CSS). Todo valor abaixo é <span class="tag">decisão de projeto</span> — não uma
+      estimativa visual de material de terceiro.
+    </p>
+    <div class="meta-chips">
+      <div class="meta-chip"><span class="k">Segmento</span><span class="v">Logística / Supply Chain (BI)</span></div>
+      <div class="meta-chip"><span class="k">Tom visual</span><span class="v">Técnico/dados + Minimalista</span></div>
+      <div class="meta-chip"><span class="k">Personalidade</span><span class="v">Direto, confiável, analítico</span></div>
+      <div class="meta-chip"><span class="k">Tema recomendado</span><span class="v">Light · espaçado/executivo</span></div>
+    </div>
+  </section>
+
+  <section id="paleta-institucional">
+    <div class="section-eyebrow">Bloco 2A</div>
+    <h2 class="section-title">Paleta institucional</h2>
+    <p class="section-intro">
+      As cinco cores que definem a marca do projeto — todas provenientes da escala Tailwind CSS,
+      escolhidas deliberadamente por seus papéis (não recicladas depois disso; ver nota de
+      proveniência em <code>paleta-e-uso.md</code>).
+    </p>
+    <div class="swatch-grid">
+      <div class="swatch-card">
+        <div class="swatch-fill" style="background:#4F46E5;"><span style="color:#fff;">Aa</span></div>
+        <div class="swatch-body">
+          <div class="swatch-name">Primária</div>
+          <div class="swatch-hex">#4F46E5 · indigo-600</div>
+          <div class="swatch-use">Título, ações, linha de dado principal · texto claro por cima</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-fill" style="background:#06B6D4;"><span style="color:#0F172A;">Aa</span></div>
+        <div class="swatch-body">
+          <div class="swatch-name">Secundária</div>
+          <div class="swatch-hex">#06B6D4 · cyan-500</div>
+          <div class="swatch-use">Segunda série de dado, rampa ordinal · texto escuro por cima</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-fill" style="background:#C7D2FE;"><span style="color:#0F172A;">Aa</span></div>
+        <div class="swatch-body">
+          <div class="swatch-name">Apoio (Lavanda)</div>
+          <div class="swatch-hex">#C7D2FE · indigo-200</div>
+          <div class="swatch-use">Ponta clara de rampa sequencial, estado "filtro aplicado"</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-fill" style="background:#F8FAFC; border-bottom:1px solid var(--border);"><span style="color:#0F172A;">Aa</span></div>
+        <div class="swatch-body">
+          <div class="swatch-name">Fundo principal</div>
+          <div class="swatch-hex">#F8FAFC · slate-50</div>
+          <div class="swatch-use">Plano de fundo da página, nunca dos cards</div>
+        </div>
+      </div>
+      <div class="swatch-card">
+        <div class="swatch-fill" style="background:#0F172A;"><span style="color:#fff;">Aa</span></div>
+        <div class="swatch-body">
+          <div class="swatch-name">Texto principal</div>
+          <div class="swatch-hex">#0F172A · slate-900</div>
+          <div class="swatch-use">Título, valor de KPI — nunca colorido, só a tinta</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paleta-dashboard">
+    <div class="section-eyebrow">Bloco 2B</div>
+    <h2 class="section-title">Paleta traduzida para o dashboard</h2>
+    <p class="section-intro">
+      Tradução das cores institucionais para papéis de token de BI. Nenhuma é cópia direta —
+      status (bom/atenção/crítico), por exemplo, usa o padrão fundo-claro + texto-700 para
+      garantir contraste de texto, em vez do tom 500 puro.
+    </p>
+    <div class="swatch-grid">
+      <div class="swatch-card"><div class="swatch-fill" style="background:#F8FAFC; border-bottom:1px solid var(--border);"></div><div class="swatch-body"><div class="swatch-name">background-page</div><div class="swatch-hex">#F8FAFC</div><div class="swatch-use">Fundo geral do relatório</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#FFFFFF; border-bottom:1px solid var(--border);"></div><div class="swatch-body"><div class="swatch-name">background-card</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-use">Cards e painéis de visual</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#F8FAFC; border-bottom:1px solid var(--border);"></div><div class="swatch-body"><div class="swatch-name">background-header</div><div class="swatch-hex">#F8FAFC</div><div class="swatch-use">Mesma cor da página — sem barra escura</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#4F46E5;"><span style="color:#fff; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">color-primary</div><div class="swatch-hex">#4F46E5</div><div class="swatch-use">KPI em destaque, linha principal, hyperlink</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#06B6D4;"><span style="color:#0F172A; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">color-secondary</div><div class="swatch-hex">#06B6D4</div><div class="swatch-use">Segunda série, rampa ordinal</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#6366F1;"><span style="color:#fff; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">color-accent</div><div class="swatch-hex">#6366F1 · indigo-500</div><div class="swatch-use">Hover / estado ativo de elemento primário</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#0F172A;"><span style="color:#fff; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">text-primary</div><div class="swatch-hex">#0F172A</div><div class="swatch-use">Título, valor de KPI</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#64748B;"><span style="color:#fff; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">text-secondary</div><div class="swatch-hex">#64748B</div><div class="swatch-use">Label, legenda, subtítulo de card</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#E2E8F0;"></div><div class="swatch-body"><div class="swatch-name">border-color</div><div class="swatch-hex">#E2E8F0</div><div class="swatch-use">Divisor de card, grade de gráfico</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#ECFDF5; border-bottom:1px solid var(--good-border);"><span style="color:#047857; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">color-success</div><div class="swatch-hex">bg #ECFDF5 · texto #047857</div><div class="swatch-use">OTD ≥95% — nunca reciclada como série</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#FFFBEB; border-bottom:1px solid var(--warn-border);"><span style="color:#B45309; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">color-warning</div><div class="swatch-hex">bg #FFFBEB · texto #B45309</div><div class="swatch-use">OTD 85–95%</div></div></div>
+      <div class="swatch-card"><div class="swatch-fill" style="background:#FEF2F2; border-bottom:1px solid var(--bad-border);"><span style="color:#B91C1C; font-size:12px; padding:6px 10px;">Aa</span></div><div class="swatch-body"><div class="swatch-name">color-danger</div><div class="swatch-hex">bg #FEF2F2 · texto #B91C1C</div><div class="swatch-use">OTD &lt;85%, sinalizador de atraso</div></div></div>
+    </div>
+  </section>
+
+  <section id="paleta-series">
+    <div class="section-eyebrow">Bloco 2C</div>
+    <h2 class="section-title">Paleta de séries para gráficos</h2>
+    <p class="section-intro">
+      Seis cores para gráficos multi-série, validadas com o script de acessibilidade cromática da
+      skill <code>dataviz</code> (separação CVD em pares adjacentes, piso de croma, contraste).
+      As duas primeiras são as cores de marca; as três seguintes existem só como reserva — a Fase
+      4 não usa mais de duas séries ao mesmo tempo.
+    </p>
+    <div class="series-strip">
+      <div class="series-swatch" style="background:#4F46E5;"><div class="n">series-1</div><div class="h">#4F46E5</div></div>
+      <div class="series-swatch" style="background:#06B6D4; color:#0F172A;"><div class="n">series-2</div><div class="h">#06B6D4</div></div>
+      <div class="series-swatch" style="background:#EB6834;"><div class="n">series-3</div><div class="h">#EB6834</div></div>
+      <div class="series-swatch" style="background:#4A3AA7;"><div class="n">series-4</div><div class="h">#4A3AA7</div></div>
+      <div class="series-swatch" style="background:#E87BA4;"><div class="n">series-5</div><div class="h">#E87BA4</div></div>
+      <div class="series-swatch" style="background:#64748B;"><div class="n">series-6</div><div class="h">#64748B</div></div>
+    </div>
+    <p class="series-note">
+      <strong>series-1</strong> Azul (marca) · <strong>series-2</strong> Teal (marca) ·
+      <strong>series-3</strong> Laranja queimado · <strong>series-4</strong> Violeta ·
+      <strong>series-5</strong> Magenta · <strong>series-6</strong> Cinza-ardósia — exceção
+      deliberada de neutro para "Outros/não classificado" (não passa no piso de croma da
+      checagem categórica por ser propositalmente neutro). Ordem validada só para pares
+      <em>adjacentes</em> (barra, coluna, linha) — não usar em dispersão/mapa/pequenos múltiplos
+      com mais de três séries sem revalidar.
+    </p>
+  </section>
+
+  <section id="tipografia">
+    <div class="section-eyebrow">Bloco 3</div>
+    <h2 class="section-title">Tipografia</h2>
+    <p class="section-intro">
+      Fonte única — <strong>Segoe UI</strong> — para título, corpo e número. É a única cor de fonte que
+      não exige um fallback do Power BI: renderiza igual no Desktop, no serviço e neste
+      documento. Sem biblioteca de ícones tipográfica (Font Awesome, Material Icons) — ícones em
+      SVG desenhado, sem dependência externa.
+    </p>
+    <div class="json-card" style="margin-bottom:24px;">
+      <div class="type-row">
+        <div class="type-sample" style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-secondary);">Total de Pedidos</div>
+        <div class="type-meta"><div class="type-token">text-xs · 11px / 600</div><div class="type-desc">Label de KPI, nota de rodapé</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-size:12px; color:var(--ink-muted);">últimos 12 meses</div>
+        <div class="type-meta"><div class="type-token">text-sm · 12px / 400</div><div class="type-desc">Legenda de gráfico, eixo, subtítulo</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-size:13px;">Período: Últimos 12 meses</div>
+        <div class="type-meta"><div class="type-token">text-base · 13px / 400</div><div class="type-desc">Corpo de card, filtro, tabela</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-size:15px; font-weight:600;">Evolução mensal do OTD</div>
+        <div class="type-meta"><div class="type-token">text-lg · 15px / 600</div><div class="type-desc">Título de card / seção de gráfico</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-size:28px; font-weight:700;">Painel Executivo</div>
+        <div class="type-meta"><div class="type-token">text-2xl · 28px / 700</div><div class="type-desc">Título de página</div></div>
+      </div>
+      <div class="type-row">
+        <div class="type-sample" style="font-size:32px; font-weight:700;">91,3%</div>
+        <div class="type-meta"><div class="type-token">text-3xl · 32px / 700</div><div class="type-desc">Valor hero de KPI</div></div>
+      </div>
+    </div>
+    <div class="style-grid">
+      <div class="style-card">
+        <h4>Recomendação para Power BI</h4>
+        <p style="font-size:12.5px; color:var(--ink-secondary); margin:0;">
+          Segoe UI é nativa do Power BI Desktop e do serviço — sem necessidade de fallback do
+          Google Fonts. Usar a mesma família para números: manter um único rosto evita
+          desalinhamento sutil entre rótulo e valor no mesmo visual.
+        </p>
+      </div>
+      <div class="style-card">
+        <h4>Pesos em uso</h4>
+        <p style="font-size:12.5px; color:var(--ink-secondary); margin:0;">
+          <strong>400</strong> corpo/legendas · <strong>600</strong> label/título de card/badge ·
+          <strong>700</strong> valor de KPI e título de página. Sem itálico, sem condensada.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="estilo">
+    <div class="section-eyebrow">Bloco 4</div>
+    <h2 class="section-title">Estilo visual</h2>
+    <p class="section-intro">Geometria, ícone e ausência deliberada de ornamento.</p>
+    <div class="style-grid">
+      <div class="style-card">
+        <h4>Border-radius</h4>
+        <div class="radius-demo">
+          <div class="radius-box" style="width:44px; height:44px; border-radius:12px;"></div>
+          <div class="radius-box" style="width:70px; height:24px; border-radius:999px;"></div>
+          <div class="radius-box" style="width:60px; height:14px; border-radius:5px;"></div>
+        </div>
+        <p style="font-size:12.5px; color:var(--ink-secondary); margin:0;">Card 12px · badge/pill 999px · barra 4–6px. Nunca 0px (frio demais) nem 16px+ (foge do tom técnico).</p>
+      </div>
+      <div class="style-card">
+        <h4>Sombra e borda</h4>
+        <p style="font-size:12.5px; color:var(--ink-secondary); margin:0;">Nenhuma sombra — borda sutil de 1px (<code>#E2E8F0</code>) separa cards do fundo. Cartão "flat", compatível com o visual nativo do Power BI, sem plugin.</p>
+      </div>
+      <div class="style-card">
+        <h4>Ícones</h4>
+        <p style="font-size:12.5px; color:var(--ink-secondary); margin:0;">Outline/traço, 1.6–1.8px, grade 24px, sem preenchimento, soltos (sem container) exceto dentro de badge. Referência de estilo mais próxima: Lucide. Desenhados em SVG inline — zero dependência de rede.</p>
+      </div>
+      <div class="style-card">
+        <h4>Sem isso</h4>
+        <p style="font-size:12.5px; color:var(--ink-secondary); margin:0;">Sem gradiente, textura, fotografia ou microanimação — o Power BI Desktop não sustenta isso de forma nativa e foge do tom "técnico/dados" da marca.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="componentes">
+    <div class="section-eyebrow">Bloco 4 → aplicado</div>
+    <h2 class="section-title">Componentes mockados</h2>
+    <p class="section-intro">Os mesmos padrões usados no mockup do Painel Executivo, isolados como referência reutilizável.</p>
+
+    <div class="mock-grid" style="margin-bottom:20px;">
+      <div class="kpi-card">
+        <div class="kpi-label">OTD %</div>
+        <div class="kpi-value">91,3%</div>
+        <span class="status-pill status-warn">Atenção</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Badges de status</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;">
+          <span class="status-pill status-good">Bom ≥95%</span>
+          <span class="status-pill status-warn">Atenção 85–95%</span>
+          <span class="status-pill status-bad">Crítico &lt;85%</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Decomposição por etapa</div>
+        <div style="display:flex; height:16px; border-radius:5px; overflow:hidden; margin-top:10px;">
+          <div style="width:8%; background:#A5F3FC;"></div>
+          <div style="width:38%; background:#22D3EE;"></div>
+          <div style="width:54%; background:#0891B2;"></div>
+        </div>
+        <div style="font-size:11.5px; color:var(--ink-muted); margin-top:6px;">Aprovação · Coleta · Transporte</div>
+      </div>
+    </div>
+
+    <div class="mock-grid">
+      <div class="kpi-card" style="grid-column: span 1;">
+        <div class="kpi-label" style="margin-bottom:14px;">Atraso médio por UF Vendedor</div>
+        <table class="mini-table">
+          <thead><tr><th>UF Vendedor</th><th style="text-align:right;">Dias</th></tr></thead>
+          <tbody>
+            <tr><td>SP</td><td class="num">6,8d</td></tr>
+            <tr><td>RJ</td><td class="num">5,9d</td></tr>
+            <tr><td>MG</td><td class="num">5,4d</td></tr>
+            <tr><td>BA</td><td class="num">5,1d</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="grid-column: span 2;">
+        <div class="dash-header-mock">
+          <span class="title">Painel Executivo de Entregas</span>
+          <div style="display:flex; gap:8px;">
+            <span class="filter-pill">Período: Últimos 12 meses</span>
+            <span class="filter-pill">UF: Todas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tokens">
+    <div class="section-eyebrow">Bloco 6B</div>
+    <h2 class="section-title">Tokens JSON — tema Power BI</h2>
+    <p class="section-intro">
+      O mesmo arquivo já usado no Desktop (<code>design/theme/theme_torre_de_controle.json</code>) —
+      esta caixa é só a cópia de leitura, a fonte da verdade é o arquivo no repositório.
+    </p>
+    <div class="json-card">
+      <div class="json-toolbar">
+        <p>Clique para selecionar tudo e copiar (Ctrl+C caso a cópia automática seja bloqueada).</p>
+        <button id="copy-btn" onclick="copyThemeJson()">Copiar JSON do tema</button>
+      </div>
+      <textarea id="theme-json" readonly onclick="this.select();">{
+  "name": "Torre de Controle",
+  "dataColors": ["#4F46E5", "#06B6D4", "#E87BA4", "#4A3AA7"],
+  "foreground": "#0F172A",
+  "foregroundNeutralSecondary": "#64748B",
+  "foregroundNeutralTertiary": "#94A3B8",
+  "background": "#FFFFFF",
+  "backgroundLight": "#F8FAFC",
+  "backgroundNeutral": "#E2E8F0",
+  "tableAccent": "#4F46E5",
+  "good": "#10B981",
+  "neutral": "#F59E0B",
+  "bad": "#EF4444",
+  "maximum": "#10B981",
+  "center": "#F59E0B",
+  "minimum": "#EF4444",
+  "hyperlink": "#4F46E5",
+  "visitedHyperlink": "#4338CA",
+  "textClasses": {
+    "callout": { "fontFace": "Segoe UI", "color": "#0F172A" },
+    "title": { "fontFace": "Segoe UI", "color": "#0F172A" },
+    "header": { "fontFace": "Segoe UI", "color": "#0F172A" },
+    "label": { "fontFace": "Segoe UI", "color": "#0F172A" }
+  }
+}</textarea>
+    </div>
+  </section>
+
+  <section id="recomendacoes">
+    <div class="section-eyebrow">Bloco 5</div>
+    <h2 class="section-title">Recomendações</h2>
+    <p class="section-intro">
+      Estrutura sugerida: cabeçalho com filtros à direita → linha de 4 KPIs → duas linhas de dois
+      gráficos (visão geral em cima, decomposição/detalhe embaixo). Sem sidebar — o Painel
+      Executivo é uma página única, não um app de múltiplas telas.
+    </p>
+    <div class="rec-grid">
+      <div class="rec-card">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Fazer
+        </h4>
+        <ul>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Usar cor de status só pra semântica de OTD, nunca decorativa</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Manter o valor de KPI em tinta escura — a cor vai no badge/delta ao lado</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Uma família tipográfica do início ao fim (Segoe UI)</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Espaçamento generoso entre cards (mín. 20px) — o painel é executivo, não denso</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></span>Documentar a medida DAX de cada visual antes de construir (ver <code>docs/02-replicar-funcoes-dax.md</code>)</li>
+        </ul>
+      </div>
+      <div class="rec-card">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Evitar
+        </h4>
+        <ul>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Reciclar verde/âmbar/vermelho como cor de série categórica</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Sombra pronunciada ou gradiente — foge do tom técnico/dados</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Adicionar biblioteca externa de ícones — quebra o repositório sem dependência de rede</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Inventar limiar de negócio sem validar com o dono do dado</li>
+          <li><span class="rec-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Colorir o número do KPI inteiro — perde legibilidade e mistura sinal com valor</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fidelity-banner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2 20h20L12 4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="0.6" fill="#047857" stroke="none"/></svg>
+      Nível de fidelidade: Alta — sistema definido deliberadamente (não extraído de terceiro incerto), validado por CVD, com tema Power BI e mockup já publicados.
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      Documento de referência interno, gerado para validar a consistência do design system antes
+      da construção definitiva no Power BI Desktop. Fontes: <code>design/paleta-e-uso.md</code>,
+      <code>design/theme/theme_torre_de_controle.json</code>, mockup
+      <code>design/mockups/Main.dc.html</code>.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  function copyThemeJson() {
+    var ta = document.getElementById('theme-json');
+    var btn = document.getElementById('copy-btn');
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, 999999);
+    function done(ok) {
+      btn.textContent = ok ? 'Copiado ✓' : 'Selecionado — use Ctrl+C';
+      setTimeout(function () { btn.textContent = 'Copiar JSON do tema'; }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(function () { done(true); }).catch(function () {
+        try { done(document.execCommand('copy')); } catch (e) { done(false); }
+      });
+    } else {
+      try { done(document.execCommand('copy')); } catch (e) { done(false); }
+    }
+  }
+</script>

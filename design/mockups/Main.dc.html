@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; color: #0F172A; }
+    a { color: #4F46E5; }
+    a:hover { color: #4338CA; }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .muted { color: #94A3B8; }
+    .label-sm {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #64748B;
+    }
+  </style>
+</helmet>
+
+<div style="width:1920px; height:1080px; box-sizing:border-box; background:#F8FAFC; padding:40px; display:flex; flex-direction:column; gap:28px;">
+
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <span class="label-sm" style="color:#4F46E5;">Torre de Controle</span>
+      <h1 style="margin:0; font-size:28px; font-weight:700; color:#0F172A;">Painel Executivo de Entregas</h1>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; align-items:center; gap:6px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:8px 14px; font-size:13px; color:#334155;">
+        Período: Últimos 12 meses
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:8px 14px; font-size:13px; color:#334155;">
+        UF: Todas
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI row -->
+  <div style="display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:20px;">
+
+    <!-- Total de Pedidos -->
+    <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/>
+        </svg>
+        <span class="label-sm">Total de Pedidos</span>
+      </div>
+      <div style="font-size:32px; font-weight:700;">99.441</div>
+      <div style="font-size:13px;" class="muted">últimos 12 meses</div>
+    </div>
+
+    <!-- OTD % -->
+    <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 4L2 20h20L12 4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="0.6" fill="#B45309" stroke="none"/>
+        </svg>
+        <span class="label-sm">OTD %</span>
+      </div>
+      <div style="font-size:32px; font-weight:700;">91,3%</div>
+      <div style="display:inline-flex; align-items:center; gap:6px; width:fit-content; background:#FFFBEB; border:1px solid #FDE68A; color:#B45309; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px;">
+        Atenção
+      </div>
+    </div>
+
+    <!-- Lead Time Médio -->
+    <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>
+        </svg>
+        <span class="label-sm">Lead Time Médio</span>
+      </div>
+      <div style="font-size:32px; font-weight:700;">12,3 dias</div>
+      <div style="font-size:13px;" class="muted">compra → entrega</div>
+    </div>
+
+    <!-- Frete sobre Faturamento -->
+    <div class="card" style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+        <span class="label-sm">Frete sobre Faturamento</span>
+      </div>
+      <div style="font-size:32px; font-weight:700;">16,8%</div>
+      <div style="font-size:13px;" class="muted">frete ÷ valor dos itens</div>
+    </div>
+
+  </div>
+
+  <!-- Charts row A -->
+  <div style="display:grid; grid-template-columns: 3fr 2fr; gap:20px;">
+
+    <!-- Evolução mensal -->
+    <div class="card" style="display:flex; flex-direction:column; gap:4px;">
+      <div style="font-size:15px; font-weight:600;">Evolução mensal do OTD</div>
+      <div style="font-size:12px;" class="muted">% de pedidos entregues até a data prevista, por mês de entrega</div>
+      <svg viewBox="0 0 1000 240" style="display:block; width:100%; height:auto; margin-top:10px;">
+        <!-- gridlines -->
+        <line x1="20" y1="200" x2="980" y2="200" stroke="#E2E8F0" stroke-width="1"/>
+        <line x1="20" y1="20" x2="20" y2="200" stroke="#E2E8F0" stroke-width="1"/>
+        <!-- target line at 95% -->
+        <line x1="20" y1="65" x2="980" y2="65" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="984" y="69" font-size="12" fill="#94A3B8">Meta 95%</text>
+        <!-- OTD line -->
+        <polyline points="20,127.1 107.27,132.5 194.55,137.9 281.82,117.2 369.09,106.4 456.36,93.8 543.64,109.1 630.91,89.3 718.18,78.5 805.45,101 892.73,111.8 980,98.3"
+                  fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <g fill="#4F46E5" stroke="#FFFFFF" stroke-width="2">
+          <circle cx="20" cy="127.1" r="4.5"/><circle cx="107.27" cy="132.5" r="4.5"/><circle cx="194.55" cy="137.9" r="4.5"/>
+          <circle cx="281.82" cy="117.2" r="4.5"/><circle cx="369.09" cy="106.4" r="4.5"/><circle cx="456.36" cy="93.8" r="4.5"/>
+          <circle cx="543.64" cy="109.1" r="4.5"/><circle cx="630.91" cy="89.3" r="4.5"/><circle cx="718.18" cy="78.5" r="4.5"/>
+          <circle cx="805.45" cy="101" r="4.5"/><circle cx="892.73" cy="111.8" r="4.5"/><circle cx="980" cy="98.3" r="4.5"/>
+        </g>
+        <text x="945" y="86" font-size="13" font-weight="600" fill="#4F46E5">91,3%</text>
+        <!-- x-axis labels -->
+        <g font-size="12" fill="#94A3B8" text-anchor="middle">
+          <text x="20" y="220">Jan</text><text x="107.27" y="220">Fev</text><text x="194.55" y="220">Mar</text>
+          <text x="281.82" y="220">Abr</text><text x="369.09" y="220">Mai</text><text x="456.36" y="220">Jun</text>
+          <text x="543.64" y="220">Jul</text><text x="630.91" y="220">Ago</text><text x="718.18" y="220">Set</text>
+          <text x="805.45" y="220">Out</text><text x="892.73" y="220">Nov</text><text x="980" y="220">Dez</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Mapa por UF -->
+    <div class="card" style="display:flex; flex-direction:column; gap:4px;">
+      <div style="font-size:15px; font-weight:600;">OTD por UF de destino</div>
+      <div style="font-size:12px;" class="muted">cartograma simplificado — cor por faixa de OTD</div>
+      <div style="display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:8px; margin-top:8px;">
+
+        <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">RS</div><div style="font-size:12px; color:#047857; font-weight:600;">96,5%</div>
+        </div>
+        <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">PR</div><div style="font-size:12px; color:#047857; font-weight:600;">95,8%</div>
+        </div>
+        <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">SC</div><div style="font-size:12px; color:#047857; font-weight:600;">97,2%</div>
+        </div>
+        <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">GO</div><div style="font-size:12px; color:#047857; font-weight:600;">96,1%</div>
+        </div>
+
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">SP</div><div style="font-size:12px; color:#B45309; font-weight:600;">89,4%</div>
+        </div>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">MG</div><div style="font-size:12px; color:#B45309; font-weight:600;">93,1%</div>
+        </div>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">BA</div><div style="font-size:12px; color:#B45309; font-weight:600;">88,7%</div>
+        </div>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">DF</div><div style="font-size:12px; color:#B45309; font-weight:600;">94,0%</div>
+        </div>
+
+        <div style="background:#FEF2F2; border:1px solid #FECACA; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">RJ</div><div style="font-size:12px; color:#B91C1C; font-weight:600;">84,2%</div>
+        </div>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">PE</div><div style="font-size:12px; color:#B45309; font-weight:600;">90,3%</div>
+        </div>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">CE</div><div style="font-size:12px; color:#B45309; font-weight:600;">92,6%</div>
+        </div>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:13px; font-weight:700;">ES</div><div style="font-size:12px; color:#B45309; font-weight:600;">91,7%</div>
+        </div>
+
+      </div>
+      <div style="display:flex; gap:14px; margin-top:10px; font-size:11px; color:#64748B;">
+        <div style="display:flex; align-items:center; gap:5px;"><span style="width:9px; height:9px; border-radius:2px; background:#10B981; display:inline-block;"></span>Bom ≥95%</div>
+        <div style="display:flex; align-items:center; gap:5px;"><span style="width:9px; height:9px; border-radius:2px; background:#F59E0B; display:inline-block;"></span>Atenção 85–95%</div>
+        <div style="display:flex; align-items:center; gap:5px;"><span style="width:9px; height:9px; border-radius:2px; background:#EF4444; display:inline-block;"></span>Crítico &lt;85%</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Charts row B -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+
+    <!-- Decomposição por etapa -->
+    <div class="card" style="display:flex; flex-direction:column; gap:4px;">
+      <div style="font-size:15px; font-weight:600;">Decomposição do lead time por etapa</div>
+      <div style="font-size:12px;" class="muted">média de dias por etapa até a entrega</div>
+
+      <div style="display:flex; gap:16px; margin-top:14px; margin-bottom:8px; font-size:12px; color:#334155;">
+        <div style="display:flex; align-items:center; gap:5px;"><span style="width:10px; height:10px; border-radius:2px; background:#A5F3FC; display:inline-block;"></span>Aprovação · 0,4d</div>
+        <div style="display:flex; align-items:center; gap:5px;"><span style="width:10px; height:10px; border-radius:2px; background:#22D3EE; display:inline-block;"></span>Coleta · 2,8d</div>
+        <div style="display:flex; align-items:center; gap:5px;"><span style="width:10px; height:10px; border-radius:2px; background:#0891B2; display:inline-block;"></span>Transporte · 9,1d</div>
+      </div>
+
+      <div style="display:flex; height:28px; width:100%; border-radius:6px; overflow:hidden;">
+        <div style="width:3.2%; background:#A5F3FC;"></div>
+        <div style="width:0.4%; background:#FFFFFF;"></div>
+        <div style="width:22.5%; background:#22D3EE;"></div>
+        <div style="width:0.4%; background:#FFFFFF;"></div>
+        <div style="width:73.5%; background:#0891B2;"></div>
+      </div>
+      <div style="font-size:12px; color:#64748B; margin-top:4px;">Total: 12,3 dias (lead time médio)</div>
+
+      <div style="margin-top:16px; padding-top:14px; border-top:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 4L2 20h20L12 4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="0.6" fill="#B91C1C" stroke="none"/>
+          </svg>
+          <span style="font-size:13px; color:#334155;">Dias de atraso — média entre pedidos atrasados</span>
+        </div>
+        <span style="font-size:16px; font-weight:700; color:#B91C1C;">4,2 dias</span>
+      </div>
+    </div>
+
+    <!-- Atraso médio por UF Vendedor -->
+    <div class="card" style="display:flex; flex-direction:column; gap:4px;">
+      <div style="font-size:15px; font-weight:600;">Atraso médio por UF Vendedor</div>
+      <div style="font-size:12px;" class="muted">Dias de Atraso médio → por UF do Vendedor</div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:46px; font-size:12px; color:#334155;">SP</div>
+          <div style="flex:1; background:#E2E8F0; border-radius:4px; height:16px; position:relative;">
+            <div style="width:100%; background:#06B6D4; height:16px; border-radius:4px;"></div>
+          </div>
+          <div style="width:44px; font-size:12px; font-weight:600; text-align:right;">6,8d</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:46px; font-size:12px; color:#334155;">RJ</div>
+          <div style="flex:1; background:#E2E8F0; border-radius:4px; height:16px;">
+            <div style="width:87%; background:#06B6D4; height:16px; border-radius:4px;"></div>
+          </div>
+          <div style="width:44px; font-size:12px; font-weight:600; text-align:right;">5,9d</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:46px; font-size:12px; color:#334155;">MG</div>
+          <div style="flex:1; background:#E2E8F0; border-radius:4px; height:16px;">
+            <div style="width:79%; background:#06B6D4; height:16px; border-radius:4px;"></div>
+          </div>
+          <div style="width:44px; font-size:12px; font-weight:600; text-align:right;">5,4d</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:46px; font-size:12px; color:#334155;">BA</div>
+          <div style="flex:1; background:#E2E8F0; border-radius:4px; height:16px;">
+            <div style="width:75%; background:#06B6D4; height:16px; border-radius:4px;"></div>
+          </div>
+          <div style="width:44px; font-size:12px; font-weight:600; text-align:right;">5,1d</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:46px; font-size:12px; color:#334155;">PR</div>
+          <div style="flex:1; background:#E2E8F0; border-radius:4px; height:16px;">
+            <div style="width:71%; background:#06B6D4; height:16px; border-radius:4px;"></div>
+          </div>
+          <div style="width:44px; font-size:12px; font-weight:600; text-align:right;">4,8d</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:46px; font-size:12px; color:#334155;">SC</div>
+          <div style="flex:1; background:#E2E8F0; border-radius:4px; height:16px;">
+            <div style="width:66%; background:#06B6D4; height:16px; border-radius:4px;"></div>
+          </div>
+          <div style="width:44px; font-size:12px; font-weight:600; text-align:right;">4,5d</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div style="font-size:11px; color:#94A3B8; text-align:right;">
+    Dados de exemplo, ilustrativos — layout de referência para o relatório em Power BI Desktop.
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
