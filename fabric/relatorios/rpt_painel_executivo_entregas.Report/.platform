@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "rpt_painel_executivo_entregas"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5929975c-b7e9-96e3-4b1d-1fd7df26ac02"
+  }
+}
