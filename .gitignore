@@ -42,6 +42,10 @@ design/img/
 design/mockups/*.html
 !design/mockups/*.dc.html
 
+# Apresentacao em PDF para o LinkedIn — processo paralelo, nao faz parte do
+# projeto Torre de Controle em si. Ver planejamento/apresentacao-tecnica.md.
+design/apresentacao/
+
 # Arquivos .pq de trabalho do Power Query. A fonte da verdade e o Dataflow
 # versionado pela integracao Git em fabric/dataflows/ — manter os dois no
 # repositorio faria o projeto contar duas historias sobre o mesmo codigo.
