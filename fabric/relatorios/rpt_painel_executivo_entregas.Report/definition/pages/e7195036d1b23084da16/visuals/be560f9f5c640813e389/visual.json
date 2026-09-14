@@ -42,11 +42,11 @@
                       "Entity": "_medidas"
                     }
                   },
-                  "Property": "Dias de Atraso (méd) (por Vendedor)"
+                  "Property": "Dias de Atraso (méd) por Vendedor"
                 }
               },
-              "queryRef": "_medidas.Dias de Atraso (méd) (por Vendedor)",
-              "nativeQueryRef": "Dias de Atraso (méd) (por Vendedor)"
+              "queryRef": "_medidas.Dias de Atraso (méd) por Vendedor",
+              "nativeQueryRef": "Dias de Atraso (méd) por Vendedor"
             }
           ]
         }
@@ -61,7 +61,7 @@
                     "Entity": "_medidas"
                   }
                 },
-                "Property": "Dias de Atraso (méd) (por Vendedor)"
+                "Property": "Dias de Atraso (méd) por Vendedor"
               }
             },
             "direction": "Descending"
@@ -221,7 +221,21 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "b652c0903746780c2c16",
+        "name": "511dc2fbd50b917c2c4a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_medidas"
+              }
+            },
+            "Property": "Dias de Atraso (méd) por Vendedor"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "fd3cb7070484ae262001",
         "field": {
           "Column": {
             "Expression": {
@@ -277,7 +291,7 @@
                                 "Source": "_"
                               }
                             },
-                            "Property": "Dias de Atraso (méd) (por Vendedor)"
+                            "Property": "Dias de Atraso (méd) por Vendedor"
                           }
                         }
                       }
@@ -320,8 +334,7 @@
             }
           ]
         },
-        "isHiddenInViewMode": true,
-        "isLockedInViewMode": true
+        "howCreated": "User"
       }
     ]
   }

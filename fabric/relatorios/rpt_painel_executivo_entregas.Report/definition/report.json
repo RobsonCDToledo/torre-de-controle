@@ -50,17 +50,6 @@
   },
   "resourcePackages": [
     {
-      "name": "SharedResources",
-      "type": "SharedResources",
-      "items": [
-        {
-          "name": "Fluent2-CY26SU08",
-          "path": "BaseThemes/Fluent2-CY26SU08.json",
-          "type": "BaseTheme"
-        }
-      ]
-    },
-    {
       "name": "RegisteredResources",
       "type": "RegisteredResources",
       "items": [
@@ -72,7 +61,18 @@
         {
           "name": "Torre_de_Controle0023014448150961986.json",
           "path": "Torre_de_Controle0023014448150961986.json",
-          "type": "CustomTheme"
+          "type": "Image"
+        }
+      ]
+    },
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "Fluent2-CY26SU08",
+          "path": "BaseThemes/Fluent2-CY26SU08.json",
+          "type": "BaseTheme"
         }
       ]
     }

@@ -678,7 +678,7 @@ dim_cliente.write.mode('overwrite').option('overwriteSchema', 'true').saveAsTabl
 
 # CELL ********************
 
-# Monta o fato de entrega no grao de pedido, com a chave sk_pedido
+ # Monta o fato de entrega no grao de pedido, com a chave sk_pedido
 
 fato_entrega = spark.sql(f"""
     WITH itens AS (
@@ -696,11 +696,22 @@ fato_entrega = spark.sql(f"""
                                       ORDER BY data_avaliacao DESC, id_avaliacao DESC) AS ordem
             FROM {SILVER}.avaliacoes
         ) WHERE ordem = 1
+    ),
+    vendedor_principal AS (
+        SELECT id_pedido, id_vendedor FROM (
+            SELECT id_pedido, id_vendedor,
+            ROW_NUMBER() OVER (PARTITION BY id_pedido
+                ORDER BY preco DESC, numero_item ASC) AS ordem
+            FROM {SILVER}.itens_pedido 
+        ) WHERE ordem = 1
     )
     SELECT ROW_NUMBER() OVER (ORDER BY p.id_pedido) AS sk_pedido,
            p.id_pedido,
            dc.sk_cliente,
            dg.sk_geografia AS sk_geografia_destino,
+           dg.uf AS uf_destino,
+           dv.uf AS uf_origem,
+           CONCAT(dv.uf, ' → ', dg.uf) AS rota,           
            CAST(DATE_FORMAT(p.data_compra,           'yyyyMMdd') AS INT) AS sk_data_compra,
            CAST(DATE_FORMAT(p.data_entrega_prevista, 'yyyyMMdd') AS INT) AS sk_data_prevista,
            CAST(DATE_FORMAT(p.data_entrega_real,     'yyyyMMdd') AS INT) AS sk_data_entrega,
@@ -720,6 +731,8 @@ fato_entrega = spark.sql(f"""
     LEFT JOIN {SILVER}.clientes c  ON c.id_cliente       = p.id_cliente
     LEFT JOIN dim_cliente       dc ON dc.id_cliente_unico = c.id_cliente_unico
     LEFT JOIN dim_geografia     dg ON dg.prefixo_cep      = c.prefixo_cep
+    LEFT JOIN vendedor_principal vp ON vp.id_pedido   = p.id_pedido
+    LEFT JOIN dim_vendedor       dv ON dv.id_vendedor = vp.id_vendedor
 """)
 
 # Escreve a tabela no banco
