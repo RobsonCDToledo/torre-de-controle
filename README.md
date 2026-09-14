@@ -154,7 +154,7 @@ Construído em seis fases, cada uma com entrega publicável. Acompanhe em
 - [x] **Fase 1** · Fundação — repositório, dados de origem, workspace, integração Git, ingestão para bronze
 - [x] **Fase 2** · Silver — Dataflow Gen2, tipagem, limpeza, regras de qualidade
 - [x] **Fase 3** · Gold — notebook, esquema estrela, dimensão calendário
-- [ ] **Fase 4** · Semântica — Direct Lake, medidas DAX, Painel Executivo
+- [x] **Fase 4** · Semântica — Direct Lake, medidas DAX, Painel Executivo
 - [ ] **Fase 5** · Self-service — RLS, endosso, dicionário, perguntas nativas, Painel de Frete
 - [ ] **Fase 6** · ML — engenharia de atributos, modelo, MLflow, escrita na gold
 

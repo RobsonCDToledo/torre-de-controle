@@ -69,25 +69,15 @@ bonita para isso.
 Referência de mercado (last-mile/e-commerce). **Ajustável** — é só trocar os dois literais na
 medida abaixo depois de ver a distribuição real do OTD por UF/mês no modelo.
 
-Onde aplicar (criar no Web Modeling, mesmo fluxo de `docs/02-replicar-funcoes-dax.md`, home
-table `_medidas`):
+**Implementado como três medidas, não uma** — `OTD % (Text Color)`, `OTD % (Background Color)`
+e `OTD % (Legend)`, todas em `_medidas`, ocultas do painel de campos (`isHidden`). Código
+completo e onde cada uma se aplica: `docs/02-replicar-funcoes-dax.md`, seção "Medidas de
+formatação visual". O texto usa a tonalidade 700 e o fundo a 50 — não o `good`/`neutral`/`bad`
+bruto do tema — porque a cor 500 sozinha não fecha 3:1 de contraste sobre fundo claro.
 
-```dax
-OTD % Cor =
-VAR v = [OTD %]
-RETURN
-SWITCH(
-    TRUE(),
-    ISBLANK(v), "#94A3B8",
-    v >= 0.95, "#10B981",
-    v >= 0.85, "#F59E0B",
-    "#EF4444"
-)
-```
-
-Usa-se em **Formatação condicional → cor da fonte/fundo → Campo** apontando pra essa medida —
-é assim que o mapa por UF e as barras de OTD por vendedor herdam a mesma régua de cor que o
-cartão de KPI, em vez de cada visual inventar seu próprio corte.
+Aplicação: **Formatação condicional → cor da fonte/fundo → Campo** apontando pra
+`OTD % (Text Color)` / `(Background Color)`. É assim que o cartograma por UF e o cartão de KPI
+herdam a mesma régua de cor, em vez de cada visual inventar seu próprio corte.
 
 ### Sequencial — mapa por UF (Painel Executivo)
 

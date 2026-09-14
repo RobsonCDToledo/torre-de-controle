@@ -1,0 +1,126 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 684.71393027512113,
+            "y": 590.34590245666357
+          },
+          "nodeIndex": "dim_calendario",
+          "nodeLineageTag": "7e788ec8-8051-4d67-96b0-3ced75979df2",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1257.2542998386043,
+            "y": 475.10292191808321
+          },
+          "nodeIndex": "dim_cliente",
+          "nodeLineageTag": "53384877-92cc-4d9a-82df-8e723750e9aa",
+          "size": {
+            "height": 219,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 774.15222664588339,
+            "y": 269.81903214497413
+          },
+          "nodeIndex": "dim_geografia",
+          "nodeLineageTag": "b99a9818-9010-47fc-807a-7bb8d2ed1f5c",
+          "size": {
+            "height": 267,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 222.78552798290673,
+            "y": -50
+          },
+          "nodeIndex": "dim_produto",
+          "nodeLineageTag": "64090f74-3f9e-4627-9039-15032f10ae54",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 303.35474364847494
+          },
+          "nodeIndex": "dim_vendedor",
+          "nodeLineageTag": "89ef5c29-b3a3-4774-a13f-19c8ed7ff989",
+          "size": {
+            "height": 219,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 972.516470543299,
+            "y": 590.35141519038484
+          },
+          "nodeIndex": "fato_entrega",
+          "nodeLineageTag": "4fb6ae73-56de-4184-8bed-26a46e3e9301",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 397.68788673840311,
+            "y": 303.7209458276543
+          },
+          "nodeIndex": "fato_item_pedido",
+          "nodeLineageTag": "bd1f04c7-1d8c-45b9-86ab-9e3fae31ad19",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1491.2542998386043,
+            "y": 320.17570759519236
+          },
+          "nodeIndex": "_medidas",
+          "nodeLineageTag": "cc99d097-dbe7-4ac8-8a40-92bc399de1c0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 76.993214821879832,
+      "pinKeyFieldsToTop": true,
+      "showExtraHeaderInfo": true,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

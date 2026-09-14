@@ -12,6 +12,10 @@ annotation PBI_QueryOrder = ["DirectLake - lh_gold","_medidas"]
 
 annotation PBI_ProTooling = ["DirectLakeOnOneLakeInWeb","WebModelingEdit","TMDLView_Desktop","DevMode","RemoteModeling"]
 
+annotation __PBI_ServiceStoredInTmdl = reserved
+
+annotation __LastRPTime = 134336233839845030
+
 ref table dim_calendario
 ref table dim_vendedor
 ref table dim_geografia

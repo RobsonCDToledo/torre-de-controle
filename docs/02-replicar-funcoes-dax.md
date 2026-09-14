@@ -223,6 +223,106 @@ medida desejada dentro do `CALCULATE`.
 
 ---
 
+## Medidas de formatação visual
+
+Diferente de tudo acima, estas sete medidas não calculam indicador de negócio novo — geram um
+valor de apoio (cor, texto, rótulo condicional) que um visual consome via formatação
+condicional ou vinculação direta. Necessárias pro funcionamento da UI do painel, não pra
+análise: por isso ficam **ocultas** (`isHidden`) do painel de campos — um analista não tem
+motivo pra arrastar `OTD % (Text Color)` solta num visual. Moram em `_medidas`, pasta de
+exibição `Formatações`.
+
+### Régua de cor do OTD
+
+Três medidas implementam a régua de status documentada em `design/paleta-e-uso.md`
+(`≥95% bom · 85–95% atenção · <85% crítico`), cada uma devolvendo um valor diferente pro mesmo
+limiar:
+
+```dax
+OTD % (Text Color) =
+VAR vValor = [OTD %]
+RETURN
+SWITCH(
+    TRUE(),
+    vValor >= 0.95, "#047857",
+    vValor >= 0.85, "#B45309",
+    vValor <  0.85, "#B91C1C"
+)
+
+OTD % (Background Color) =
+VAR vValor = [OTD %]
+RETURN
+SWITCH(
+    TRUE(),
+    vValor >= 0.95, "#ECFDF5",
+    vValor >= 0.85, "#FFFBEB",
+    vValor <  0.85, "#FEF2F2"
+)
+
+OTD % (Legend) =
+VAR vValor = [OTD %]
+RETURN
+SWITCH(
+    TRUE(),
+    vValor >= 0.95, "Bom!",
+    vValor >= 0.85, "Atenção!",
+    vValor <  0.85, "Crítico!"
+)
+```
+Formato: texto.
+**Onde aplicar:** `OTD % (Text Color)` / `(Background Color)` em Formatação condicional → cor
+da fonte / plano de fundo → Campo, no cartão de KPI e no cartograma por UF. `OTD % (Legend)`
+alimenta o texto do badge de status.
+**Por que texto na tonalidade 700 e fundo na 50, não a cor bruta do tema (`good`/`neutral`/
+`bad`):** contraste — a cor 500 sozinha não passa no piso de 3:1 sobre fundo claro; o par
+texto-escuro-sobre-fundo-claro resolve isso sem inventar uma quarta cor fora do sistema.
+
+```dax
+Meta OTD = 0.95
+```
+Formato: geral. Expõe o limiar "bom" como constante — alimenta a linha de referência do
+gráfico de evolução mensal, em vez de ficar hardcoded dentro da formatação de cada visual que
+precisar dele.
+
+### Rótulo seletivo da linha de evolução
+
+```dax
+OTD % (por Data de Entrega) — Rótulo Final =
+VAR UltimoPontoComDados =
+    CALCULATE(
+        MAX(dim_calendario[sk_data]),
+        FILTER(
+            ALLSELECTED(dim_calendario),
+            NOT ISBLANK([OTD % (por Data de Entrega)])
+        )
+    )
+RETURN
+IF(
+    MAX(dim_calendario[sk_data]) = UltimoPontoComDados,
+    [OTD % (por Data de Entrega)],
+    BLANK()
+)
+```
+Formato: geral. Alimenta uma segunda série invisível (linha de espessura 0, sem marcador) no
+gráfico "Evolução Mensal do OTD" — só essa série tem rótulo de dado ligado, e só ela retorna
+valor no último ponto com dado, deixando a linha real intocada e sem rótulo em cada mês.
+**Por que o `FILTER`:** `NOT ISBLANK([OTD % (por Data de Entrega)])` direto como filtro do
+`CALCULATE`, sem `FILTER()`, dispara "A function ... has been used in a True/False expression
+that is used as a table filter expression" — medida com `CALCULATE`/`USERELATIONSHIP` por trás
+não pode virar condição booleana solta; precisa do contexto de linha que o `FILTER` cria.
+
+### Texto formatado
+
+```dax
+Lead Time Médio Format = FORMAT([Lead Time Médio], "#.0 Dias")
+Dias em Atraso (Format) = FORMAT([Dias de Atraso (méd)], "#.0 Dias")
+```
+
+Formato: texto. Versão textual das duas medidas, com o sufixo "Dias" embutido — usada onde o
+visual não aceita `formatString` numérico customizado.
+
+---
+
 ## Pendências fora do escopo deste documento
 
 - **Hierarquia de calendário** (`Ano` → `Trimestre` → `Mês` → `Dia`) — construída visualmente
