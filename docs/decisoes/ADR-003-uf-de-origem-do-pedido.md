@@ -28,11 +28,12 @@ já resolvido pela medida `Dias de Atraso (méd) por Vendedor` (ponte `TREATAS`,
 
 A construção de "rota" de verdade fica para a **fase 5** (Painel de Frete e Rotas) e acontece
 na **gold**, não no modelo semântico — mesma ferramenta-por-camada do ADR-001. O notebook
-`nb_silver_para_gold` ganha uma coluna `uf_origem` em `fato_entrega`, resolvida por um critério
-de desempate determinístico quando há mais de um vendedor: candidato natural é o vendedor do
-item de maior `valor_itens` no pedido, com `sk_item` como desempate secundário — mesmo padrão
-do ADR-002. A UF de destino já existe via `sk_geografia_destino → dim_geografia[uf]`, sem
-mudança necessária.
+`nb_silver_para_gold` ganha três colunas em `fato_entrega`: `uf_origem` (vendedor do item de
+maior `preco` no pedido, `numero_item` como desempate secundário — mesmo padrão do ADR-002,
+ajustado porque `sk_item` só existe depois que `fato_item_pedido` é montado), `uf_destino`
+(mesmo join que já gerava `sk_geografia_destino`, agora também exposto como UF) e `rota`
+(`CONCAT(uf_origem, ' → ', uf_destino)`, pronta pra uso direto em visual sem depender de coluna
+calculada em DAX).
 
 ## Alternativas consideradas
 
@@ -53,15 +54,31 @@ muitos vendedores. Mesmo tipo de distorção que motivou manter dois grãos de f
 ## Consequências
 
 **Positivas.** O Painel Executivo sai da fase 4 sem depender de recurso em preview nem de sair
-de Direct Lake. Quando `uf_origem` for construída na fase 5, fica disponível pros dois
-painéis, não só pro de Frete e Rotas.
+de Direct Lake. `uf_origem`, `uf_destino` e `rota` ficam disponíveis pros dois painéis, não só
+pro de Frete e Rotas, e `rota` já sai pronta pra uso em visual, sem coluna calculada em DAX.
 
 **Negativas, e aceitas.** O gráfico "por rota" previsto inicialmente para a fase 4 em
-`00-arquitetura.md` não sai nessa fase — o documento foi ajustado pra refletir isso.
+`00-arquitetura.md` não saiu nessa fase — o documento foi ajustado pra refletir isso.
+`uf_origem` (e por extensão `rota`) é uma aproximação em **≈1,3% dos pedidos** (1.278 de
+98.666 pedidos com item) — os que têm item de mais de um vendedor. Nesses casos, a UF
+registrada é a do vendedor com o item de maior preço, não uma junção fiel de todas as origens
+reais. Aceito porque a alternativa (uma linha por combinação vendedor×pedido) foi rejeitada
+acima pelo mesmo motivo do ADR-001.
 
-## Desdobramento para a fase 5
+## Status — implementado e validado
 
-Antes de construir o Painel de Frete e Rotas: adicionar `uf_origem` a `fato_entrega` no
-notebook da gold, com o critério de desempate desta ADR (ou um substituto, se a distribuição
-real dos dados sugerir outro — documentar a troca aqui se acontecer). Só depois disso o eixo de
-rota (UF origem → UF destino) existe como coluna física, sem tabela calculada nem `TREATAS`.
+Construído em `nb_silver_para_gold`, célula `fato_entrega`. Validação rodada e conferida:
+
+| Validação | Esperado | Real |
+|---|---|---|
+| Linhas em `fato_entrega` | 99.441 | **99.441** |
+| `uf_origem` nulo | 775 (pedidos sem item) | **775** |
+| `uf_destino` nulo | igual a `sk_geografia_destino` nulo | **279**, zero divergência |
+| `rota` nulo | ≥ 775 (união dos dois lados) | **1.050** = 775 + 279 − 4 (só 4 pedidos nulos nos dois) |
+| Pedidos com item e mais de um vendedor | — | **1.278** de 98.666 (**≈1,3%**) |
+
+`uf_destino` e `rota` foram adicionados junto com `uf_origem`, além do escopo mínimo original
+desta ADR — os três reaproveitam os mesmos `JOIN`s já existentes na célula (`dim_vendedor` e
+`dim_geografia`), então saíram sem custo extra de junção. Com isso, o eixo de rota (UF origem →
+UF destino) já existe como coluna física, pronto pro Painel de Frete e Rotas da fase 5 — sem
+tabela calculada, sem `TREATAS`, sem depender de recurso em preview.

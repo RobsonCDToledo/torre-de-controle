@@ -322,6 +322,9 @@ qualidade das coordenadas.
 | `id_pedido` | string | Chave natural da origem, mantida para rastreio |
 | `sk_cliente` | bigint | Junta com `dim_cliente`. Sem nulos |
 | `sk_geografia_destino` | bigint | Junta com `dim_geografia`. É o endereço do cliente |
+| `uf_destino` | string | UF do cliente. **Nulo em 279 pedidos** — mesmos casos de `sk_geografia_destino` nulo, zero divergência entre os dois |
+| `uf_origem` | string | UF do vendedor do item de maior preço no pedido — ver ADR-003. **Nulo nos mesmos 775 pedidos sem item** |
+| `rota` | string | `uf_origem` + " → " + `uf_destino`, pronta pra uso em visual. **Nulo em 1.050 pedidos** — união dos nulos de origem e destino (só 4 pedidos são nulos nos dois ao mesmo tempo) |
 | `sk_data_compra` | int | `yyyyMMdd`. Marco zero do funil |
 | `sk_data_prevista` | int | `yyyyMMdd`. Prazo prometido ao cliente |
 | `sk_data_entrega` | int | `yyyyMMdd`. **Nulo em 2.965 pedidos** não entregues |
@@ -346,11 +349,19 @@ hora `00:00:00` e `data_entrega_real` com hora real. Comparar as duas cruas marc
 atrasada toda entrega feita no dia do prazo depois da meia-noite. O fato aplica `DATE()` nos
 dois lados.
 
-**775 pedidos não têm nenhum item**, então `valor_itens`, `valor_frete` e `qtd_itens` ficam
-nulos — nunca zero, que diria "pedido de R$ 0,00" e contaminaria ticket médio e frete sobre
-faturamento. A quebra por status explica 767 deles: 603 `unavailable` e 164 `canceled`. Os
-outros 8 são anomalia da origem — 5 `created`, 2 `invoiced` e **1 `shipped`**, este último
-sem explicação de negócio possível.
+**775 pedidos não têm nenhum item**, então `valor_itens`, `valor_frete`, `qtd_itens` e
+`uf_origem`/`rota` ficam nulos — nunca zero, que diria "pedido de R$ 0,00" e contaminaria
+ticket médio e frete sobre faturamento. A quebra por status explica 767 deles: 603
+`unavailable` e 164 `canceled`. Os outros 8 são anomalia da origem — 5 `created`, 2 `invoiced`
+e **1 `shipped`**, este último sem explicação de negócio possível.
+
+**`uf_origem` (e por extensão `rota`) é uma aproximação em ≈1,3% dos pedidos.** Não existe "o
+vendedor do pedido" nesta base, pelo mesmo motivo de não existir "a nota do pedido": um pedido
+pode ter itens de mais de um vendedor — **1.278 de 98.666 pedidos com item** (os que sobram
+depois dos 775 sem item nenhum). A regra (`ADR-003`): o vendedor do item de maior `preco`,
+`numero_item` como desempate secundário. Nesses 1.278 casos, `uf_origem` reflete só o vendedor
+"principal", não uma junção fiel de todas as origens reais do pedido — a origem exata por item
+continua em `fato_item_pedido[sk_geografia_origem]`, no grão certo pra isso.
 
 ---
 
