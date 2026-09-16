@@ -3,9 +3,9 @@
 Catálogo de tabelas, campos e medidas — mantido por tabela e preparado para busca,
 inclusive por agentes de IA.
 
-> **Status:** camada silver documentada e verificada. Gold e medidas do modelo semântico
-> serão preenchidas nas fases 3 e 4. A fase 5 exige este documento completo: sem ele,
-> self-service vira acesso a dado sem acesso a significado.
+> **Status:** completo — silver, gold, medidas e sinônimos documentados. A seção "Sinônimos
+> para Q&A" abaixo fica só como referência: Q&A não é suportado em Direct Lake (`ADR-005`),
+> então não há esquema linguístico do modelo pra aplicar esse mapeamento hoje.
 
 ---
 
@@ -463,6 +463,75 @@ registrada aqui em vez de escondida.
 | `Peso Total (kg)` | Soma do peso dos itens, convertido de gramas | — |
 | `Custo por Quilo` | Valor de frete por quilo transportado | Escopo do Painel de Frete e Rotas (fase 5) — já existe no modelo, mas só passa a ser usada quando esse painel for construído |
 | `Dias de Atraso (méd) por Vendedor` | `Dias de Atraso (méd)` filtrado pelo vendedor, mesmo sem relacionamento físico entre os fatos | Ponte virtual via `TREATAS` — evita reabrir a ambiguidade que motivou remover o relacionamento direto entre `fato_entrega` e `fato_item_pedido` |
+
+---
+
+## Sinônimos para Q&A
+
+> **Não aplicado no modelo.** Q&A e esquema linguístico não são suportados em modelo Direct
+> Lake — testado e descartado em três contextos diferentes, ver `ADR-005`. A tabela abaixo
+> fica como referência de intenção: se o Direct Lake ganhar suporte a Q&A no futuro, o
+> mapeamento já está pronto pra virar configuração real sem trabalho de redescoberta.
+
+### Tabelas
+
+| Tabela | Sinônimos |
+|---|---|
+| `fato_entrega` | pedidos, entregas |
+| `fato_item_pedido` | itens, itens de pedido, itens do pedido |
+| `dim_cliente` | clientes, compradores |
+| `dim_vendedor` | vendedores, lojistas, sellers |
+| `dim_produto` | produtos, itens do catálogo |
+| `dim_geografia` | geografia, localização, cidades, estados |
+| `dim_calendario` | calendário, datas |
+
+### Campos
+
+| Campo | Tabela | Sinônimos | Por quê |
+|---|---|---|---|
+| `uf_origem` | `fato_entrega` | UF do vendedor, estado de origem, estado do vendedor, de onde saiu | "origem" sozinho é ambíguo com `uf_destino` — a pergunta precisa distinguir vendedor de cliente |
+| `uf_destino` | `fato_entrega` | UF do cliente, estado de destino, estado do cliente, para onde foi | mesmo motivo, lado oposto |
+| `rota` | `fato_entrega` | trajeto, trecho, caminho | variações comuns do termo já fechado no glossário |
+| `dias_de_atraso` | `fato_entrega` | atraso, dias atrasado, quanto atrasou | — |
+| `entregue_no_prazo` | `fato_entrega` | no prazo, pontual, dentro do prazo | — |
+| `lead_time_dias` | `fato_entrega` | tempo de entrega, prazo de entrega, tempo até entregar | — |
+| `nota` | `fato_entrega` | avaliação, satisfação, review, estrelas | escala 1–5; "estrelas" é o termo visual usado no painel |
+| `status_pedido` | `fato_entrega` | situação do pedido, status | — |
+| `uf` | `dim_vendedor`, `dim_cliente`, `dim_geografia` | estado, unidade federativa | mesmo papel semântico em três tabelas — cadastrar nas três, não só numa |
+| `cidade` | `dim_geografia` | município | — |
+| `categoria_rotulo` | `dim_produto` | categoria do produto, tipo de produto | — |
+| `peso_gramas` | `dim_produto`, `fato_item_pedido` | peso | — |
+
+### Medidas
+
+| Medida | Sinônimos |
+|---|---|
+| `OTD %` | taxa de entrega no prazo, percentual on time, índice de pontualidade |
+| `Lead Time Médio` | tempo médio de entrega, prazo médio de entrega |
+| `Frete sobre Faturamento` | frete percentual, proporção de frete, frete sobre vendas |
+| `Ticket Médio` | valor médio do pedido, ticket médio de venda |
+| `Dias de Atraso (méd)` | atraso médio, média de atraso |
+| `Custo por Quilo` | frete por quilo, custo de frete por peso |
+| `Nota Média` | satisfação média, avaliação média |
+
+### Campos a esconder do Q&A
+
+Chaves substitutas (`sk_*`) e colunas de rastro (`id_pedido`, `numero_item` e afins) já estão
+ocultas no modelo — Q&A não deveria sugeri-las como resposta padrão. Ao configurar o esquema
+linguístico, confirmar que continuam ocultas: campo oculto não vira candidato de resposta
+automática, mas ainda pode ser usado se alguém perguntar por ele explicitamente pelo nome.
+
+### Perguntas de exemplo
+
+Sem Q&A pra testar contra, essas perguntas viram diretamente o material do teste de aceite da
+fase (item 5 do plano) — respondidas navegando o relatório e o dicionário, não digitadas numa
+caixa de busca.
+
+- "Qual o OTD por UF de origem?"
+- "Quantos pedidos atrasados por estado do vendedor?"
+- "Qual o lead time médio por mês?"
+- "Qual a nota média por categoria de produto?"
+- "Qual o frete sobre faturamento por rota?"
 
 ---
 

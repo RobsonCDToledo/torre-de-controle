@@ -1,4 +1,5 @@
 table dim_produto
+	description: Uma linha por produto, com categoria, dimensoes fisicas e contagem de fotos do anuncio
 	lineageTag: 64090f74-3f9e-4627-9039-15032f10ae54
 	sourceLineageTag: [dbo].[dim_produto]
 
@@ -29,6 +30,7 @@ table dim_produto
 
 	column categoria
 		dataType: string
+		description: Codigo de categoria da origem, por exemplo cama_mesa_banho. 610 produtos sem categoria
 		lineageTag: 9b5c8d1a-4c90-4324-9f46-550fb51389f8
 		sourceLineageTag: categoria
 		summarizeBy: none
@@ -38,6 +40,7 @@ table dim_produto
 
 	column categoria_rotulo
 		dataType: string
+		description: Rotulo legivel da categoria, derivado do codigo por capitalizacao, por exemplo Cama Mesa Banho
 		lineageTag: b2bb1981-19b7-4feb-a9e1-18f47d65c30b
 		sourceLineageTag: categoria_rotulo
 		summarizeBy: none
@@ -77,6 +80,7 @@ table dim_produto
 
 	column peso_gramas
 		dataType: int64
+		description: Peso do produto, base do custo por quilo. Nulo em 2 produtos sem dimensao fisica
 		formatString: 0
 		lineageTag: 0001b0d3-911e-41ed-bbce-0f642932c747
 		sourceLineageTag: peso_gramas
@@ -117,6 +121,7 @@ table dim_produto
 
 	column volume_cm3
 		dataType: int64
+		description: Volume calculado a partir de comprimento, altura e largura do produto
 		formatString: 0
 		lineageTag: c9dbf721-b9aa-4eaf-98e3-4f6a73c24fa4
 		sourceLineageTag: volume_cm3

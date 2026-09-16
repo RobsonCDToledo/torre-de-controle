@@ -1,4 +1,5 @@
 table fato_item_pedido
+	description: Um item de um pedido, grao de item, base do custo de frete por rota e por peso
 	lineageTag: bd1f04c7-1d8c-45b9-86ab-9e3fae31ad19
 	sourceLineageTag: [dbo].[fato_item_pedido]
 
@@ -87,6 +88,7 @@ table fato_item_pedido
 
 	column sk_geografia_origem
 		dataType: int64
+		description: Endereco do vendedor no item. Nulo em 253 linhas cujo prefixo de CEP nunca teve geolocalizacao
 		isHidden
 		formatString: 0
 		lineageTag: d8686220-034c-4cc9-a807-19fbf2e1ce10
@@ -113,6 +115,7 @@ table fato_item_pedido
 
 	column preco
 		dataType: decimal
+		description: Preco do item, sempre maior que zero
 		formatString: #,0.00
 		lineageTag: 42cb5fef-a16c-4ce7-a504-b2eeee74d982
 		sourceLineageTag: preco
@@ -129,6 +132,7 @@ table fato_item_pedido
 
 	column valor_frete
 		dataType: decimal
+		description: Frete rateado no item, nunca negativo
 		isHidden
 		formatString: #,0.00
 		lineageTag: 88a38623-0682-4a8e-8ce0-ebcb9c58ac13
@@ -148,6 +152,7 @@ table fato_item_pedido
 
 	column peso_gramas
 		dataType: int64
+		description: Desnormalizado da dim_produto, evita juncao em toda consulta de frete por peso
 		isHidden
 		formatString: 0
 		lineageTag: d33383a1-58a5-4eee-b69e-7b2fab2c4568
@@ -163,6 +168,7 @@ table fato_item_pedido
 
 	column volume_cm3
 		dataType: int64
+		description: Desnormalizado da dim_produto, evita juncao em toda consulta de frete por volume
 		isHidden
 		formatString: 0
 		lineageTag: 0519ca37-d471-421e-afa1-7409131a4475

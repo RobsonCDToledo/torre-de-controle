@@ -2,6 +2,7 @@ table _medidas
 	lineageTag: cc99d097-dbe7-4ac8-8a40-92bc399de1c0
 
 	measure 'Total de Pedidos' = COUNTROWS('fato_entrega')
+		description: Quantidade de pedidos, contagem de linhas de fato_entrega
 		formatString: #,0
 		displayFolder: Fato entrega\Contadores Base
 		lineageTag: 6948c3f7-7bc7-43fc-8dfc-a16f50fefaf3
@@ -15,6 +16,7 @@ table _medidas
 					)
 				)
 			```
+		description: Pedidos que chegaram ao destino, filtra por entregue_no_prazo nao nulo
 		formatString: #,0
 		displayFolder: Fato entrega\Contadores Base
 		lineageTag: 997cac0a-2008-4160-9bb8-67c0e4f6d87c
@@ -26,6 +28,7 @@ table _medidas
 					fato_entrega[entregue_no_prazo] = TRUE
 				)
 			```
+		description: Pedidos entregues ate a data prometida ao cliente
 		formatString: #,0
 		displayFolder: Fato entrega\Contadores Base
 		lineageTag: e6eb53ee-33c8-44ce-8023-39b5f0c7f9ad
@@ -37,6 +40,7 @@ table _medidas
 					fato_entrega[status_pedido] = "canceled"
 				)
 			```
+		description: Pedidos com status canceled
 		formatString: #,0
 		displayFolder: Fato entrega\Contadores Base
 		lineageTag: 41200931-58c8-4fd1-927b-3dfc15854aca
@@ -49,6 +53,7 @@ table _medidas
 					0
 				)
 			```
+		description: Pedidos entregues ate a data prevista sobre pedidos entregues. Denominador exclui pedidos nao entregues
 		formatString: #,0.0%;-#,0.0%;#,0.0%
 		displayFolder: Fato entrega\Medidas Centrais
 		lineageTag: 5e737880-9053-4fda-94d5-f08d228ebeee
@@ -57,6 +62,7 @@ table _medidas
 			
 				AVERAGE(fato_entrega[lead_time_dias])
 			```
+		description: Media de dias entre compra e entrega, sensivel a outliers
 		formatString: #,0.0
 		displayFolder: Fato entrega\Medidas Centrais
 		lineageTag: fc86c08d-6dce-44b9-9f3d-d2ad974856b4
@@ -65,6 +71,7 @@ table _medidas
 			
 				MEDIAN(fato_entrega[lead_time_dias])
 			```
+		description: Mediana de dias entre compra e entrega, complementa a media quando outliers distorcem
 		formatString: #,0.0
 		displayFolder: Fato entrega\Medidas Centrais
 		lineageTag: e5d7f150-978e-45f1-bc8a-a16bc673c989
@@ -74,6 +81,7 @@ table _medidas
 				SUM(fato_entrega[valor_itens])
 					
 			```
+		description: Soma do valor dos itens do pedido
 		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
 		displayFolder: Fato entrega\Financeiro
 		lineageTag: 1ba5a774-7ab3-440c-b736-add20a462b77
@@ -84,6 +92,7 @@ table _medidas
 			
 				SUM(fato_entrega[valor_frete])
 			```
+		description: Soma do valor de frete do pedido
 		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
 		displayFolder: Fato entrega\Financeiro
 		lineageTag: 13e7250c-a2fd-49e5-b86a-0297ea876292
@@ -98,6 +107,7 @@ table _medidas
 					0
 				)
 			```
+		description: Valor medio de itens por pedido
 		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
 		displayFolder: Fato entrega\Financeiro
 		lineageTag: cf11f1ef-da64-413d-a4be-f13ad542e9af
@@ -112,6 +122,7 @@ table _medidas
 					0
 				)
 			```
+		description: Soma de frete sobre soma do valor dos itens, razao de somas, nunca media de razoes por pedido
 		formatString: #,0.0%;-#,0.0%;#,0.0%
 		displayFolder: Fato entrega\Medidas Centrais
 		lineageTag: 3391b69e-decd-4034-a21a-b5f4dacad6e6
@@ -122,6 +133,7 @@ table _medidas
 					fato_entrega[dias_ate_aprovacao]
 				)
 			```
+		description: Media de dias entre compra e aprovacao do pagamento
 		formatString: #,0.0
 		displayFolder: Fato entrega\Decomposição de Atraso
 		lineageTag: cbb59afe-3799-4d76-a677-8d84ac19c446
@@ -132,6 +144,7 @@ table _medidas
 					fato_entrega[dias_ate_coleta]
 				)
 			```
+		description: Media de dias entre aprovacao e coleta pela transportadora
 		formatString: #,0.0
 		displayFolder: Fato entrega\Decomposição de Atraso
 		lineageTag: e43ac025-7421-45c7-a243-b6ff3d6caac5
@@ -147,6 +160,7 @@ table _medidas
 						)
 				)
 			```
+		description: Media de dias em transito, da coleta a entrega, calculada por pedido antes de tirar a media
 		formatString: #,0.0
 		displayFolder: Fato entrega\Decomposição de Atraso
 		lineageTag: b518bfcc-7feb-4720-8eaf-6c64669cc969
@@ -159,11 +173,13 @@ table _medidas
 				)
 			
 			```
+		description: Media de dias de atraso entre os pedidos atrasados, filtra dias_de_atraso maior que zero
 		formatString: #,0.0
 		displayFolder: Fato entrega\Decomposição de Atraso
 		lineageTag: f810f7ab-3e68-4184-88ed-65bdb2b7de7c
 
 	measure 'Nota Média' = AVERAGE(fato_entrega[nota])
+		description: Media da avaliacao do cliente, nula em pedidos sem avaliacao
 		formatString: #,0.00
 		displayFolder: Fato entrega\Avaliações
 		lineageTag: 1f3092f9-1199-4321-90db-5efe54329a41
@@ -178,6 +194,7 @@ table _medidas
 					)
 				)
 			```
+		description: Pedidos Entregues reagrupado pelo mes em que a entrega aconteceu, nao pelo mes da compra
 		formatString: 0
 		displayFolder: Fato entrega\Troca Relacionamento
 		lineageTag: 9051da9b-f3be-4378-aee3-27db7bc22204
@@ -188,11 +205,13 @@ table _medidas
 			    [OTD %],
 			    USERELATIONSHIP(fato_entrega[sk_data_entrega], dim_calendario[sk_data])
 			)
+		description: OTD % reagrupado pelo mes da entrega, necessaria pra evolucao mensal fazer sentido pelo mes em que a entrega ocorreu
 		formatString: #,0.00%;-#,0.00%;#,0.00%
 		displayFolder: Fato entrega\Troca Relacionamento
 		lineageTag: 68ea6516-91d9-4316-b8bf-1c9be3cbb284
 
 	measure 'Valor de Frete (Item)' = SUM(fato_item_pedido[valor_frete])
+		description: Soma do frete no grao de item, de fato_item_pedido
 		formatString: "R$"\ #,0.0;-"R$"\ #,0.0;"R$"\ #,0.0
 		displayFolder: Fato item pedido\Financeiro e Frete
 		lineageTag: 3d1b1f72-d21b-4934-bc00-1d7a5ca88eeb
@@ -200,6 +219,7 @@ table _medidas
 		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
 
 	measure 'Peso Total (kg)' = SUM(fato_item_pedido[peso_gramas]) / 1000
+		description: Soma do peso dos itens, convertido de gramas pra quilos
 		formatString: #,0.00
 		displayFolder: Fato item pedido\Financeiro e Frete
 		lineageTag: 165bef96-38fc-4b64-8219-745c9c6bff74
@@ -212,6 +232,7 @@ table _medidas
 					0
 				)
 			```
+		description: Valor de frete por quilo transportado. Escopo do Painel de Frete e Rotas
 		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
 		displayFolder: Fato item pedido\Financeiro e Frete
 		lineageTag: be5ed125-eeca-4a10-8fc3-9f1f98432557
@@ -228,11 +249,13 @@ table _medidas
 					)
 				)
 			```
+		description: Dias de Atraso (méd) filtrado pelo vendedor, ponte virtual via TREATAS, sem relacionamento fisico entre os fatos
 		formatString: #,0.0
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: d978d479-7a24-4e29-a529-dd753283f40b
 
 	measure 'Lead Time Médio Format' = FORMAT([Lead Time Médio], "#.0 Dias")
+		description: Formatacao visual de Lead Time Medio como texto com unidade, uso interno de visual
 		isHidden
 		displayFolder: Formatações
 		lineageTag: db79e04f-d3f4-4e5c-98a4-31ea36b58ae1
@@ -240,6 +263,7 @@ table _medidas
 		changedProperty = IsHidden
 
 	measure 'Dias em Atraso (Format)' = FORMAT([Dias de Atraso (méd)], "#.0 Dias")
+		description: Formatacao visual de Dias de Atraso (med) como texto com unidade, uso interno de visual
 		isHidden
 		displayFolder: Formatações
 		lineageTag: b6455c3f-6860-4eca-b2ae-6c71ffe1126d
@@ -257,6 +281,7 @@ table _medidas
 					vValor >= 0.85, "#B45309",
 					vValor <  0.85, "#B91C1C"
 				)
+		description: Cor do texto do cartao de OTD, faixa de cor por meta, uso interno de visual
 		isHidden
 		displayFolder: Formatações
 		lineageTag: a679a618-24a0-42e1-8c23-cc7a5ce8fb97
@@ -274,6 +299,7 @@ table _medidas
 					vValor >= 0.85, "#FFFBEB",
 					vValor <  0.85, "#FEF2F2"
 				)
+		description: Cor de fundo do cartao de OTD, faixa de cor por meta, uso interno de visual
 		isHidden
 		displayFolder: Formatações
 		lineageTag: 1badc47d-9b5a-4149-8402-5a6db4878591
@@ -281,6 +307,7 @@ table _medidas
 		changedProperty = IsHidden
 
 	measure 'Meta OTD' = 0.95
+		description: Valor fixo de meta de OTD, 95 por cento, usado como linha de referencia no visual
 		isHidden
 		displayFolder: Formatações
 		lineageTag: d73f44fa-6a1a-45de-ad94-42ebdd417940
@@ -305,6 +332,7 @@ table _medidas
 			    [OTD % (por Data de Entrega)],
 			    BLANK()
 			)
+		description: Rotulo final da linha de evolucao mensal de OTD, mostra valor so no ultimo ponto com dado
 		isHidden
 		displayFolder: Formatações
 		lineageTag: 7fb26f18-43d1-4ded-b2b1-5502fc003af8
@@ -324,6 +352,7 @@ table _medidas
 					vValor >= 0.85, "Atenção!",
 					vValor <  0.85, "Crítico!"
 				)
+		description: Texto de legenda do OTD por faixa de meta, uso interno de visual
 		isHidden
 		displayFolder: Formatações
 		lineageTag: 9137b9aa-740e-4078-8edd-d39acad907c5

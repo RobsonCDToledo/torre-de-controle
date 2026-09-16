@@ -1,6 +1,6 @@
 # Fase 5 — plano de início
 
-**Status:** itens 1 e 2 concluídos e validados (`ADR-003`, `ADR-004`). Seguindo pros itens 3–5.
+**Status:** itens 1 a 3 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Seguindo pros itens 4 e 5.
 O escopo já está fechado em `cronograma.md` e `docs/00-arquitetura.md`; aqui é a ordem e as
 dependências entre as partes.
 
@@ -20,12 +20,13 @@ dependências entre as partes.
   e validados via live connect avulso no Desktop.
 - Endpoint SQL da gold — usuário de teste com `Read, ReadAll` em `lh_gold`.
 
-### 3. Dicionário de dados completo
+### 3. ~~Dicionário de dados completo~~ ✅ concluído, com uma ressalva
 
-- Sinônimos e descrições de campo pra Q&A.
-- Esquema linguístico configurado no modelo semântico.
-- Ponto de partida: `docs/dicionario-de-dados.md` já tem a base de tabelas/colunas/medidas —
-  falta a camada de linguagem natural em cima.
+- Sinônimos e descrições de campo documentados em `docs/dicionario-de-dados.md`.
+- ~~Esquema linguístico configurado no modelo semântico~~ — **bloqueado por limitação de
+  plataforma**: Q&A não é suportado em Direct Lake, testado em três contextos diferentes.
+  Registrado em `ADR-005`. A seção de sinônimos fica como documentação de intenção, sem
+  aplicação no modelo.
 
 ### 4. Painel de Frete e Rotas
 
@@ -39,11 +40,14 @@ dependências entre as partes.
 ### 5. Teste de aceite da fase
 
 Critério do `cronograma.md`: "um analista externo consegue responder uma pergunta nova sem
-pedir ajuda." **Papel do "analista externo" simulado por Claude**, usando só o dicionário/Q&A
-publicado (item 3), sem contexto desta conversa — não é autoavaliação do autor do projeto.
+pedir ajuda." **Papel do "analista externo" simulado por Claude**, usando só o material
+publicado — o relatório (visuais e filtros) e `docs/dicionario-de-dados.md` — sem contexto
+desta conversa. Ajustado pelo `ADR-005`: a validação **não** passa pela caixa de Q&A (não
+suportada em Direct Lake), passa por navegar o relatório e responder com o que ele expõe.
 
 ## Decisões resolvidas no início da fase
 
 - **RLS por UF de origem** (vendedor), não destino — `ADR-004`.
-- **Teste de aceite:** Claude simula o analista externo, a partir só do material publicado
-  (item 3), depois que o item 3 estiver pronto.
+- **Q&A nativo aceito como indisponível** em Direct Lake, modelo mantido como está — `ADR-005`.
+- **Teste de aceite:** Claude simula o analista externo, usando relatório + dicionário
+  publicados, depois que o item 4 (Painel de Frete e Rotas) estiver pronto.

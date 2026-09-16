@@ -1,4 +1,5 @@
 table dim_vendedor
+	description: Uma linha por vendedor, com cidade e UF de origem, metade do par que define uma rota
 	lineageTag: 89ef5c29-b3a3-4774-a13f-19c8ed7ff989
 	sourceLineageTag: [dbo].[dim_vendedor]
 
@@ -47,6 +48,7 @@ table dim_vendedor
 
 	column uf
 		dataType: string
+		description: UF do vendedor, lado origem da rota. Usada nos papeis de seguranca por UF de origem
 		lineageTag: 6bd69d11-9a23-496c-a2fe-cb56191315be
 		sourceLineageTag: uf
 		summarizeBy: none
