@@ -340,23 +340,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "f63d59efbeae9338e7d5",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_medidas"
-              }
-            },
-            "Property": "Frete sobre Faturamento"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

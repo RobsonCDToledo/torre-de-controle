@@ -4,10 +4,10 @@
   "position": {
     "x": 1075.2542372881355,
     "y": 696.94915254237287,
-    "z": 2002,
+    "z": 4000,
     "height": 356.61016949152543,
     "width": 820.33898305084745,
-    "tabOrder": 2002
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "barChart",
@@ -377,20 +377,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "5a269f9085b00abda9d7",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_medidas"
-              }
-            },
-            "Property": "Frete sobre Faturamento"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

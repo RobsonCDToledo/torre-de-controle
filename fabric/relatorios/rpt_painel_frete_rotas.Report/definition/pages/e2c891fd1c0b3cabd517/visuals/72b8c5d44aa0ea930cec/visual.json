@@ -4,10 +4,10 @@
   "position": {
     "x": 1198.64406779661,
     "y": 461.01694915254234,
-    "z": 2001,
+    "z": 3000,
     "height": 157.28813559322032,
     "width": 696.94915254237287,
-    "tabOrder": 2001
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -322,37 +322,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "b083ad348be704b8d072",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_medidas"
-              }
-            },
-            "Property": "Custo por Quilo"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "dc5c469707e35c0132b7",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_medidas"
-              }
-            },
-            "Property": "Peso Total (kg)"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

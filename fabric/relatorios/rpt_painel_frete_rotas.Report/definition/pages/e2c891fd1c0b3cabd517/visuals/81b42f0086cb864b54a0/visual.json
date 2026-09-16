@@ -508,7 +508,7 @@
                                 "Source": "_"
                               }
                             },
-                            "Property": "Valor de Frete"
+                            "Property": "Custo por Quilo (por Rota)"
                           }
                         }
                       }
@@ -553,34 +553,6 @@
         },
         "isHiddenInViewMode": true,
         "isLockedInViewMode": true
-      },
-      {
-        "name": "5d9b443211a74ca0970a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_medidas"
-              }
-            },
-            "Property": "Custo por Quilo (por Rota)"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "d97e22db889111d21232",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_medidas"
-              }
-            },
-            "Property": "Valor de Frete"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

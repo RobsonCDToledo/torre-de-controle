@@ -232,103 +232,6 @@ table _medidas
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: d978d479-7a24-4e29-a529-dd753283f40b
 
-	measure 'Peso Total (kg) por Rota' = ```
-
-				CALCULATE(
-					[Peso Total (kg)],
-					TREATAS(
-						VALUES(fato_entrega[sk_pedido]),
-						fato_item_pedido[sk_pedido]
-					)
-				)
-			```
-		formatString: #,0.00
-		displayFolder: Fato item pedido\Ponte Virtual
-		lineageTag: 621e8f6b-8081-49fc-9eac-5fb1d9ce6818
-
-	measure 'Custo por Quilo (por Rota)' = ```
-
-				DIVIDE(
-					[Valor de Frete],
-					[Peso Total (kg) por Rota],
-					0
-				)
-			```
-		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
-		displayFolder: Fato item pedido\Ponte Virtual
-		lineageTag: 4763684e-ae77-421a-bb20-0638afdfc944
-
-		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
-
-	measure 'Rota Mais Cara por Kg' = ```
-
-				VAR Ranking =
-					ADDCOLUMNS(
-						SUMMARIZE(fato_entrega, fato_entrega[rota]),
-						"@CustoKg", [Custo por Quilo (por Rota)]
-					)
-				VAR RotaTop =
-					TOPN(1, FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0), [@CustoKg], DESC)
-				RETURN
-					MAXX(RotaTop, fato_entrega[rota])
-			```
-		displayFolder: Fato item pedido\Insight Frete e Rotas
-		lineageTag: 42d193c0-7487-43d7-b1df-560332ecbb6d
-
-	measure 'Custo por Kg da Rota Mais Cara' = ```
-
-				VAR Ranking =
-					ADDCOLUMNS(
-						SUMMARIZE(fato_entrega, fato_entrega[rota]),
-						"@CustoKg", [Custo por Quilo (por Rota)]
-					)
-				VAR Filtrado =
-					FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0)
-				RETURN
-					MAXX(Filtrado, [@CustoKg])
-			```
-		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
-		displayFolder: Fato item pedido\Insight Frete e Rotas
-		lineageTag: b3d0a63c-7eb6-4131-ba7f-e4df760028ff
-
-		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
-
-	measure 'Custo por Kg Médio (Top 10)' = ```
-
-				VAR Top10 =
-					TOPN(10, SUMMARIZE(fato_entrega, fato_entrega[rota]), [Valor de Frete], DESC)
-				RETURN
-					AVERAGEX(Top10, [Custo por Quilo (por Rota)])
-			```
-		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
-		displayFolder: Fato item pedido\Insight Frete e Rotas
-		lineageTag: 6e079a11-f622-462b-8914-bf8880635f59
-
-		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
-
-	measure 'Múltiplo Custo por Kg' = ```
-
-				DIVIDE(
-					[Custo por Kg da Rota Mais Cara],
-					[Custo por Kg Médio (Top 10)],
-					0
-				)
-			```
-		formatString: #,0.0"×"
-		displayFolder: Fato item pedido\Insight Frete e Rotas
-		lineageTag: d1d6e314-feb3-4877-a7fc-b0e1c0f8d644
-
-	measure 'Insight Frete e Rotas' = ```
-
-				"R$ " & FORMAT(DIVIDE([Valor de Frete], 1000000), "0,00") & "M em frete no período (" &
-				FORMAT([Frete sobre Faturamento], "0,0%") & " do faturamento). A rota " &
-				[Rota Mais Cara por Kg] & " é a mais cara por quilo — " &
-				FORMAT([Custo por Kg da Rota Mais Cara], "\R\$ 0,00") & ", quase " &
-				FORMAT([Múltiplo Custo por Kg], "0,0") & "× o custo das rotas de maior volume."
-			```
-		displayFolder: Fato item pedido\Insight Frete e Rotas
-		lineageTag: 614d9a9a-3285-4334-add0-23a25554ac68
-
 	measure 'Lead Time Médio Format' = FORMAT([Lead Time Médio], "#.0 Dias")
 		isHidden
 		displayFolder: Formatações
@@ -426,6 +329,103 @@ table _medidas
 		lineageTag: 9137b9aa-740e-4078-8edd-d39acad907c5
 
 		changedProperty = IsHidden
+
+	measure 'Peso Total (kg) por Rota' = ```
+			
+				CALCULATE(
+					[Peso Total (kg)],
+					TREATAS(
+						VALUES(fato_entrega[sk_pedido]),
+						fato_item_pedido[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 621e8f6b-8081-49fc-9eac-5fb1d9ce6818
+
+	measure 'Custo por Quilo (por Rota)' = ```
+			
+				DIVIDE(
+					[Valor de Frete],
+					[Peso Total (kg) por Rota],
+					0
+				)
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 4763684e-ae77-421a-bb20-0638afdfc944
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Rota Mais Cara por Kg' = ```
+			
+				VAR Ranking =
+					ADDCOLUMNS(
+						SUMMARIZE(fato_entrega, fato_entrega[rota]),
+						"@CustoKg", [Custo por Quilo (por Rota)]
+					)
+				VAR RotaTop =
+					TOPN(1, FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0), [@CustoKg], DESC)
+				RETURN
+					MAXX(RotaTop, fato_entrega[rota])
+			```
+		displayFolder: Fato item pedido\Insight Frete e Rotas
+		lineageTag: 42d193c0-7487-43d7-b1df-560332ecbb6d
+
+	measure 'Custo por Kg da Rota Mais Cara' = ```
+			
+				VAR Ranking =
+					ADDCOLUMNS(
+						SUMMARIZE(fato_entrega, fato_entrega[rota]),
+						"@CustoKg", [Custo por Quilo (por Rota)]
+					)
+				VAR Filtrado =
+					FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0)
+				RETURN
+					MAXX(Filtrado, [@CustoKg])
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Fato item pedido\Insight Frete e Rotas
+		lineageTag: b3d0a63c-7eb6-4131-ba7f-e4df760028ff
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Custo por Kg Médio (Top 10)' = ```
+			
+				VAR Top10 =
+					TOPN(10, SUMMARIZE(fato_entrega, fato_entrega[rota]), [Valor de Frete], DESC)
+				RETURN
+					AVERAGEX(Top10, [Custo por Quilo (por Rota)])
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Fato item pedido\Insight Frete e Rotas
+		lineageTag: 6e079a11-f622-462b-8914-bf8880635f59
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'Múltiplo Custo por Kg' = ```
+			
+				DIVIDE(
+					[Custo por Kg da Rota Mais Cara],
+					[Custo por Kg Médio (Top 10)],
+					0
+				)
+			```
+		formatString: #,0.0"×"
+		displayFolder: Fato item pedido\Insight Frete e Rotas
+		lineageTag: d1d6e314-feb3-4877-a7fc-b0e1c0f8d644
+
+	measure 'Insight Frete e Rotas' = ```
+			
+				"R$ " & FORMAT(DIVIDE([Valor de Frete], 1000000), "#,0.00") & "M em frete no período (" &
+				FORMAT([Frete sobre Faturamento], "0,0%") & " do faturamento). A rota " &
+				[Rota Mais Cara por Kg] & " é a mais cara por quilo — " &
+				FORMAT([Custo por Kg da Rota Mais Cara], "\R\$ 0,00") & ", quase " &
+				FORMAT([Múltiplo Custo por Kg], "0,0") & "× o custo das rotas de maior volume."
+			```
+		displayFolder: Fato item pedido\Insight Frete e Rotas
+		lineageTag: 614d9a9a-3285-4334-add0-23a25554ac68
 
 	partition _medidas = m
 		mode: import
