@@ -277,10 +277,15 @@ table _medidas
 
 	measure 'Custo por Kg da Rota Mais Cara' = ```
 
-				CALCULATE(
-					[Custo por Quilo (por Rota)],
-					fato_entrega[rota] = [Rota Mais Cara por Kg]
-				)
+				VAR Ranking =
+					ADDCOLUMNS(
+						SUMMARIZE(fato_entrega, fato_entrega[rota]),
+						"@CustoKg", [Custo por Quilo (por Rota)]
+					)
+				VAR Filtrado =
+					FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0)
+				RETURN
+					MAXX(Filtrado, [@CustoKg])
 			```
 		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
 		displayFolder: Fato item pedido\Insight Frete e Rotas
