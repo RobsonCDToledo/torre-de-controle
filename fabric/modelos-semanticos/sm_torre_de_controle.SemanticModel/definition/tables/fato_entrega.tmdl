@@ -245,6 +245,33 @@ table fato_entrega
 
 		annotation SummarizationSetBy = User
 
+	column uf_destino
+		dataType: string
+		lineageTag: a591dc3c-1561-44d2-94bd-0a1028614a1f
+		sourceLineageTag: uf_destino
+		summarizeBy: none
+		sourceColumn: uf_destino
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf_origem
+		dataType: string
+		lineageTag: 72bdbc80-32c0-4357-b3e3-b9074f2758d2
+		sourceLineageTag: uf_origem
+		summarizeBy: none
+		sourceColumn: uf_origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column rota
+		dataType: string
+		lineageTag: 60eaa3d4-dcc3-4b1d-bd3c-d89136a0ff93
+		sourceLineageTag: rota
+		summarizeBy: none
+		sourceColumn: rota
+
+		annotation SummarizationSetBy = Automatic
+
 	partition fato_entrega = entity
 		mode: directLake
 		source

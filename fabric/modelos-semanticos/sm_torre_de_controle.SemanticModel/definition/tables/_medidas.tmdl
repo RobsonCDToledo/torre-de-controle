@@ -339,7 +339,5 @@ table _medidas
 				in
 				  #"Removed Columns"
 
-	changedProperty = Name
-
 	annotation PBI_ResultType = Table
 
