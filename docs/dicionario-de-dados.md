@@ -465,6 +465,11 @@ registrada aqui em vez de escondida.
 | `Dias de Atraso (méd) por Vendedor` | `Dias de Atraso (méd)` filtrado pelo vendedor, mesmo sem relacionamento físico entre os fatos | Ponte virtual via `TREATAS` — evita reabrir a ambiguidade que motivou remover o relacionamento direto entre `fato_entrega` e `fato_item_pedido` |
 | `Peso Total (kg) por Rota` | `Peso Total (kg)` filtrado por rota, mesma ponte virtual via `TREATAS`, direção oposta (de `fato_entrega` pra `fato_item_pedido`) | Escopo do Painel de Frete e Rotas (fase 5) — `rota` só existe em `fato_entrega`, peso só existe em `fato_item_pedido` |
 | `Custo por Quilo (por Rota)` | `Valor de Frete` sobre `Peso Total (kg) por Rota` | Reaproveita `Valor de Frete` (já soma do frete dos itens) em vez de abrir uma segunda ponte só pro frete |
+| `Rota Mais Cara por Kg` | Nome da rota (UF origem → UF destino) com o maior `Custo por Quilo (por Rota)` | Ignora rota em branco ou custo zero — ruído de pedido sem item completo |
+| `Custo por Kg da Rota Mais Cara` | `Custo por Quilo (por Rota)` avaliado só pra rota de `Rota Mais Cara por Kg` | — |
+| `Custo por Kg Médio (Top 10)` | Média de `Custo por Quilo (por Rota)` entre as 10 rotas de maior `Valor de Frete` | "Maior volume" = mesmo corte do treemap do Painel de Frete e Rotas |
+| `Múltiplo Custo por Kg` | `Custo por Kg da Rota Mais Cara` sobre `Custo por Kg Médio (Top 10)` | Quantas vezes a rota mais cara por kg custa em relação à média das rotas de maior volume |
+| `Insight Frete e Rotas` | Frase narrativa concatenando frete total, % sobre faturamento, rota mais cara por kg e o múltiplo | Medida de texto pro cartão de destaque do painel — mesmo padrão de `OTD % (Legend)` |
 
 ---
 

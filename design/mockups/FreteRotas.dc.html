@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", system-ui, -apple-system, sans-serif; color: #0F172A; }
+    a { color: #06B6D4; }
+    a:hover { color: #0891B2; }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 20px;
+      overflow: hidden;
+      min-height: 0;
+      min-width: 0;
+    }
+    .muted { color: #94A3B8; }
+    .label-sm {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #64748B;
+    }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+    .stat-row + .stat-row { border-top: 1px solid #E2E8F0; }
+  </style>
+</helmet>
+
+<div style="width:1920px; height:1080px; box-sizing:border-box; background:#F8FAFC; display:flex; flex-direction:column;">
+
+  <!-- Accent bar -->
+  <div style="height:4px; width:100%; background:linear-gradient(90deg, #06B6D4, #4F46E5);"></div>
+
+  <div style="flex:1; padding:32px 40px 24px; display:grid; grid-template-rows: auto auto minmax(0,1.3fr) minmax(0,1fr); row-gap:18px; min-height:0;">
+
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="width:40px; height:40px; border-radius:10px; background:#ECFEFF; border:1px solid #A5F3FC; display:flex; align-items:center; justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 17V11a4 4 0 0 1 4-4h4a4 4 0 0 0 4-4"/>
+          </svg>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <span class="label-sm" style="color:#0891B2;">Torre de Controle</span>
+          <h1 style="margin:0; font-size:28px; font-weight:700; color:#0F172A;">Painel de Frete e Rotas</h1>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <div style="display:flex; align-items:center; gap:6px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:8px 14px; font-size:13px; color:#334155;">
+          Período: Últimos 12 meses
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:8px 14px; font-size:13px; color:#334155;">
+          UF de Origem: Todas
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight banner -->
+    <div style="display:flex; align-items:center; gap:16px; background:#EEF2FF; border:1px solid #C7D2FE; border-radius:10px; padding:16px 22px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+        <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3.5"/>
+      </svg>
+      <div style="font-size:15px; color:#312E81; line-height:1.5;">
+        <strong>R$ 2,25M</strong> em frete no período (<strong>16,6%</strong> do faturamento). A rota
+        <strong>SP → RO</strong> é a mais cara por quilo — <strong>R$ 18,90</strong>, quase 3,3× o
+        custo das rotas de maior volume — candidata a renegociação de tarifa ou consolidação de carga.
+      </div>
+    </div>
+
+    <!-- Row 1: treemap hero + rail -->
+    <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px; min-height:0; overflow:hidden;">
+
+      <!-- Treemap -->
+      <div class="card" style="display:flex; flex-direction:column; gap:2px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+          <div style="font-size:15px; font-weight:600;">Rotas por volume de frete e eficiência</div>
+          <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:#64748B;">
+            <span>R$/kg</span>
+            <span style="width:70px; height:8px; border-radius:4px; background:linear-gradient(90deg, #E0E7FF, #818CF8, #3730A3); display:inline-block;"></span>
+            <span>barato → caro</span>
+          </div>
+        </div>
+        <div style="font-size:12px;" class="muted">tamanho = Valor de Frete · cor = Custo por Quilo (por Rota)</div>
+        <svg viewBox="0 0 992 400" style="display:block; width:100%; height:100%; flex:1; min-height:0; margin-top:8px;">
+
+          <!-- Coluna A -->
+          <rect x="10" y="10" width="376" height="211" rx="4" fill="#E0E7FF"/>
+          <text x="26" y="36" font-size="16" font-weight="700" fill="#312E81">SP → SP</text>
+          <text x="26" y="57" font-size="13" fill="#4338CA">R$ 412,3k frete</text>
+          <text x="26" y="76" font-size="12" fill="#6366F1">R$ 5,80 / kg</text>
+
+          <rect x="10" y="225" width="376" height="167" rx="4" fill="#C7D2FE"/>
+          <text x="26" y="250" font-size="16" font-weight="700" fill="#312E81">SP → RJ</text>
+          <text x="26" y="271" font-size="13" fill="#4338CA">R$ 326,1k frete</text>
+          <text x="26" y="289" font-size="12" fill="#4F46E5">R$ 7,50 / kg</text>
+
+          <!-- Coluna B -->
+          <rect x="394" y="10" width="342" height="156" rx="4" fill="#E0E7FF"/>
+          <text x="410" y="33" font-size="15" font-weight="700" fill="#312E81">SP → MG</text>
+          <text x="410" y="52" font-size="13" fill="#4338CA">R$ 280,4k</text>
+          <text x="410" y="69" font-size="12" fill="#6366F1">R$ 6,80 / kg</text>
+
+          <rect x="394" y="170" width="342" height="117" rx="4" fill="#4F46E5"/>
+          <text x="410" y="193" font-size="15" font-weight="700" fill="#FFFFFF">RJ → SP</text>
+          <text x="410" y="212" font-size="13" fill="#E0E7FF">R$ 210,6k</text>
+          <text x="410" y="229" font-size="12" fill="#C7D2FE">R$ 11,20 / kg</text>
+
+          <rect x="394" y="291" width="342" height="101" rx="4" fill="#818CF8"/>
+          <text x="410" y="313" font-size="15" font-weight="700" fill="#FFFFFF">SP → BA</text>
+          <text x="410" y="332" font-size="13" fill="#EEF2FF">R$ 181,9k</text>
+          <text x="410" y="349" font-size="12" fill="#E0E7FF">R$ 9,40 / kg</text>
+
+          <!-- Coluna C -->
+          <rect x="744" y="10" width="238" height="122" rx="4" fill="#4F46E5"/>
+          <text x="758" y="31" font-size="14" font-weight="700" fill="#FFFFFF">MG → SP</text>
+          <text x="758" y="49" font-size="12" fill="#E0E7FF">R$ 156,2k · R$ 11,70/kg</text>
+
+          <rect x="744" y="136" width="238" height="105" rx="4" fill="#C7D2FE"/>
+          <text x="758" y="157" font-size="14" font-weight="700" fill="#312E81">SP → RS</text>
+          <text x="758" y="175" font-size="12" fill="#4338CA">R$ 135,0k · R$ 8,10/kg</text>
+
+          <rect x="744" y="245" width="238" height="77" rx="4" fill="#818CF8"/>
+          <text x="758" y="264" font-size="13" font-weight="700" fill="#FFFFFF">RJ → CE</text>
+          <text x="758" y="280" font-size="11" fill="#EEF2FF">R$ 98,4k · R$ 10,20/kg</text>
+
+          <rect x="744" y="326" width="238" height="66" rx="4" fill="#3730A3"/>
+          <text x="758" y="347" font-size="13" font-weight="700" fill="#FFFFFF">SP → RO</text>
+          <text x="758" y="363" font-size="11" fill="#C7D2FE">R$ 82,1k · R$ 18,90/kg</text>
+
+        </svg>
+      </div>
+
+      <!-- Rail: gauge + stats -->
+      <div class="card" style="display:flex; flex-direction:column;">
+        <div style="font-size:13px; font-weight:600; color:#334155; flex-shrink:0;">Frete sobre Faturamento</div>
+        <svg viewBox="0 0 300 190" style="display:block; width:100%; height:100%; flex:1; min-height:0;">
+          <path d="M40,160 A110,110 0 0 1 125.5,52.8" fill="none" stroke="#A7F3D0" stroke-width="18" stroke-linecap="round"/>
+          <path d="M125.5,52.8 A110,110 0 0 1 218.6,74.0" fill="none" stroke="#FDE68A" stroke-width="18"/>
+          <path d="M218.6,74.0 A110,110 0 0 1 260,160" fill="none" stroke="#FECACA" stroke-width="18" stroke-linecap="round"/>
+          <line x1="150" y1="160" x2="141.7" y2="65.4" stroke="#312E81" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="150" cy="160" r="7" fill="#312E81"/>
+          <text x="150" y="145" font-size="34" font-weight="700" fill="#0F172A" text-anchor="middle">16,6%</text>
+          <text x="150" y="182" font-size="12" fill="#64748B" text-anchor="middle">meta ≤ 15%</text>
+        </svg>
+
+        <div class="stat-row">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6.5 3h11l-2 6h-7l-2-6z"/><path d="M4 21l3.5-12h9L20 21"/><line x1="4" y1="21" x2="20" y2="21"/>
+            </svg>
+            <span style="font-size:13px; color:#334155;">Custo por Quilo (méd)</span>
+          </div>
+          <span style="font-size:20px; font-weight:700;">R$ 8,42</span>
+        </div>
+        <div class="stat-row">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="8" width="16" height="12" rx="1.5"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/>
+            </svg>
+            <span style="font-size:13px; color:#334155;">Peso Total Transportado</span>
+          </div>
+          <span style="font-size:20px; font-weight:700;">267,4 t</span>
+        </div>
+
+        <div style="margin-top:auto; padding-top:14px; border-top:1px solid #E2E8F0;">
+          <div style="display:flex; align-items:center; gap:8px; background:#FEF2F2; border:1px solid #FECACA; border-radius:8px; padding:10px 12px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+              <path d="M12 4L2 20h20L12 4z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17" r="0.6" fill="#B91C1C" stroke="none"/>
+            </svg>
+            <span style="font-size:12px; color:#7F1D1D;">3 rotas do Norte acima de 25% de frete sobre faturamento</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 2: bubble + tabela -->
+    <div style="display:grid; grid-template-columns: 3fr 2fr; gap:20px; min-height:0; overflow:hidden;">
+
+      <!-- Bubble chart -->
+      <div class="card" style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:15px; font-weight:600;">Dispersão de peso × custo de frete, por rota</div>
+        <div style="font-size:12px;" class="muted">tamanho da bolha = volume de pedidos · vermelho = custo fora do esperado pro peso transportado</div>
+        <svg viewBox="0 0 1000 230" style="display:block; width:100%; height:100%; flex:1; min-height:0; margin-top:6px;">
+          <line x1="55" y1="195" x2="980" y2="195" stroke="#E2E8F0" stroke-width="1"/>
+          <line x1="55" y1="15" x2="55" y2="195" stroke="#E2E8F0" stroke-width="1"/>
+          <text x="517" y="220" font-size="12" fill="#94A3B8" text-anchor="middle">Peso total transportado (t)</text>
+          <text x="20" y="105" font-size="12" fill="#94A3B8" text-anchor="middle" transform="rotate(-90 20 105)">Custo de frete (R$ mil)</text>
+
+          <line x1="65" y1="180" x2="900" y2="35" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text x="905" y="32" font-size="11" fill="#94A3B8">custo esperado</text>
+
+          <g fill="#5EEAD4" stroke="#0D9488" stroke-width="1.2" fill-opacity="0.55">
+            <circle cx="130" cy="170" r="13"/>
+            <circle cx="240" cy="148" r="18"/>
+            <circle cx="360" cy="132" r="15"/>
+            <circle cx="490" cy="106" r="22"/>
+            <circle cx="580" cy="93" r="12"/>
+            <circle cx="670" cy="78" r="15"/>
+            <circle cx="780" cy="62" r="17"/>
+            <circle cx="860" cy="50" r="10"/>
+          </g>
+
+          <g fill="#FCA5A5" stroke="#B91C1C" stroke-width="1.4" fill-opacity="0.75">
+            <circle cx="320" cy="70" r="15"/>
+            <circle cx="690" cy="155" r="13"/>
+          </g>
+          <text x="320" y="57" font-size="11" font-weight="600" fill="#B91C1C" text-anchor="middle">SP → RO</text>
+          <text x="690" y="175" font-size="11" font-weight="600" fill="#B91C1C" text-anchor="middle">MG → SP</text>
+        </svg>
+      </div>
+
+      <!-- Tabela rotas criticas -->
+      <div class="card" style="display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:15px; font-weight:600;">Frete sobre faturamento — rotas críticas</div>
+        <div style="font-size:12px;" class="muted">acima de 20% consome margem, revisar precificação de frete</div>
+
+        <div style="margin-top:10px; display:flex; flex-direction:column;">
+          <div style="display:grid; grid-template-columns: 1fr 2fr 80px; gap:8px; padding:5px 4px; font-size:11px; font-weight:600; color:#94A3B8; text-transform:uppercase; letter-spacing:0.04em; border-bottom:1px solid #E2E8F0;">
+            <span>Rota</span><span></span><span style="text-align:right;">Frete %</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 2fr 80px; align-items:center; gap:8px; padding:8px 4px; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; font-weight:600; color:#334155;">SP → RO</span>
+            <div style="background:#F1F5F9; border-radius:4px; height:9px;"><div style="width:100%; background:#EF4444; height:9px; border-radius:4px;"></div></div>
+            <span style="font-size:13px; font-weight:700; color:#B91C1C; text-align:right;">28,4%</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 2fr 80px; align-items:center; gap:8px; padding:8px 4px; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; font-weight:600; color:#334155;">SP → AM</span>
+            <div style="background:#F1F5F9; border-radius:4px; height:9px;"><div style="width:92%; background:#EF4444; height:9px; border-radius:4px;"></div></div>
+            <span style="font-size:13px; font-weight:700; color:#B91C1C; text-align:right;">26,1%</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 2fr 80px; align-items:center; gap:8px; padding:8px 4px; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; font-weight:600; color:#334155;">RJ → CE</span>
+            <div style="background:#F1F5F9; border-radius:4px; height:9px;"><div style="width:76%; background:#F59E0B; height:9px; border-radius:4px;"></div></div>
+            <span style="font-size:13px; font-weight:700; color:#B45309; text-align:right;">21,7%</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 2fr 80px; align-items:center; gap:8px; padding:8px 4px; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; font-weight:600; color:#334155;">SP → PA</span>
+            <div style="background:#F1F5F9; border-radius:4px; height:9px;"><div style="width:71%; background:#F59E0B; height:9px; border-radius:4px;"></div></div>
+            <span style="font-size:13px; font-weight:700; color:#B45309; text-align:right;">20,3%</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 2fr 80px; align-items:center; gap:8px; padding:8px 4px;">
+            <span style="font-size:13px; font-weight:600; color:#334155;">SP → SP</span>
+            <div style="background:#F1F5F9; border-radius:4px; height:9px;"><div style="width:42%; background:#10B981; height:9px; border-radius:4px;"></div></div>
+            <span style="font-size:13px; font-weight:700; color:#047857; text-align:right;">11,8%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div style="font-size:11px; color:#94A3B8; text-align:right; padding:0 40px 16px;">
+    Dados de exemplo, ilustrativos — layout de referência para o relatório em Power BI Desktop.
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
