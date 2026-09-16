@@ -36,7 +36,10 @@ da Microsoft é o **Copilot para Power BI** como substituto moderno de consulta 
 natural, e a preparação recomendada pra isso é seguir as **práticas recomendadas de modelo
 semântico para o agente de dados do Fabric** — que giram em torno de **descrições** em
 tabelas, colunas e medidas, não em torno de sinônimo/esquema linguístico do motor antigo.
-Descrição é metadado comum, sempre suportado, inclusive em Direct Lake.
+
+**Essa segunda tentativa também esbarrou em limitação de plataforma — ver "Tentativa de
+descrições, revertida" abaixo.** Descrição não é, nesta versão de schema TMDL deste workspace,
+o caminho disponível agora.
 
 ## Decisão
 
@@ -52,12 +55,39 @@ futuro, a seção já está pronta pra virar configuração real sem trabalho de
 dados**, não por uma caixa de pergunta em linguagem natural. O teste de aceite (item 5 do
 plano) é ajustado de acordo — ver `planejamento/fase-5-inicio.md`.
 
-**A parte executável agora da recomendação oficial é adotada: descrições em tabelas, colunas e
-medidas do modelo semântico**, transcritas do que já está em `docs/dicionario-de-dados.md`.
-Não exige capacidade paga pra ser autorada — só pra rodar Copilot de verdade contra o modelo,
-que fica fora do escopo desta fase por causa da capacidade trial. O trabalho de descrição não
-depende disso: enriquece o modelo pra qualquer agente de IA (incluindo o próprio Copilot, se a
-capacidade mudar no futuro) e melhora a tooltip de campo pra usuário humano hoje.
+**A tentativa de adicionar descrições ao modelo foi revertida — ver "Tentativa de descrições,
+revertida" abaixo.** O conteúdo já redigido continua útil como referência: as descrições
+pensadas para cada tabela, coluna e medida ficam documentadas no histórico do commit revertido
+e podem ser reaplicadas se este workspace ganhar suporte à propriedade, ou aplicadas campo a
+campo pela interface (não pelo TMDL bruto) caso valha o esforço manual no futuro.
+
+## Tentativa de descrições, revertida
+
+Descrições foram escritas em TMDL bruto — `description: ...` em 7 tabelas, colunas com nuance
+documentada e as 29 medidas — commitadas e sincronizadas via **Atualizar tudo** no portal do
+Fabric. O pipeline de importação do workspace rejeitou o arquivo:
+
+```text
+Workload Error Code: Workload_FailedToParseFile
+TMDL Format Error: Parsing error type - UnknownKeyword
+Detailed error - Unsupported property - description is not a supported property
+in the current context!
+```
+
+Primeira tentativa (medidas removidas, tabelas/colunas mantidas) isolou a causa: **não é só
+medida.** A segunda tentativa (`dim_calendario`, primeira tabela do lote) recebeu o mesmo erro
+na descrição de **tabela**. A propriedade `description` não é reconhecida pelo parser TMDL
+deste pipeline de importação via Git, em nenhum nível — tabela, coluna ou medida.
+
+Todas as descrições foram removidas e o modelo voltou ao estado anterior, validado por
+sincronizar sem erro depois da reversão.
+
+**Isso não invalida a decisão de manter Direct Lake nem a leitura sobre Copilot ser o caminho
+oficial** — é uma limitação adicional, desta vez do pipeline de sincronização Git→workspace
+especificamente, não necessariamente do motor Direct Lake em si. Não foi testado se a mesma
+propriedade funcionaria autorada campo a campo pela interface (Desktop/Web), sem passar pelo
+TMDL bruto via Git — ponto em aberto, não perseguido nesta fase pelo volume de campos
+envolvido (~50) frente ao ganho.
 
 ## Alternativas consideradas
 
@@ -77,16 +107,18 @@ permitir, sem trabalho de redescoberta.
 
 ## Consequências
 
-**Positivas.** Direct Lake permanece intacto como a peça central do projeto. A limitação
-documentada e aceita — em vez de escondida ou forçada por um workaround frágil — é, ela mesma,
-demonstração de maturidade técnica: reconhecer o limite real de uma plataforma nova (e de um
-recurso em fim de vida) é mais sênior do que insistir contra ele. A seção de sinônimos no
-dicionário não foi trabalho perdido — vira ativo pronto para quando (ou se) o recurso for
-suportado. E o projeto sai desta fase seguindo a recomendação **atual** da Microsoft — Copilot
-e descrições, não uma prática sendo descontinuada — com o modelo preparado pro caminho moderno
-de IA, não só documentado sobre o caminho antigo que não funcionou.
+**Positivas.** Direct Lake permanece intacto como a peça central do projeto. As duas
+limitações documentadas e aceitas — em vez de escondidas ou forçadas por workaround frágil —
+são, elas mesmas, demonstração de maturidade técnica: reconhecer o limite real de uma
+plataforma nova (e de um recurso em fim de vida) é mais sênior do que insistir contra ele. A
+seção de sinônimos no dicionário e o texto de descrição já redigido não foram trabalho
+perdido — ficam como ativo pronto pra reaplicar se o workspace ganhar suporte, ou pra usar
+manualmente pela interface se algum dia valer o esforço campo a campo.
 
 **Negativas, e aceitas.** O item "perguntas em linguagem natural" do `cronograma.md` não sai
 como uma caixa de Q&A funcional nesta fase — sai como documentação de sinônimos pronta, sem
-aplicação. O teste de aceite da fase precisa validar self-service por outro caminho (visuais,
-filtros, dicionário), não pela pergunta digitada livre que o cronograma original sugeria.
+aplicação. O modelo também não sai desta fase com descrições de campo aplicadas, ao contrário
+do que a decisão original previa — a preparação pro agente de dados do Fabric fica só no nível
+de intenção documentada, não de metadado real no modelo. O teste de aceite da fase precisa
+validar self-service por outro caminho (visuais, filtros, dicionário), não pela pergunta
+digitada livre que o cronograma original sugeria, nem por tooltip de descrição no campo.

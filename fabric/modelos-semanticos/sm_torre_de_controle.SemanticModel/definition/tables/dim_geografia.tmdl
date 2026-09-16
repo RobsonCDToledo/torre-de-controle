@@ -1,5 +1,4 @@
 table dim_geografia
-	description: Um centroide por prefixo de CEP, calculado por mediana, servindo os dois fatos em papeis opostos, origem e destino
 	lineageTag: b99a9818-9010-47fc-807a-7bb8d2ed1f5c
 	sourceLineageTag: [dbo].[dim_geografia]
 
@@ -27,7 +26,6 @@ table dim_geografia
 
 	column latitude
 		dataType: double
-		description: Mediana das latitudes validas do prefixo de CEP, robusta a pontos com erro de geocodificacao
 		lineageTag: d0fc5240-1f13-4511-859a-f19bc9a23e41
 		sourceLineageTag: latitude
 		dataCategory: Latitude
@@ -44,7 +42,6 @@ table dim_geografia
 
 	column longitude
 		dataType: double
-		description: Mediana das longitudes validas do prefixo de CEP, robusta a pontos com erro de geocodificacao
 		lineageTag: b7899016-48f8-4f21-938e-2d5f8a54b6ed
 		sourceLineageTag: longitude
 		dataCategory: Longitude
@@ -61,7 +58,6 @@ table dim_geografia
 
 	column cidade
 		dataType: string
-		description: Cidade mais frequente das coordenadas do prefixo de CEP, sem acento
 		lineageTag: b41f2a23-c7b2-4432-9c27-0fdfa6dff943
 		sourceLineageTag: cidade
 		summarizeBy: none
@@ -71,7 +67,6 @@ table dim_geografia
 
 	column uf
 		dataType: string
-		description: UF mais frequente das coordenadas do prefixo de CEP
 		lineageTag: 0ce438d0-417a-41a8-ae0b-84323f9cfbcc
 		sourceLineageTag: uf
 		summarizeBy: none
@@ -81,7 +76,6 @@ table dim_geografia
 
 	column regiao
 		dataType: string
-		description: Regiao geografica brasileira derivada da UF, por exemplo Sudeste ou Nordeste
 		lineageTag: 30e1735e-44fa-4773-b096-e04141805190
 		sourceLineageTag: regiao
 		summarizeBy: none

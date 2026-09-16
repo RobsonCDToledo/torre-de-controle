@@ -1,5 +1,4 @@
 table dim_calendario
-	description: Uma linha por dia, de 2016-01-01 a 2018-12-31, com hierarquia Ano Trimestre Mes Dia e feriados nacionais brasileiros
 	lineageTag: 7e788ec8-8051-4d67-96b0-3ced75979df2
 	sourceLineageTag: [dbo].[dim_calendario]
 	dataCategory: Time
@@ -93,7 +92,6 @@ table dim_calendario
 
 	column anomes
 		dataType: int64
-		description: Ano e mes concatenados, formato usado pra ordenar a evolucao mensal
 		formatString: 0
 		lineageTag: 1e2c71c0-9042-4735-838d-545e7335d91f
 		sourceLineageTag: anomes
@@ -202,7 +200,6 @@ table dim_calendario
 
 	column feriado
 		dataType: boolean
-		description: Verdadeiro em feriado nacional brasileiro
 		formatString: """TRUE"";""TRUE"";""FALSE"""
 		lineageTag: 4809c86c-0400-4808-a064-575cef5fc123
 		sourceLineageTag: feriado
@@ -232,7 +229,6 @@ table dim_calendario
 
 	column tipo_dia
 		dataType: string
-		description: Classificacao textual do dia, por exemplo dia util, fim de semana ou feriado
 		lineageTag: 8e53edd3-3672-4985-b820-d329984a8688
 		sourceLineageTag: tipo_dia
 		summarizeBy: none
@@ -242,7 +238,6 @@ table dim_calendario
 
 	column dia_util
 		dataType: boolean
-		description: Falso em fim de semana e em feriado nacional
 		formatString: """TRUE"";""TRUE"";""FALSE"""
 		lineageTag: f441061b-13af-4dee-b54f-6767365921c7
 		sourceLineageTag: dia_util

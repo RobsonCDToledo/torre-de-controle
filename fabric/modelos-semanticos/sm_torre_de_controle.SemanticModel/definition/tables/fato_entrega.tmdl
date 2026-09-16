@@ -1,5 +1,4 @@
 table fato_entrega
-	description: Um pedido e sua historia de entrega, grao de pedido, base de todos os indicadores de prazo e do OTD
 	lineageTag: 4fb6ae73-56de-4184-8bed-26a46e3e9301
 	sourceLineageTag: [dbo].[fato_entrega]
 
@@ -86,7 +85,6 @@ table fato_entrega
 
 	column sk_data_entrega
 		dataType: int64
-		description: Nulo em 2965 pedidos ainda nao entregues, nunca zero nem data sentinela. Ver ADR-002
 		isHidden
 		formatString: 0
 		lineageTag: 3b504d27-125a-401a-9bb6-124fe3a2bb8d
@@ -102,7 +100,6 @@ table fato_entrega
 
 	column status_pedido
 		dataType: string
-		description: Situacao do pedido na origem, oito valores possiveis como delivered, canceled ou unavailable
 		lineageTag: d3b38496-92b9-40db-bd6c-46ffbe8f775e
 		sourceLineageTag: status_pedido
 		summarizeBy: none
@@ -112,7 +109,6 @@ table fato_entrega
 
 	column dias_ate_aprovacao
 		dataType: int64
-		description: Dias entre a compra e a aprovacao do pagamento
 		isHidden
 		formatString: 0
 		lineageTag: ae003f94-f960-426b-8c5a-10d01cb9fabe
@@ -128,7 +124,6 @@ table fato_entrega
 
 	column dias_ate_coleta
 		dataType: int64
-		description: Dias entre a compra e a coleta pela transportadora
 		isHidden
 		formatString: 0
 		lineageTag: c5c969ce-4046-42fd-998d-a311a10e9b84
@@ -144,7 +139,6 @@ table fato_entrega
 
 	column lead_time_dias
 		dataType: int64
-		description: Dias entre a compra e a entrega ao cliente
 		isHidden
 		formatString: 0
 		lineageTag: 7f8a0a56-7d01-4e60-86cf-dba34ba1b7fd
@@ -160,7 +154,6 @@ table fato_entrega
 
 	column dias_de_atraso
 		dataType: int64
-		description: Entrega real menos prevista. Negativo indica entrega adiantada, nulo em pedido ainda nao entregue
 		isHidden
 		formatString: 0
 		lineageTag: 812070ff-e3f7-4667-9e0c-cae2672146ae
@@ -176,7 +169,6 @@ table fato_entrega
 
 	column entregue_no_prazo
 		dataType: boolean
-		description: Verdadeiro quando a entrega ocorreu ate a data prevista. Nulo, nunca falso, em pedido ainda nao entregue. Base do OTD
 		formatString: """TRUE"";""TRUE"";""FALSE"""
 		lineageTag: 7f96f09f-5c88-49e5-bf85-e156aeae047d
 		sourceLineageTag: entregue_no_prazo
@@ -187,7 +179,6 @@ table fato_entrega
 
 	column nota
 		dataType: int64
-		description: Nota de 1 a 5 da avaliacao mais recente do pedido, nulo em 768 pedidos sem avaliacao. Ver ADR-002
 		isHidden
 		formatString: 0
 		lineageTag: 6a42d6a0-dfbf-469f-afd5-ff2956592d62
@@ -203,7 +194,6 @@ table fato_entrega
 
 	column valor_itens
 		dataType: decimal
-		description: Soma do preco dos itens do pedido, nulo, nunca zero, nos 775 pedidos sem item
 		isHidden
 		formatString: #,0.00
 		lineageTag: 40405ea8-88e1-45bf-89b2-769c9691c1e8
@@ -223,7 +213,6 @@ table fato_entrega
 
 	column valor_frete
 		dataType: decimal
-		description: Soma do frete dos itens do pedido, nulo, nunca zero, nos 775 pedidos sem item
 		isHidden
 		formatString: #,0.00
 		lineageTag: 4cb67e50-a2d6-44e6-b480-23cad8bfe824
@@ -243,7 +232,6 @@ table fato_entrega
 
 	column qtd_itens
 		dataType: int64
-		description: Contagem de linhas de item do pedido, nulo, nunca zero, nos 775 pedidos sem item
 		isHidden
 		formatString: 0
 		lineageTag: a79cdd29-86bd-4546-a53b-99d12789a17c
@@ -259,7 +247,6 @@ table fato_entrega
 
 	column uf_destino
 		dataType: string
-		description: UF do cliente. Nulo em 279 pedidos, mesmos casos de sk_geografia_destino nulo
 		lineageTag: a591dc3c-1561-44d2-94bd-0a1028614a1f
 		sourceLineageTag: uf_destino
 		summarizeBy: none
@@ -269,7 +256,6 @@ table fato_entrega
 
 	column uf_origem
 		dataType: string
-		description: UF do vendedor do item de maior preco no pedido, aproximacao em pedidos com mais de um vendedor. Nulo nos 775 pedidos sem item. Ver ADR-003
 		lineageTag: 72bdbc80-32c0-4357-b3e3-b9074f2758d2
 		sourceLineageTag: uf_origem
 		summarizeBy: none
@@ -279,7 +265,6 @@ table fato_entrega
 
 	column rota
 		dataType: string
-		description: UF de origem seguido de UF de destino, pronta pra uso direto em visual. Nulo em 1050 pedidos
 		lineageTag: 60eaa3d4-dcc3-4b1d-bd3c-d89136a0ff93
 		sourceLineageTag: rota
 		summarizeBy: none

@@ -1,5 +1,4 @@
 table dim_cliente
-	description: Uma linha por pessoa, tipo 1, com a geografia do pedido mais recente do cliente
 	lineageTag: 53384877-92cc-4d9a-82df-8e723750e9aa
 	sourceLineageTag: [dbo].[dim_cliente]
 
@@ -18,7 +17,6 @@ table dim_cliente
 
 	column id_cliente_unico
 		dataType: string
-		description: Identifica a pessoa, chave natural da dimensao, diferente do id_cliente do pedido
 		isHidden
 		lineageTag: 6e29b834-6451-4a00-84e2-ffde00781351
 		sourceLineageTag: id_cliente_unico
@@ -49,7 +47,6 @@ table dim_cliente
 
 	column uf
 		dataType: string
-		description: UF do cliente no pedido mais recente, lado destino da rota
 		lineageTag: d54f9bee-b4bc-4621-b086-138e94b06dd1
 		sourceLineageTag: uf
 		summarizeBy: none
