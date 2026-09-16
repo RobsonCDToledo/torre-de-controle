@@ -223,6 +223,96 @@ medida desejada dentro do `CALCULATE`.
 
 ---
 
+## Painel de Frete e Rotas — ponte por rota e insight narrativo
+
+`rota` (UF origem → UF destino) só existe em `fato_entrega` — peso e custo por quilo só
+existem em `fato_item_pedido`. Mesmo problema de fundo do `Dias de Atraso (méd) por Vendedor`
+acima, direção oposta: aqui a ponte parte de `fato_entrega` para `fato_item_pedido`.
+
+```dax
+Peso Total (kg) por Rota =
+CALCULATE(
+    [Peso Total (kg)],
+    TREATAS(VALUES(fato_entrega[sk_pedido]), fato_item_pedido[sk_pedido])
+)
+```
+Formato: `0.00`
+
+```dax
+Custo por Quilo (por Rota) = DIVIDE([Valor de Frete], [Peso Total (kg) por Rota])
+```
+Formato: Currency (R$)
+**Por que `Valor de Frete` e não `Valor de Frete (Item)`:** os dois somam pro mesmo total —
+`fato_entrega[valor_frete]` já é soma do frete dos itens (ver dicionário) — então só o peso
+precisa de ponte. Abrir uma segunda ponte só pro frete seria trabalho sem ganho.
+
+### Cartão de insight — quem é a rota mais cara por quilo
+
+```dax
+Rota Mais Cara por Kg =
+VAR Ranking =
+    ADDCOLUMNS(
+        SUMMARIZE(fato_entrega, fato_entrega[rota]),
+        "@CustoKg", [Custo por Quilo (por Rota)]
+    )
+VAR RotaTop =
+    TOPN(1, FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0), [@CustoKg], DESC)
+RETURN
+    MAXX(RotaTop, fato_entrega[rota])
+```
+Formato: texto. Ignora rota em branco ou custo zero — ruído de pedido sem item completo, não
+uma rota real disputando o topo do ranking.
+
+```dax
+Custo por Kg da Rota Mais Cara =
+VAR Ranking =
+    ADDCOLUMNS(
+        SUMMARIZE(fato_entrega, fato_entrega[rota]),
+        "@CustoKg", [Custo por Quilo (por Rota)]
+    )
+VAR Filtrado =
+    FILTER(Ranking, NOT ISBLANK(fato_entrega[rota]) && [@CustoKg] > 0)
+RETURN
+    MAXX(Filtrado, [@CustoKg])
+```
+Formato: Currency (R$)
+**Por que não `CALCULATE([Custo por Quilo (por Rota)], fato_entrega[rota] = [Rota Mais Cara
+por Kg])`:** foi a primeira tentativa, e quebrou em produção com "A function 'PLACEHOLDER' has
+been used in a True/False expression that is used as a table filter expression" — o mesmo
+erro-classe já visto em `OTD % (por Data de Entrega) — Rótulo Final` acima. `Coluna = [Medida
+complexa]` dentro de `CALCULATE` nem sempre vira filtro de tabela simples quando a medida do
+lado direito já tem `CALCULATE`/`TOPN` por trás — o motor não consegue linearizar. A correção é
+a mesma receita das duas vezes: parar de tentar transformar a comparação num filtro de
+`CALCULATE`, e calcular o valor direto dentro de uma tabela intermediária (`FILTER`/`MAXX`).
+
+```dax
+Custo por Kg Médio (Top 10) =
+VAR Top10 = TOPN(10, SUMMARIZE(fato_entrega, fato_entrega[rota]), [Valor de Frete], DESC)
+RETURN AVERAGEX(Top10, [Custo por Quilo (por Rota)])
+```
+Formato: Currency (R$)
+"Maior volume" = Top 10 rotas por `Valor de Frete` — o mesmo corte usado no treemap do painel,
+pra a frase de insight e o visual contarem a mesma história com o mesmo recorte.
+
+```dax
+Múltiplo Custo por Kg = DIVIDE([Custo por Kg da Rota Mais Cara], [Custo por Kg Médio (Top 10)])
+```
+Formato: `0.0"×"`
+
+```dax
+Insight Frete e Rotas =
+"R$ " & FORMAT(DIVIDE([Valor de Frete], 1000000), "#,0.00") & "M em frete no período (" &
+FORMAT([Frete sobre Faturamento], "0,0%") & " do faturamento). A rota " &
+[Rota Mais Cara por Kg] & " é a mais cara por quilo — " &
+FORMAT([Custo por Kg da Rota Mais Cara], "\R\$ 0,00") & ", quase " &
+FORMAT([Múltiplo Custo por Kg], "0,0") & "× o custo das rotas de maior volume."
+```
+Formato: texto. Concatena as quatro medidas acima numa frase só, mostrada num cartão sem
+título — mesmo padrão de "medida devolve texto pronto" das medidas de formatação visual, só
+que pra consumo direto do leitor do painel, não pra formatação condicional de outro visual.
+
+---
+
 ## Medidas de formatação visual
 
 Diferente de tudo acima, estas sete medidas não calculam indicador de negócio novo — geram um
@@ -327,4 +417,7 @@ visual não aceita `formatString` numérico customizado.
 
 - **Hierarquia de calendário** (`Ano` → `Trimestre` → `Mês` → `Dia`) — construída visualmente
   no Desktop, não é medida DAX, não entra aqui.
-- **Descrições de medida** — entregável da fase 5 (self-service e perguntas nativas).
+- ~~Descrições de medida~~ — **tentado e revertido**, não é mais pendência: `description` não
+  é propriedade suportada pelo parser TMDL deste workspace, em nenhum nível (tabela, coluna ou
+  medida). Ver `ADR-005-qa-nao-suportado-em-direct-lake.md`, seção "Tentativa de descrições,
+  revertida".

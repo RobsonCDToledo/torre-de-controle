@@ -1,8 +1,8 @@
 # Fase 5 — plano de início
 
-**Status:** itens 1 a 3 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Seguindo pros itens 4 e 5.
-O escopo já está fechado em `cronograma.md` e `docs/00-arquitetura.md`; aqui é a ordem e as
-dependências entre as partes.
+**Status:** itens 1 a 4 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Falta só o 5. O escopo já
+está fechado em `cronograma.md` e `docs/00-arquitetura.md`; aqui é a ordem e as dependências
+entre as partes.
 
 ## Ordem de execução
 
@@ -28,14 +28,17 @@ dependências entre as partes.
   Registrado em `ADR-005`. A seção de sinônimos fica como documentação de intenção, sem
   aplicação no modelo.
 
-### 4. Painel de Frete e Rotas
+### 4. ~~Painel de Frete e Rotas~~ ✅ concluído
 
-- Depende do item 1.
-- Conteúdo: custo de frete por rota, frete sobre faturamento, custo por quilo, dispersão e
-  outliers, top rotas por custo.
-- Visual: reaproveita o design system existente (`design/theme/theme_torre_de_controle.json`,
-  `design/paleta-e-uso.md`) — nenhuma decisão de paleta/tipografia nova, só composição de
-  conteúdo sobre o sistema já validado.
+- Relatório novo `rpt_painel_frete_rotas`, live connection (`byPath`) pro `sm_torre_de_controle`
+  compartilhado — confirma "um modelo, muitos relatórios" na prática, não só em doc.
+- Conteúdo: treemap (volume × eficiência por rota), gauge de frete sobre faturamento, dispersão
+  peso × custo com outliers, tabela de rotas críticas, cartão de insight narrativo.
+- 5 medidas novas de ponte/ranking em `_medidas.tmdl` (`Peso Total (kg) por Rota`,
+  `Custo por Quilo (por Rota)`, `Rota Mais Cara por Kg`, `Custo por Kg da Rota Mais Cara`,
+  `Custo por Kg Médio (Top 10)`, `Múltiplo Custo por Kg`, `Insight Frete e Rotas`).
+- Mockup em `design/mockups/FreteRotas.dc.html`, composição deliberadamente distinta do Painel
+  Executivo (sem repetir a mesma grade de cards).
 
 ### 5. Teste de aceite da fase
 
