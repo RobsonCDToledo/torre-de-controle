@@ -1,0 +1,9 @@
+role 'RLS - RJ'
+	modelPermission: read
+
+	tablePermission fato_entrega = [uf_origem] == "RJ"
+
+	tablePermission dim_vendedor = [uf] == "RJ"
+
+	annotation PBI_Id = 14c02ca9913a4cbba91e170ff39e85bd
+

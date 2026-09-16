@@ -22,4 +22,5 @@ ref table fato_item_pedido
 ref table _medidas
 
 ref role 'RLS - SP'
+ref role 'RLS - RJ'
 
