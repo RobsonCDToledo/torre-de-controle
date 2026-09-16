@@ -463,6 +463,8 @@ registrada aqui em vez de escondida.
 | `Peso Total (kg)` | Soma do peso dos itens, convertido de gramas | — |
 | `Custo por Quilo` | Valor de frete por quilo transportado | Escopo do Painel de Frete e Rotas (fase 5) — já existe no modelo, mas só passa a ser usada quando esse painel for construído |
 | `Dias de Atraso (méd) por Vendedor` | `Dias de Atraso (méd)` filtrado pelo vendedor, mesmo sem relacionamento físico entre os fatos | Ponte virtual via `TREATAS` — evita reabrir a ambiguidade que motivou remover o relacionamento direto entre `fato_entrega` e `fato_item_pedido` |
+| `Peso Total (kg) por Rota` | `Peso Total (kg)` filtrado por rota, mesma ponte virtual via `TREATAS`, direção oposta (de `fato_entrega` pra `fato_item_pedido`) | Escopo do Painel de Frete e Rotas (fase 5) — `rota` só existe em `fato_entrega`, peso só existe em `fato_item_pedido` |
+| `Custo por Quilo (por Rota)` | `Valor de Frete` sobre `Peso Total (kg) por Rota` | Reaproveita `Valor de Frete` (já soma do frete dos itens) em vez de abrir uma segunda ponte só pro frete |
 
 ---
 

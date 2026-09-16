@@ -232,6 +232,34 @@ table _medidas
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: d978d479-7a24-4e29-a529-dd753283f40b
 
+	measure 'Peso Total (kg) por Rota' = ```
+
+				CALCULATE(
+					[Peso Total (kg)],
+					TREATAS(
+						VALUES(fato_entrega[sk_pedido]),
+						fato_item_pedido[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 621e8f6b-8081-49fc-9eac-5fb1d9ce6818
+
+	measure 'Custo por Quilo (por Rota)' = ```
+
+				DIVIDE(
+					[Valor de Frete],
+					[Peso Total (kg) por Rota],
+					0
+				)
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 4763684e-ae77-421a-bb20-0638afdfc944
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
 	measure 'Lead Time Médio Format' = FORMAT([Lead Time Médio], "#.0 Dias")
 		isHidden
 		displayFolder: Formatações
