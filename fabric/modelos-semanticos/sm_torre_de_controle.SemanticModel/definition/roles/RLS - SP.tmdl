@@ -1,0 +1,9 @@
+role 'RLS - SP'
+	modelPermission: read
+
+	tablePermission fato_entrega = ```
+			[dias_ate_aprovacao] == 
+			```
+
+	annotation PBI_Id = c18868092c9946909c282419ea6ad949
+
