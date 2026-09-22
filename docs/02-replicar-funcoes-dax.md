@@ -360,6 +360,24 @@ carrega o conjunto de pedidos resultante para dentro de `fato_entrega`. Por isso
 escrever uma quarta bridge — as três medidas moram em `Fato item pedido\Ponte Virtual`, mesma
 pasta da ponte original.
 
+```dax
+Desvio OTD por Vendedor = [OTD % por Vendedor] - [OTD %]
+```
+Formato: `#,0.0%`. Pensada pra ir direto num gráfico de barras com `dim_vendedor[uf]` no eixo —
+diferente das medidas "Mais Crítica" acima, que devolvem um valor único, esta devolve um valor
+por UF. Funciona porque `dim_vendedor` não tem relacionamento físico com `fato_entrega`: dentro
+de um visual com `uf` no eixo, `[OTD %]` (que só enxerga `fato_entrega`) permanece no total
+nacional em toda linha, então a subtração já dá o desvio direto — sem precisar de
+`ALLSELECTED`/`REMOVEFILTERS` pra "desfazer" um filtro que nunca chegou lá.
+
+```dax
+Quantidade de Itens = COUNTROWS(fato_item_pedido)
+```
+Formato: `#,0`, pasta `Fato item pedido\Financeiro e Frete`. Medida de volume genérica — critério
+de corte "Top N por volume" nos visuais de categoria de produto, e reaproveitada como `@Itens`
+nas três medidas de ranking por categoria abaixo, em vez de repetir `CALCULATE(COUNTROWS(...))`
+inline três vezes.
+
 ### Cartão de insight — quem é a UF e a categoria mais críticas
 
 Mesma família de "medida de ranking → valor no ranking → comparativo → texto" da seção acima,

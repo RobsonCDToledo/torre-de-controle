@@ -218,6 +218,11 @@ table _medidas
 
 		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
 
+	measure 'Quantidade de Itens' = COUNTROWS(fato_item_pedido)
+		formatString: #,0
+		displayFolder: Fato item pedido\Financeiro e Frete
+		lineageTag: 37467af9-bb9f-4bd8-9d7c-40c5e26b3974
+
 	measure 'Dias de Atraso (méd) por Vendedor' = ```
 			
 				CALCULATE(
@@ -245,6 +250,14 @@ table _medidas
 		formatString: #,0.0%;-#,0.0%;#,0.0%
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: e09f00b3-4d1f-4d76-a4f2-1bd5dc98e356
+
+	measure 'Desvio OTD por Vendedor' = ```
+
+				[OTD % por Vendedor] - [OTD %]
+			```
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: da47f7ae-d647-45c3-8ba4-d7fddb1cbc14
 
 	measure 'Pedidos Atrasados por Vendedor' = ```
 
@@ -535,7 +548,7 @@ table _medidas
 				VAR RankingVolume =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
-						"@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+						"@Itens", [Quantidade de Itens],
 						"@Nota", [Nota Média por Categoria]
 					)
 				VAR Top10Volume =
@@ -555,7 +568,7 @@ table _medidas
 				VAR RankingVolume =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
-						"@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+						"@Itens", [Quantidade de Itens],
 						"@Nota", [Nota Média por Categoria]
 					)
 				VAR Top10Volume =
@@ -574,7 +587,7 @@ table _medidas
 				VAR RankingVolume =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
-						"@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+						"@Itens", [Quantidade de Itens],
 						"@Nota", [Nota Média por Categoria]
 					)
 				VAR Top10Volume =
