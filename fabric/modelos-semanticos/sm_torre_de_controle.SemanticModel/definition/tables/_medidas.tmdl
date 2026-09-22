@@ -232,6 +232,49 @@ table _medidas
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: d978d479-7a24-4e29-a529-dd753283f40b
 
+	measure 'OTD % por Vendedor' = ```
+
+				CALCULATE(
+					[OTD %],
+					TREATAS(
+						VALUES(fato_item_pedido[sk_pedido]),
+						fato_entrega[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: e09f00b3-4d1f-4d76-a4f2-1bd5dc98e356
+
+	measure 'Pedidos Atrasados por Vendedor' = ```
+
+				CALCULATE(
+					COUNTROWS(fato_entrega),
+					fato_entrega[dias_de_atraso] > 0,
+					TREATAS(
+						VALUES(fato_item_pedido[sk_pedido]),
+						fato_entrega[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 17a6bce7-5750-4947-9aa7-ccdbfe4dc713
+
+	measure 'Nota Média por Categoria' = ```
+
+				CALCULATE(
+					[Nota Média],
+					TREATAS(
+						VALUES(fato_item_pedido[sk_pedido]),
+						fato_entrega[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: b2b090e5-364a-46b8-a78f-032dcc4a9c79
+
 	measure 'Lead Time Médio Format' = FORMAT([Lead Time Médio], "#.0 Dias")
 		isHidden
 		displayFolder: Formatações
@@ -426,6 +469,145 @@ table _medidas
 			```
 		displayFolder: Fato item pedido\Insight Frete e Rotas
 		lineageTag: 614d9a9a-3285-4334-add0-23a25554ac68
+
+	measure 'UF Mais Crítica (Vendedor)' = ```
+
+				VAR Ranking =
+					ADDCOLUMNS(
+						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
+						"@OTD", [OTD % por Vendedor]
+					)
+				VAR Filtrado =
+					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+				VAR Pior =
+					TOPN(1, Filtrado, [@OTD], ASC)
+				RETURN
+					MAXX(Pior, dim_vendedor[uf])
+			```
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: 58fb2f4d-92a0-4239-b75f-51bfb6c596e5
+
+	measure 'OTD % da UF Mais Crítica' = ```
+
+				VAR Ranking =
+					ADDCOLUMNS(
+						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
+						"@OTD", [OTD % por Vendedor]
+					)
+				VAR Filtrado =
+					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+				RETURN
+					MINX(Filtrado, [@OTD])
+			```
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: 01b617ff-8a36-4024-b8c1-fd1d76db23ae
+
+	measure 'Desvio OTD da UF Mais Crítica' = ```
+
+				[OTD % da UF Mais Crítica] - [OTD %]
+			```
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: 1f15da8b-f77d-4a33-9d2c-3e4fa74ad68c
+
+	measure 'Pedidos Atrasados da UF Mais Crítica' = ```
+
+				VAR Ranking =
+					ADDCOLUMNS(
+						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
+						"@OTD", [OTD % por Vendedor],
+						"@Atrasados", [Pedidos Atrasados por Vendedor]
+					)
+				VAR Filtrado =
+					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+				VAR Pior =
+					TOPN(1, Filtrado, [@OTD], ASC)
+				RETURN
+					MAXX(Pior, [@Atrasados])
+			```
+		formatString: #,0
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: a878e232-84e7-4df0-9f51-cd920ba80a48
+
+	measure 'Categoria Mais Crítica (Nota)' = ```
+
+				VAR RankingVolume =
+					ADDCOLUMNS(
+						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
+						"@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+						"@Nota", [Nota Média por Categoria]
+					)
+				VAR Top10Volume =
+					TOPN(10, FILTER(RankingVolume, NOT ISBLANK(dim_produto[categoria_rotulo])), [@Itens], DESC)
+				VAR Top10ComNota =
+					FILTER(Top10Volume, NOT ISBLANK([@Nota]))
+				VAR Pior =
+					TOPN(1, Top10ComNota, [@Nota], ASC)
+				RETURN
+					MAXX(Pior, dim_produto[categoria_rotulo])
+			```
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: 503feef0-9bef-421e-b2a4-e08f716c77c6
+
+	measure 'Nota da Categoria Mais Crítica' = ```
+
+				VAR RankingVolume =
+					ADDCOLUMNS(
+						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
+						"@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+						"@Nota", [Nota Média por Categoria]
+					)
+				VAR Top10Volume =
+					TOPN(10, FILTER(RankingVolume, NOT ISBLANK(dim_produto[categoria_rotulo])), [@Itens], DESC)
+				VAR Top10ComNota =
+					FILTER(Top10Volume, NOT ISBLANK([@Nota]))
+				RETURN
+					MINX(Top10ComNota, [@Nota])
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: 61fa81b2-0a73-4251-8288-95f2a8d71c1a
+
+	measure 'Melhor Nota (Top 10 Categorias)' = ```
+
+				VAR RankingVolume =
+					ADDCOLUMNS(
+						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
+						"@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+						"@Nota", [Nota Média por Categoria]
+					)
+				VAR Top10Volume =
+					TOPN(10, FILTER(RankingVolume, NOT ISBLANK(dim_produto[categoria_rotulo])), [@Itens], DESC)
+				VAR Top10ComNota =
+					FILTER(Top10Volume, NOT ISBLANK([@Nota]))
+				RETURN
+					MAXX(Top10ComNota, [@Nota])
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: b420533b-0869-4bff-9904-701e2fc21232
+
+	measure 'Diferença Nota vs Melhor Categoria' = ```
+
+				[Melhor Nota (Top 10 Categorias)] - [Nota da Categoria Mais Crítica]
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: af0b6d3a-a65b-49d5-8f11-3180c70f5da1
+
+	measure 'Insight Atribuição de Causas' = ```
+
+				"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica — " &
+				FORMAT([OTD % da UF Mais Crítica], "0,0%") & " de OTD, " &
+				FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0,0") & " pontos abaixo da média nacional, com " &
+				FORMAT([Pedidos Atrasados da UF Mais Crítica], "#,0") & " pedidos atrasados. Entre as categorias de maior volume, " &
+				[Categoria Mais Crítica (Nota)] & " tem a pior nota — " &
+				FORMAT([Nota da Categoria Mais Crítica], "0,0") & " estrelas, " &
+				FORMAT([Diferença Nota vs Melhor Categoria], "0,0") & " abaixo da melhor colocada."
+			```
+		displayFolder: Fato item pedido\Insight Atribuição de Causas
+		lineageTag: 33a11c24-4e1e-494e-821e-6160cbf00955
 
 	partition _medidas = m
 		mode: import

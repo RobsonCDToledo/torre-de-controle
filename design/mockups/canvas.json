@@ -1,7 +1,8 @@
 {
   "artboards": [
     { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1920, "h": 1080 },
-    { "file": "FreteRotas.dc.html", "x": 2000, "y": 0, "w": 1920, "h": 1080 }
+    { "file": "FreteRotas.dc.html", "x": 2000, "y": 0, "w": 1920, "h": 1080 },
+    { "file": "AtribuicaoCausas.dc.html", "x": 4000, "y": 0, "w": 1920, "h": 1080 }
   ],
   "launch": { "view": "focused", "file": "Main.dc.html" }
 }

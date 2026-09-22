@@ -470,6 +470,18 @@ registrada aqui em vez de escondida.
 | `Custo por Kg Médio (Top 10)` | Média de `Custo por Quilo (por Rota)` entre as 10 rotas de maior `Valor de Frete` | "Maior volume" = mesmo corte do treemap do Painel de Frete e Rotas |
 | `Múltiplo Custo por Kg` | `Custo por Kg da Rota Mais Cara` sobre `Custo por Kg Médio (Top 10)` | Quantas vezes a rota mais cara por kg custa em relação à média das rotas de maior volume |
 | `Insight Frete e Rotas` | Frase narrativa concatenando frete total, % sobre faturamento, rota mais cara por kg e o múltiplo | Medida de texto pro cartão de destaque do painel — mesmo padrão de `OTD % (Legend)` |
+| `OTD % por Vendedor` | `OTD %` filtrado pelo vendedor, mesma ponte virtual via `TREATAS` de `Dias de Atraso (méd) por Vendedor` | Escopo do Painel de Atribuição de Causas (fase 5, item 5) — fecha lacuna encontrada no teste de aceite: não existia OTD por UF de origem, só por UF de destino |
+| `Pedidos Atrasados por Vendedor` | Contagem de pedidos com `dias_de_atraso > 0`, filtrada pelo vendedor via a mesma ponte `TREATAS` | Escopo do Painel de Atribuição de Causas — fecha a lacuna de contagem (existia só média de atraso por vendedor, não contagem) |
+| `Nota Média por Categoria` | `Nota Média` filtrada pela categoria do produto, mesma ponte `TREATAS` — funciona porque a ponte propaga qualquer filtro que chegue em `fato_item_pedido`, não só o de vendedor | Escopo do Painel de Atribuição de Causas — fecha a lacuna de nota por categoria, que não existia em nenhum painel |
+| `UF Mais Crítica (Vendedor)` | Nome da UF de origem (vendedor) com o menor `OTD % por Vendedor` | Ignora UF em branco ou OTD em branco — mesmo cuidado de `Rota Mais Cara por Kg` |
+| `OTD % da UF Mais Crítica` | `OTD % por Vendedor` avaliado só pra UF de `UF Mais Crítica (Vendedor)` | Usa `MINX` sobre a tabela de ranking, não filtro por igualdade — evita o erro PLACEHOLDER já documentado |
+| `Desvio OTD da UF Mais Crítica` | `OTD % da UF Mais Crítica` menos `OTD %` nacional | Negativo por definição — a UF mais crítica está sempre abaixo da média |
+| `Pedidos Atrasados da UF Mais Crítica` | `Pedidos Atrasados por Vendedor` avaliado só pra UF de `UF Mais Crítica (Vendedor)` | Mesma técnica de ranking, coluna extra na mesma tabela em vez de nova ponte |
+| `Categoria Mais Crítica (Nota)` | Nome da categoria com a menor `Nota Média por Categoria`, entre as 10 de maior volume (contagem de itens) | "Maior volume" aqui é contagem de itens, não valor de frete — corte análogo ao do Painel de Frete e Rotas, métrica diferente porque o contexto é outro |
+| `Nota da Categoria Mais Crítica` | `Nota Média por Categoria` avaliada só pra categoria de `Categoria Mais Crítica (Nota)` | — |
+| `Melhor Nota (Top 10 Categorias)` | Maior `Nota Média por Categoria` entre as 10 de maior volume | Base do comparativo "pior vs. melhor" no painel |
+| `Diferença Nota vs Melhor Categoria` | `Melhor Nota (Top 10 Categorias)` menos `Nota da Categoria Mais Crítica` | — |
+| `Insight Atribuição de Causas` | Frase narrativa concatenando UF mais crítica, seu OTD e desvio, pedidos atrasados, e a categoria com pior nota e sua diferença pra melhor | Medida de texto pro cartão de destaque do painel — mesmo padrão de `Insight Frete e Rotas` |
 
 ---
 

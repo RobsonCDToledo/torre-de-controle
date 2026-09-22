@@ -313,6 +313,198 @@ que pra consumo direto do leitor do painel, não pra formatação condicional de
 
 ---
 
+## Painel de Atribuição de Causas — reaproveitando a ponte por vendedor
+
+Nasceu do teste de aceite da fase 5 (item 5): simulando um analista externo respondendo só com
+o que os dois painéis publicados expunham, três perguntas do dicionário falharam — OTD por UF
+de origem, contagem de atrasados por UF de origem e nota média por categoria de produto não
+tinham visual nem medida nenhuma. As três usam a mesma ponte `TREATAS` de
+`Dias de Atraso (méd) por Vendedor` (`fato_item_pedido` → `fato_entrega`, ver seção acima) —
+nenhuma ponte nova, só a mesma bridge envolvendo três expressões diferentes.
+
+```dax
+OTD % por Vendedor =
+CALCULATE(
+    [OTD %],
+    TREATAS(VALUES(fato_item_pedido[sk_pedido]), fato_entrega[sk_pedido])
+)
+```
+Formato: `#,0.0%`
+
+```dax
+Pedidos Atrasados por Vendedor =
+CALCULATE(
+    COUNTROWS(fato_entrega),
+    fato_entrega[dias_de_atraso] > 0,
+    TREATAS(VALUES(fato_item_pedido[sk_pedido]), fato_entrega[sk_pedido])
+)
+```
+Formato: `#,0`
+Não reaproveita `[Dias de Atraso (méd) por Vendedor]` porque essa mede a *média* dos dias — aqui
+o pedido é a *contagem* de pedidos atrasados, então o filtro `dias_de_atraso > 0` entra direto
+no `CALCULATE`, ao lado da ponte, em vez de compor sobre outra medida.
+
+```dax
+Nota Média por Categoria =
+CALCULATE(
+    [Nota Média],
+    TREATAS(VALUES(fato_item_pedido[sk_pedido]), fato_entrega[sk_pedido])
+)
+```
+Formato: `#,0.00`
+**Por que a mesma ponte serve pra categoria de produto, não só pra vendedor:** a `TREATAS`
+propaga qualquer filtro que já esteja em vigor sobre `fato_item_pedido[sk_pedido]` — não importa
+se esse filtro chegou de `dim_vendedor` (via `sk_vendedor`) ou de `dim_produto` (via
+`sk_produto`). A ponte não sabe nem precisa saber qual dimensão originou o filtro; ela só
+carrega o conjunto de pedidos resultante para dentro de `fato_entrega`. Por isso não foi preciso
+escrever uma quarta bridge — as três medidas moram em `Fato item pedido\Ponte Virtual`, mesma
+pasta da ponte original.
+
+### Cartão de insight — quem é a UF e a categoria mais críticas
+
+Mesma família de "medida de ranking → valor no ranking → comparativo → texto" da seção acima,
+com uma UF de origem no lugar de uma rota, e uma categoria de produto no lugar de um Top 10 por
+frete. Moram em `Fato item pedido\Insight Atribuição de Causas`.
+
+```dax
+UF Mais Crítica (Vendedor) =
+VAR Ranking =
+    ADDCOLUMNS(
+        SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
+        "@OTD", [OTD % por Vendedor]
+    )
+VAR Filtrado =
+    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+VAR Pior =
+    TOPN(1, Filtrado, [@OTD], ASC)
+RETURN
+    MAXX(Pior, dim_vendedor[uf])
+```
+Formato: texto. Mesmo cuidado de `Rota Mais Cara por Kg`: ignora UF em branco ou OTD em branco,
+não uma UF real disputando o fundo do ranking.
+
+```dax
+OTD % da UF Mais Crítica =
+VAR Ranking =
+    ADDCOLUMNS(
+        SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
+        "@OTD", [OTD % por Vendedor]
+    )
+VAR Filtrado =
+    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+RETURN
+    MINX(Filtrado, [@OTD])
+```
+Formato: `#,0.0%`
+**Por que `MINX` na tabela de ranking, e não `CALCULATE([OTD % por Vendedor], dim_vendedor[uf] =
+[UF Mais Crítica (Vendedor)])`:** a segunda forma é exatamente o padrão que já quebrou com o erro
+PLACEHOLDER em `Custo por Kg da Rota Mais Cara` — comparar uma coluna a uma medida complexa
+dentro de `CALCULATE` não linhariza quando a medida da direita já tem `CALCULATE`/`TREATAS` por
+trás. `MINX` sobre a própria tabela de ranking já filtrada evita o filtro por igualdade por
+completo.
+
+```dax
+Desvio OTD da UF Mais Crítica = [OTD % da UF Mais Crítica] - [OTD %]
+```
+Formato: `#,0.0%`. Negativo por definição — combina duas medidas escalares por subtração
+simples, sem risco de PLACEHOLDER porque não há filtro de tabela envolvido.
+
+```dax
+Pedidos Atrasados da UF Mais Crítica =
+VAR Ranking =
+    ADDCOLUMNS(
+        SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
+        "@OTD", [OTD % por Vendedor],
+        "@Atrasados", [Pedidos Atrasados por Vendedor]
+    )
+VAR Filtrado =
+    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+VAR Pior =
+    TOPN(1, Filtrado, [@OTD], ASC)
+RETURN
+    MAXX(Pior, [@Atrasados])
+```
+Formato: `#,0`. Adiciona a coluna `@Atrasados` na mesma tabela de ranking em vez de abrir uma
+ponte nova — o `TOPN` já escolhe a linha da UF mais crítica pelo `@OTD`, então `MAXX` só precisa
+ler a coluna extra da mesma linha.
+
+```dax
+Categoria Mais Crítica (Nota) =
+VAR RankingVolume =
+    ADDCOLUMNS(
+        SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
+        "@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+        "@Nota", [Nota Média por Categoria]
+    )
+VAR Top10Volume =
+    TOPN(10, FILTER(RankingVolume, NOT ISBLANK(dim_produto[categoria_rotulo])), [@Itens], DESC)
+VAR Top10ComNota =
+    FILTER(Top10Volume, NOT ISBLANK([@Nota]))
+VAR Pior =
+    TOPN(1, Top10ComNota, [@Nota], ASC)
+RETURN
+    MAXX(Pior, dim_produto[categoria_rotulo])
+```
+Formato: texto. "Maior volume" aqui é contagem de itens (`COUNTROWS(fato_item_pedido)`), não
+`Valor de Frete` como no Painel de Frete e Rotas — o contexto de negócio é diferente (qualidade
+percebida, não custo de transporte), então o corte de volume usa a métrica que faz sentido pra
+essa pergunta.
+
+```dax
+Nota da Categoria Mais Crítica =
+VAR RankingVolume =
+    ADDCOLUMNS(
+        SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
+        "@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+        "@Nota", [Nota Média por Categoria]
+    )
+VAR Top10Volume =
+    TOPN(10, FILTER(RankingVolume, NOT ISBLANK(dim_produto[categoria_rotulo])), [@Itens], DESC)
+VAR Top10ComNota =
+    FILTER(Top10Volume, NOT ISBLANK([@Nota]))
+RETURN
+    MINX(Top10ComNota, [@Nota])
+
+Melhor Nota (Top 10 Categorias) =
+VAR RankingVolume =
+    ADDCOLUMNS(
+        SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
+        "@Itens", CALCULATE(COUNTROWS(fato_item_pedido)),
+        "@Nota", [Nota Média por Categoria]
+    )
+VAR Top10Volume =
+    TOPN(10, FILTER(RankingVolume, NOT ISBLANK(dim_produto[categoria_rotulo])), [@Itens], DESC)
+VAR Top10ComNota =
+    FILTER(Top10Volume, NOT ISBLANK([@Nota]))
+RETURN
+    MAXX(Top10ComNota, [@Nota])
+```
+Formato: `#,0.00` nas duas. Mesma tabela `RankingVolume`/`Top10ComNota` reconstruída em cada
+medida — `MINX` pra pior nota, `MAXX` pra melhor. Recalcular a tabela em vez de compartilhar
+entre medidas é o mesmo padrão já usado em `Rota Mais Cara por Kg` / `Custo por Kg da Rota Mais
+Cara`: DAX não deixa reaproveitar uma `VAR` de tabela entre medidas diferentes.
+
+```dax
+Diferença Nota vs Melhor Categoria = [Melhor Nota (Top 10 Categorias)] - [Nota da Categoria Mais Crítica]
+```
+Formato: `#,0.00`
+
+```dax
+Insight Atribuição de Causas =
+"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica — " &
+FORMAT([OTD % da UF Mais Crítica], "0,0%") & " de OTD, " &
+FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0,0") & " pontos abaixo da média nacional, com " &
+FORMAT([Pedidos Atrasados da UF Mais Crítica], "#,0") & " pedidos atrasados. Entre as categorias de maior volume, " &
+[Categoria Mais Crítica (Nota)] & " tem a pior nota — " &
+FORMAT([Nota da Categoria Mais Crítica], "0,0") & " estrelas, " &
+FORMAT([Diferença Nota vs Melhor Categoria], "0,0") & " abaixo da melhor colocada."
+```
+Formato: texto. Mesmo padrão de `Insight Frete e Rotas` — concatena as medidas acima numa frase
+pronta pro cartão de destaque. `ABS(...) * 100` converte a fração do desvio em pontos percentuais
+direto na formatação, sem precisar de uma medida só pra isso.
+
+---
+
 ## Medidas de formatação visual
 
 Diferente de tudo acima, estas sete medidas não calculam indicador de negócio novo — geram um

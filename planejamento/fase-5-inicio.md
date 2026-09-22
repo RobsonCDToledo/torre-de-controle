@@ -40,13 +40,31 @@ entre as partes.
 - Mockup em `design/mockups/FreteRotas.dc.html`, composição deliberadamente distinta do Painel
   Executivo (sem repetir a mesma grade de cards).
 
-### 5. Teste de aceite da fase
+### 5. Teste de aceite da fase — 🔄 em andamento, achou lacunas reais
 
 Critério do `cronograma.md`: "um analista externo consegue responder uma pergunta nova sem
 pedir ajuda." **Papel do "analista externo" simulado por Claude**, usando só o material
 publicado — o relatório (visuais e filtros) e `docs/dicionario-de-dados.md` — sem contexto
 desta conversa. Ajustado pelo `ADR-005`: a validação **não** passa pela caixa de Q&A (não
 suportada em Direct Lake), passa por navegar o relatório e responder com o que ele expõe.
+
+**Rodado contra as 5 perguntas do dicionário — resultado: 1 passa, 1 parcial, 3 falham.**
+
+| Pergunta | Resultado |
+|---|---|
+| OTD por UF de origem | ❌ só existia por UF de destino |
+| Pedidos atrasados por estado do vendedor (contagem) | ❌ só existia média de atraso, não contagem |
+| Lead time médio por mês | ⚠️ só via iteração manual no slicer, sem visual de tendência |
+| Nota média por categoria de produto | ❌ `dim_produto` não aparecia em nenhum visual |
+| Frete sobre faturamento por rota | ✅ passa direto |
+
+**Remediação em andamento:** novo relatório `rpt_painel_atribuicao_causas`, mesmo padrão
+"um modelo, muitos relatórios", pra fechar as 3 lacunas que falharam (a parcial do lead time
+por mês fica registrada como limitação conhecida, fora de escopo — não tem medida faltando, só
+um visual de tendência que os outros dois painéis não cobrem). Três medidas-ponte novas em
+`_medidas.tmdl`, reaproveitando a bridge `TREATAS` já validada (`OTD % por Vendedor`,
+`Pedidos Atrasados por Vendedor`, `Nota Média por Categoria`) — ver
+`docs/02-replicar-funcoes-dax.md`. Mockup em `design/mockups/AtribuicaoCausas.dc.html`.
 
 ## Decisões resolvidas no início da fase
 
