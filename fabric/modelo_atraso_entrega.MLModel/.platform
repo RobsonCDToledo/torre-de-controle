@@ -1,11 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "Notebook",
-    "displayName": "nb_ml_atraso"
+    "type": "MLModel",
+    "displayName": "modelo_atraso_entrega"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "46b9630d-8ed5-41e2-bfe6-739078146e95"
+    "logicalId": "af576b58-6b16-bc75-4ccb-8a41f34c6e4a"
   }
 }

@@ -23,44 +23,35 @@
 # MARKDOWN ********************
 
 # # nb_ml_atraso
-#
 # Prevê, **no instante da compra**, se um pedido vai atrasar. Fase 6 do projeto.
-#
 # Lê só da gold (`lh_gold` como lakehouse padrão), treina, registra no MLflow e escreve as
 # predições de volta na gold como `predicao_atraso`, para o modelo semântico consumir.
-#
 # ---
 # ## O contrato do problema
-#
 # | | |
 # |---|---|
 # | **Pergunta** | Este pedido vai ser entregue depois da data prometida? |
 # | **Alvo** | `atraso = 1` quando `entregue_no_prazo = false`. Só pedidos **entregues** têm alvo (96.476) |
 # | **Instante da previsão** | A compra. Nada que aconteça depois pode entrar |
 # | **Divisão** | **Temporal** pela data de compra: 70% mais antigos treinam, 15% validam e escolhem o limiar, 15% mais recentes testam. Embaralhar vazaria o futuro para o passado |
-#
 # ## A regra que define o projeto: sem vazamento temporal
-#
 # **Proibidos como atributo** — acontecem depois da compra: `dias_ate_aprovacao`,
 # `dias_ate_coleta`, `lead_time_dias`, `dias_de_atraso`, `sk_data_entrega`, `nota`,
 # `status_pedido`. Além deles, `order_approved_at` e `order_delivered_carrier_date` e qualquer
 # derivado. Uma célula abaixo **falha** se algum deles aparecer na lista de atributos.
-#
 # **Permitidos** — conhecidos na compra: UF de origem e destino, distância entre centroides,
 # prazo prometido (compra até data prevista, que o cliente já vê no checkout), peso, volume,
 # frete, preço, categoria, mês e dia da semana, quantidade de itens e de vendedores, e a
 # **pontualidade histórica do vendedor**.
-#
 # **A pontualidade do vendedor é o atributo perigoso.** Calculada sobre a base inteira, ela
 # carregaria o resultado dos pedidos futuros do próprio vendedor para dentro do treino. Aqui, para
 # cada pedido, só contam entregas do mesmo vendedor com **data de entrega estritamente anterior
 # à data de compra** deste pedido — o que de fato se sabia naquele dia. Pedido sem histórico fica
 # com atributo nulo, que o modelo trata nativamente; não se inventa taxa.
-#
 # ## Vendedor e UF de origem
-#
 # Vale a regra do `ADR-003`: o item de maior `preco`, `numero_item` como desempate. Vendedor,
 # categoria e geografia de origem vêm desse mesmo item.
+
 
 # CELL ********************
 
@@ -97,7 +88,6 @@ print("ok")
 # MARKDOWN ********************
 
 # ## 1. Atributos conhecidos na compra
-#
 # Uma linha por pedido. O item principal sai de uma janela por pedido (maior `preco`, depois menor
 # `numero_item`). A distância é haversine entre o centroide do CEP do vendedor e o do cliente.
 
@@ -173,7 +163,6 @@ print("pedidos:", base.count())
 # MARKDOWN ********************
 
 # ## 2. Pontualidade histórica do vendedor, sem olhar o futuro
-#
 # Para cada pedido, junta as entregas **do mesmo vendedor principal** cuja `data_entrega` é
 # **estritamente anterior** à `data_compra` do pedido. É a única forma de saber, na compra, como
 # aquele vendedor vinha entregando. Entrega no mesmo dia da compra fica de fora — conservador.
@@ -209,7 +198,6 @@ base = base.join(pontualidade, "sk_pedido", "left")
 # MARKDOWN ********************
 
 # ## 3. Lista de atributos e trava anti-vazamento
-#
 # Se qualquer atributo proibido entrar na lista, a célula falha e o treino não acontece.
 
 # CELL ********************
@@ -246,7 +234,6 @@ print("pedidos com item:", len(pdf), "| entregues (com alvo):", int(pdf["atraso"
 # MARKDOWN ********************
 
 # ## 4. Divisão temporal
-#
 # Os cortes são **datas de compra**, calculadas sobre os pedidos entregues. Treino é o passado,
 # teste é o futuro mais recente — como seria usar o modelo de verdade.
 
@@ -291,12 +278,10 @@ X_te, y_te = te[ATRIBUTOS], te["atraso"].astype(int)
 # MARKDOWN ********************
 
 # ## 5. Modelo, baseline e métricas
-#
 # **Modelo:** gradiente com histogramas (`HistGradientBoostingClassifier`), que aceita nulo nativamente e
 # trata UF e categoria como categóricas. **Baseline:** o mesmo modelo só com `prazo_prometido_dias` e
 # `distancia_km` — mostra o quanto os demais atributos acrescentam. Atraso é raro, então a métrica principal é
 # **PR-AUC** (precisão e revocação), ao lado do ROC-AUC.
-#
 # O **limiar** de decisão é escolhido na validação (maior F1) e só então aplicado ao teste.
 
 # CELL ********************
@@ -370,7 +355,6 @@ display(comparativo)
 # MARKDOWN ********************
 
 # ## 6. Importância dos atributos
-#
 # Importância por **permutação no teste**: quanto o ROC-AUC cai quando o atributo é embaralhado. Mede o que
 # o modelo usa de fato em dado que ele não viu.
 
@@ -392,7 +376,6 @@ display(importancia)
 # MARKDOWN ********************
 
 # ## 7. Registro no MLflow
-#
 # Parâmetros, métricas, importância e o modelo, registrado com o nome `modelo_atraso_entrega`. Cada execução
 # cria uma versão nova.
 
@@ -437,7 +420,6 @@ print("run:", ID_EXECUCAO, "| versao registrada:", VERSAO or "(ver no registro)"
 # MARKDOWN ********************
 
 # ## 8. Predições de volta na gold
-#
 # `predicao_atraso`, um registro por pedido com item. **Atenção ao `conjunto`:** nas linhas `treino` e
 # `validacao` a predição é *dentro da amostra* e parece melhor do que é. Para comparar previsto e realizado
 # com honestidade, o painel deve filtrar `conjunto = 'teste'`. `nao_entregue` são pedidos ainda sem desfecho —
