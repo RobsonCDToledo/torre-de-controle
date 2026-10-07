@@ -19,6 +19,7 @@ ref table dim_produto
 ref table dim_cliente
 ref table fato_entrega
 ref table fato_item_pedido
+ref table predicao_atraso
 ref table _medidas
 
 ref role 'RLS - SP'

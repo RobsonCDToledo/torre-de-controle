@@ -1,12 +1,12 @@
 # Fase 6 — plano de início
 
-**Status:** notebook escrito, ainda não executado no Fabric. **Restrição de calendário:** o trial do
+**Status:** notebook executado no Fabric com sucesso (07/10/2026); itens 1 e 2 concluídos, tabela e medidas no modelo escritas (item 3, a validar no Fabric). **Restrição de calendário:** o trial do
 Fabric tinha 11 dias restantes em 07/10/2026, o que dá até ~18/10/2026. Tudo que exige execução
 (treino, escrita na gold, modelo semântico) precisa caber nesse prazo; documentação não.
 
 ## Ordem de execução
 
-### 1. Rodar `nb_ml_atraso` — 🔄 a fazer no Fabric
+### 1. Rodar `nb_ml_atraso` — ✅ concluído
 - Sincronizar o workspace (Atualizar tudo) e abrir `nb_ml_atraso`, com `lh_gold` como padrão.
 - Executar célula por célula. O notebook não foi testado fora do Fabric (scikit-learn e Spark
   indisponíveis localmente), então a primeira execução pode revelar ajustes de código.
@@ -17,11 +17,11 @@ Fabric tinha 11 dias restantes em 07/10/2026, o que dá até ~18/10/2026. Tudo q
   o ganho for pequeno, isso é resultado e fica registrado como tal — não se "melhora" com atributo
   que vaze.
 
-### 2. Documentar a gold e as decisões
+### 2. Documentar a gold e as decisões — ✅ `ADR-006` e dicionário
 - `predicao_atraso` no dicionário de dados, com o aviso do `conjunto`.
 - ADR da regra de vazamento e da divisão temporal, com números reais da execução.
 
-### 3. Levar a predição ao modelo semântico
+### 3. Levar a predição ao modelo semântico — 🔄 TMDL escrito, falta sincronizar e validar
 - Tabela `predicao_atraso` no modelo, relacionamento com `fato_entrega[sk_pedido]` (1:1), medidas
   de probabilidade média, atrasos previstos, precisão e revocação, sempre filtradas em `teste`.
 

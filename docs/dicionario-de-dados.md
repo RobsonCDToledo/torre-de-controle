@@ -401,6 +401,27 @@ cidade e UF deles, então análise de rota por par de estados não é afetada �
 
 ---
 
+### `predicao_atraso`
+
+**Propósito:** a probabilidade de atraso de cada pedido, calculada no instante da compra.
+**Grão:** um pedido com item — 98.666 linhas. Pedidos sem item (775) não têm predição.
+**Origem:** `nb_ml_atraso`, modelo `modelo_atraso_entrega` no MLflow. Reescrita inteira a cada execução.
+**Decisões:** `ADR-006`.
+
+| Campo | Tipo | Definição |
+|---|---|---|
+| `sk_pedido` | bigint | Junta com `fato_entrega`. Único |
+| `probabilidade_atraso` | double | De 0 a 1. **Serve para ordenar pedidos por risco**, não como risco absoluto — ver deriva no ADR-006 |
+| `previsao_atraso` | int | 1 quando `probabilidade_atraso` ≥ `limiar` |
+| `conjunto` | string | `treino`, `validacao`, `teste` ou `nao_entregue` |
+| `atraso_real` | int | 1 se entregue com atraso, 0 se no prazo. **Nulo em `nao_entregue`** |
+| `limiar` | double | Corte de decisão, escolhido na validação (0,1092) |
+| `modelo`, `versao_modelo`, `gerado_em` | string, string, timestamp | Rastro da execução |
+
+**Só `conjunto = 'teste'` serve para comparar previsto e realizado.** Em `treino` e `validacao` o modelo
+já viu os pedidos, então a predição é dentro da amostra e parece melhor do que é. As medidas do modelo
+semântico já aplicam esse filtro. Pedido `nao_entregue` tem predição mas não tem desfecho.
+
 ### Dimensões
 
 | Tabela | Grão | Linhas | Chave natural | Observação |

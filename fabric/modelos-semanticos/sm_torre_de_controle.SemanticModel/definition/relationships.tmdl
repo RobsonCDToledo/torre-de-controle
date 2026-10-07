@@ -36,3 +36,6 @@ relationship 7ef8af5e-5914-c4ff-e2b6-e343584d49ae
 	fromColumn: fato_item_pedido.sk_vendedor
 	toColumn: dim_vendedor.sk_vendedor
 
+relationship f5d8b94e-3a59-41bc-af83-23e697d6d7e6
+	fromColumn: predicao_atraso.sk_pedido
+	toColumn: fato_entrega.sk_pedido

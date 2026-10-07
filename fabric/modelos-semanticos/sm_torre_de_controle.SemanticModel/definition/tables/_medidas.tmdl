@@ -622,6 +622,78 @@ table _medidas
 		displayFolder: Fato item pedido\Insight Atribuição de Causas
 		lineageTag: 33a11c24-4e1e-494e-821e-6160cbf00955
 
+	measure 'Pedidos Avaliados (Teste)' = ```
+
+				CALCULATE(COUNTROWS(predicao_atraso), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
+			```
+		formatString: #,0
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: d20153df-564d-4b44-81a1-761e461cc1a6
+
+	measure 'Atrasos Reais (Teste)' = ```
+
+				CALCULATE(SUM(predicao_atraso[atraso_real]), predicao_atraso[conjunto] = "teste")
+			```
+		formatString: #,0
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: a07a866f-b69b-4c9c-9ae9-d293ed7247b5
+
+	measure 'Atrasos Previstos (Teste)' = ```
+
+				CALCULATE(SUM(predicao_atraso[previsao_atraso]), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
+			```
+		formatString: #,0
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: c281a0f0-6b96-41e1-9604-55ef1b561ac1
+
+	measure 'Atrasos Acertados (Teste)' = ```
+
+				CALCULATE(COUNTROWS(predicao_atraso), predicao_atraso[conjunto] = "teste", predicao_atraso[previsao_atraso] = 1, predicao_atraso[atraso_real] = 1)
+			```
+		formatString: #,0
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: 526fd8c9-37fc-4eeb-963f-9be88417385f
+
+	measure 'Precisão do Modelo' = ```
+
+				DIVIDE([Atrasos Acertados (Teste)], [Atrasos Previstos (Teste)])
+			```
+		formatString: #,0.0%
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: 1de51b18-1578-4f39-aab5-7dce2cdda99f
+
+	measure 'Revocação do Modelo' = ```
+
+				DIVIDE([Atrasos Acertados (Teste)], [Atrasos Reais (Teste)])
+			```
+		formatString: #,0.0%
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: e940346c-e311-44ac-9e9e-17a188fae7dd
+
+	measure 'Taxa de Atraso Real (Teste)' = ```
+
+				DIVIDE([Atrasos Reais (Teste)], [Pedidos Avaliados (Teste)])
+			```
+		formatString: #,0.0%
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: 86ccff8a-81ce-4ae1-8bf2-1907f7724dae
+
+	measure 'Probabilidade Média Prevista (Teste)' = ```
+
+				CALCULATE(AVERAGE(predicao_atraso[probabilidade_atraso]), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
+			```
+		formatString: #,0.0%
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: 562fc5cb-b4b8-420d-950d-3d059e4c6b41
+
+	measure 'Atrasos Pegos por Previsão (Lift)' = ```
+
+				DIVIDE([Precisão do Modelo], [Taxa de Atraso Real (Teste)])
+			```
+		formatString: #,0.0"×"
+		displayFolder: Fato entrega\Predição de Atraso
+		lineageTag: 6bd61f33-1824-49e1-a8af-d0452f28e101
+
 	partition _medidas = m
 		mode: import
 		source =

@@ -1,0 +1,104 @@
+table predicao_atraso
+	lineageTag: 50dedccf-2884-4ba0-94b4-4db3da4a144d
+	sourceLineageTag: [dbo].[predicao_atraso]
+
+	column sk_pedido
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4ec00df1-6b11-4332-8049-cb8b5469a409
+		sourceLineageTag: sk_pedido
+		summarizeBy: none
+		sourceColumn: sk_pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column probabilidade_atraso
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 2ba7a150-7789-4fcb-b5db-4b0457538d67
+		sourceLineageTag: probabilidade_atraso
+		summarizeBy: none
+		sourceColumn: probabilidade_atraso
+
+		annotation SummarizationSetBy = Automatic
+
+	column previsao_atraso
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f0cb85b-25c0-47d4-8afe-ac2815342748
+		sourceLineageTag: previsao_atraso
+		summarizeBy: none
+		sourceColumn: previsao_atraso
+
+		annotation SummarizationSetBy = Automatic
+
+	column conjunto
+		dataType: string
+		lineageTag: 7c10555f-ab07-4178-8049-3b3e002646a2
+		sourceLineageTag: conjunto
+		summarizeBy: none
+		sourceColumn: conjunto
+
+		annotation SummarizationSetBy = Automatic
+
+	column atraso_real
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b4fd68a-090e-4c90-9e41-f41db678b6c5
+		sourceLineageTag: atraso_real
+		summarizeBy: none
+		sourceColumn: atraso_real
+
+		annotation SummarizationSetBy = Automatic
+
+	column limiar
+		dataType: double
+		isHidden
+		formatString: 0.000
+		lineageTag: 0d46277e-81ca-43d7-b2ba-0ca3e13b0bea
+		sourceLineageTag: limiar
+		summarizeBy: none
+		sourceColumn: limiar
+
+		annotation SummarizationSetBy = Automatic
+
+	column modelo
+		dataType: string
+		isHidden
+		lineageTag: 39169d90-6688-4003-b750-a22a53044162
+		sourceLineageTag: modelo
+		summarizeBy: none
+		sourceColumn: modelo
+
+		annotation SummarizationSetBy = Automatic
+
+	column versao_modelo
+		dataType: string
+		isHidden
+		lineageTag: b2b1e925-62b1-4a64-9dec-97fece1ea3af
+		sourceLineageTag: versao_modelo
+		summarizeBy: none
+		sourceColumn: versao_modelo
+
+		annotation SummarizationSetBy = Automatic
+
+	column gerado_em
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 1a15486f-1b0e-438a-93ad-fad00c0da1e6
+		sourceLineageTag: gerado_em
+		summarizeBy: none
+		sourceColumn: gerado_em
+
+		annotation SummarizationSetBy = Automatic
+
+	partition predicao_atraso = entity
+		mode: directLake
+		source
+			entityName: predicao_atraso
+			schemaName: dbo
+			expressionSource: 'DirectLake - lh_gold'
+
+	annotation PBI_ResultType = Table

@@ -635,3 +635,36 @@ visual não aceita `formatString` numérico customizado.
   é propriedade suportada pelo parser TMDL deste workspace, em nenhum nível (tabela, coluna ou
   medida). Ver `ADR-005-qa-nao-suportado-em-direct-lake.md`, seção "Tentativa de descrições,
   revertida".
+
+---
+
+## Predição de atraso — comparar previsto e realizado
+
+Tabela `predicao_atraso`, ligada a `fato_entrega[sk_pedido]`. **Toda medida filtra
+`conjunto = "teste"`**: em treino e validação a predição é dentro da amostra (`ADR-006`). Moram em
+`Fato entrega\Predição de Atraso`.
+
+```dax
+Pedidos Avaliados (Teste) =
+CALCULATE(COUNTROWS(predicao_atraso), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
+
+Atrasos Reais (Teste) =
+CALCULATE(SUM(predicao_atraso[atraso_real]), predicao_atraso[conjunto] = "teste")
+
+Atrasos Previstos (Teste) =
+CALCULATE(SUM(predicao_atraso[previsao_atraso]), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
+
+Atrasos Acertados (Teste) =
+CALCULATE(COUNTROWS(predicao_atraso), predicao_atraso[conjunto] = "teste",
+          predicao_atraso[previsao_atraso] = 1, predicao_atraso[atraso_real] = 1)
+
+Precisão do Modelo = DIVIDE([Atrasos Acertados (Teste)], [Atrasos Previstos (Teste)])
+Revocação do Modelo = DIVIDE([Atrasos Acertados (Teste)], [Atrasos Reais (Teste)])
+Taxa de Atraso Real (Teste) = DIVIDE([Atrasos Reais (Teste)], [Pedidos Avaliados (Teste)])
+Probabilidade Média Prevista (Teste) =
+CALCULATE(AVERAGE(predicao_atraso[probabilidade_atraso]), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
+Atrasos Pegos por Previsão (Lift) = DIVIDE([Precisão do Modelo], [Taxa de Atraso Real (Teste)])
+```
+Formatos: contagens `#,0`; taxas `#,0.0%`; lift `#,0.0"×"`. O **lift** responde "quantas vezes mais
+atrasos há entre os pedidos que o modelo sinalizou do que num pedido qualquer" — no teste, 2,3×.
+
