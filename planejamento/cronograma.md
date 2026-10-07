@@ -50,8 +50,8 @@ técnicas ocultas. Painel Executivo de Entregas construído sobre ele.
 ## Fase 5 · Self-service e perguntas nativas
 
 Permissão de build no modelo compartilhado, endosso aplicado, RLS por UF, endpoint SQL
-liberado. Dicionário de dados completo. Sinônimos, descrições de campo e esquema linguístico
-configurados para Q&A. Painel de Frete e Rotas, sobre o mesmo modelo.
+liberado. Dicionário de dados completo. Q&A nativo avaliado e descartado em Direct Lake
+(`ADR-005`). Painéis de Frete e Rotas e de Atribuição de Causas, sobre o mesmo modelo.
 
 **Entrega:** um analista externo consegue responder uma pergunta nova sem pedir ajuda.
 

@@ -1,6 +1,6 @@
 # Fase 5 — plano de início
 
-**Status:** itens 1 a 4 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Falta só o 5. O escopo já
+**Status:** itens 1 a 4 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Item 5 implementado; falta a conferência visual no Power BI Desktop (ver abaixo). O escopo já
 está fechado em `cronograma.md` e `docs/00-arquitetura.md`; aqui é a ordem e as dependências
 entre as partes.
 
@@ -40,7 +40,7 @@ entre as partes.
 - Mockup em `design/mockups/FreteRotas.dc.html`, composição deliberadamente distinta do Painel
   Executivo (sem repetir a mesma grade de cards).
 
-### 5. Teste de aceite da fase — 🔄 em andamento, achou lacunas reais
+### 5. Teste de aceite da fase — ✅ implementado, 🔎 conferência visual pendente
 
 Critério do `cronograma.md`: "um analista externo consegue responder uma pergunta nova sem
 pedir ajuda." **Papel do "analista externo" simulado por Claude**, usando só o material
@@ -58,13 +58,32 @@ suportada em Direct Lake), passa por navegar o relatório e responder com o que 
 | Nota média por categoria de produto | ❌ `dim_produto` não aparecia em nenhum visual |
 | Frete sobre faturamento por rota | ✅ passa direto |
 
-**Remediação em andamento:** novo relatório `rpt_painel_atribuicao_causas`, mesmo padrão
-"um modelo, muitos relatórios", pra fechar as 3 lacunas que falharam (a parcial do lead time
-por mês fica registrada como limitação conhecida, fora de escopo — não tem medida faltando, só
-um visual de tendência que os outros dois painéis não cobrem). Três medidas-ponte novas em
-`_medidas.tmdl`, reaproveitando a bridge `TREATAS` já validada (`OTD % por Vendedor`,
-`Pedidos Atrasados por Vendedor`, `Nota Média por Categoria`) — ver
-`docs/02-replicar-funcoes-dax.md`. Mockup em `design/mockups/AtribuicaoCausas.dc.html`.
+**Remediação implementada:** relatório `rpt_painel_atribuicao_causas`, mesmo padrão "um modelo,
+muitos relatórios" (live connection `byPath` ao `sm_torre_de_controle`). 11 visuais sobre o
+layout do mockup `design/mockups/AtribuicaoCausas.dc.html`: 4 cartões de diagnóstico, faixa de
+insight, barras de desvio de OTD por UF de origem, top 3 UFs por pedidos atrasados, nota média
+das 10 maiores categorias, cartão "Categoria em Foco" e 2 filtros (Ano, UF de Origem). Medidas
+reaproveitam a bridge `TREATAS` — ver `docs/02-replicar-funcoes-dax.md`.
+
+**Segunda rodada, por inspeção da definição (PBIR) — o que cada pergunta encontra:**
+
+| Pergunta | Onde responde | Resultado esperado |
+|---|---|---|
+| OTD por UF de origem | Atribuição de Causas — barras de desvio de OTD | ✅ |
+| Pedidos atrasados por estado do vendedor | Atribuição de Causas — top 3 UFs | ✅ |
+| Lead time médio por mês | Painel Executivo, cartão `Lead Time Médio` filtrado pelos slicers de período | ⚠️ limitação aceita |
+| Nota média por categoria de produto | Atribuição de Causas — 10 maiores categorias | ✅ |
+| Frete sobre faturamento por rota | Painel de Frete e Rotas | ✅ |
+
+**Decisão sobre o lead time por mês:** fica como limitação conhecida e fora de escopo. A medida
+existe; falta só um visual de tendência (a evolução mensal do Painel Executivo mostra OTD, não
+lead time). O analista chega à resposta iterando o filtro de período, com um passo a mais.
+
+**Conferência pendente (só o Desktop faz):** o PBIR foi gerado e verificado por script (JSON
+válido, as 11 referências de medida existem no modelo), mas não foi aberto no Power BI Desktop.
+Antes de marcar a fase como fechada: abrir `rpt_painel_atribuicao_causas.pbip`, confirmar que os
+visuais renderizam sobre o fundo, que o top 3 e o top 10 filtram certo, e que os cartões de
+texto cabem. Ajustes finos de posição são esperados.
 
 ## Decisões resolvidas no início da fase
 

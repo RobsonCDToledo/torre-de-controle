@@ -140,10 +140,11 @@ de qualquer visual "por rota" existir.
 
 **Self-service** — o modelo publicado com permissão de build, endosso aplicado, RLS por UF,
 mais o endpoint SQL da gold para quem prefere consultar direto. Detalhado em
-`05-self-service.md`.
+`decisoes/ADR-004-rls-por-uf-de-origem.md` e `dicionario-de-dados.md`.
 
-**Perguntas nativas** — sinônimos, descrições de campo e esquema linguístico configurados
-no modelo. Detalhado em `06-perguntas-nativas.md`.
+**Perguntas nativas** — sinônimos, descrições de campo e esquema linguístico planejados
+no modelo — **não aplicável em Direct Lake**, ver `decisoes/ADR-005-qa-nao-suportado-em-direct-lake.md`.
+A validação de self-service foi feita por teste de aceite, registrado em `planejamento/fase-5-inicio.md`.
 
 ---
 

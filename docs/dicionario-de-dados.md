@@ -14,9 +14,9 @@ inclusive por agentes de IA.
 Cada tabela segue o mesmo bloco: propósito, grão, origem, campos, e regras conhecidas.
 A padronização é o que torna o documento pesquisável — por pessoas e por máquinas.
 
-Termos de negócio recebem a mesma definição aqui e no esquema linguístico do modelo
-semântico, para que a resposta de uma pergunta em linguagem natural nunca contradiga a
-documentação.
+Termos de negócio têm uma definição só, aqui. O esquema linguístico de Q&A não pôde ser
+aplicado ao modelo (`ADR-005`), então este documento é a fonte de vocabulário para quem
+navega os relatórios ou consulta o endpoint SQL.
 
 ---
 
@@ -487,7 +487,7 @@ registrada aqui em vez de escondida.
 
 ---
 
-## Sinônimos para Q&A
+## Vocabulário e sinônimos (referência — não aplicado no modelo)
 
 > **Não aplicado no modelo.** Q&A e esquema linguístico não são suportados em modelo Direct
 > Lake — testado e descartado em três contextos diferentes, ver `ADR-005`. A tabela abaixo
@@ -548,11 +548,13 @@ Sem Q&A pra testar contra, essas perguntas viram diretamente o material do teste
 fase (item 5 do plano) — respondidas navegando o relatório e o dicionário, não digitadas numa
 caixa de busca.
 
-- "Qual o OTD por UF de origem?"
-- "Quantos pedidos atrasados por estado do vendedor?"
-- "Qual o lead time médio por mês?"
-- "Qual a nota média por categoria de produto?"
-- "Qual o frete sobre faturamento por rota?"
+| Pergunta | Onde responder |
+|---|---|
+| Qual o OTD por UF de origem? | Painel de Atribuição de Causas — barras de desvio de OTD |
+| Quantos pedidos atrasados por estado do vendedor? | Painel de Atribuição de Causas — top 3 UFs |
+| Qual o lead time médio por mês? | Painel Executivo — cartão `Lead Time Médio` filtrado por período (sem visual de tendência, limitação conhecida) |
+| Qual a nota média por categoria de produto? | Painel de Atribuição de Causas — 10 maiores categorias |
+| Qual o frete sobre faturamento por rota? | Painel de Frete e Rotas |
 
 ---
 
