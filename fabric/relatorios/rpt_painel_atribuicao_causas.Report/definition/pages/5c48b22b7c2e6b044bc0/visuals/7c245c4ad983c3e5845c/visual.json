@@ -126,7 +126,7 @@
                 "color": {
                   "expr": {
                     "ThemeDataColor": {
-                      "ColorId": 0,
+                      "ColorId": 3,
                       "Percent": 0
                     }
                   }
@@ -281,7 +281,7 @@
                     ],
                     "OrderBy": [
                       {
-                        "Direction": 1,
+                        "Direction": 2,
                         "Expression": {
                           "Measure": {
                             "Expression": {

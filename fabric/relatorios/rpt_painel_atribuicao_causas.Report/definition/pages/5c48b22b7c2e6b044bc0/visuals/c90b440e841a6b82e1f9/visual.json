@@ -97,6 +97,13 @@
                 }
               }
             },
+            "maxTiles": {
+              "expr": {
+                "Literal": {
+                  "Value": "1L"
+                }
+              }
+            },
             "showFixedSize": {
               "expr": {
                 "Literal": {

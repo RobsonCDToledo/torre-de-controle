@@ -361,7 +361,8 @@ escrever uma quarta bridge — as três medidas moram em `Fato item pedido\Ponte
 pasta da ponte original.
 
 ```dax
-Desvio OTD por Vendedor = [OTD % por Vendedor] - [OTD %]
+Desvio OTD por Vendedor =
+IF(NOT ISBLANK([OTD % por Vendedor]), [OTD % por Vendedor] - [OTD %])
 ```
 Formato: `#,0.0%`. Pensada pra ir direto num gráfico de barras com `dim_vendedor[uf]` no eixo —
 diferente das medidas "Mais Crítica" acima, que devolvem um valor único, esta devolve um valor
@@ -509,17 +510,20 @@ Formato: `#,0.00`
 
 ```dax
 Insight Atribuição de Causas =
-"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica — " &
-FORMAT([OTD % da UF Mais Crítica], "0,0%") & " de OTD, " &
-FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0,0") & " pontos abaixo da média nacional, com " &
-FORMAT([Pedidos Atrasados da UF Mais Crítica], "#,0") & " pedidos atrasados. Entre as categorias de maior volume, " &
-[Categoria Mais Crítica (Nota)] & " tem a pior nota — " &
-FORMAT([Nota da Categoria Mais Crítica], "0,0") & " estrelas, " &
-FORMAT([Diferença Nota vs Melhor Categoria], "0,0") & " abaixo da melhor colocada."
+"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica: " &
+FORMAT([OTD % da UF Mais Crítica], "0.0%") & " de OTD, " &
+FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0.0") & " pontos abaixo da média nacional, com " &
+FORMAT([Pedidos Atrasados da UF Mais Crítica], "#,0") & " pedido(s) atrasado(s). Entre as categorias de maior volume, " &
+[Categoria Mais Crítica (Nota)] & " tem a pior nota: " &
+FORMAT([Nota da Categoria Mais Crítica], "0.0") & " estrelas, " &
+FORMAT([Diferença Nota vs Melhor Categoria], "0.0") & " abaixo da melhor."
 ```
 Formato: texto. Mesmo padrão de `Insight Frete e Rotas` — concatena as medidas acima numa frase
 pronta pro cartão de destaque. `ABS(...) * 100` converte a fração do desvio em pontos percentuais
 direto na formatação, sem precisar de uma medida só pra isso.
+**Máscara de formato:** o modelo tem cultura `en-US`, então `FORMAT` interpreta `"0,0"` como separador de
+milhar e devolve "04" no lugar de "3,9". Use `"0.0"` — o ponto é o decimal da máscara; a exibição
+segue o locale do leitor.
 
 ---
 

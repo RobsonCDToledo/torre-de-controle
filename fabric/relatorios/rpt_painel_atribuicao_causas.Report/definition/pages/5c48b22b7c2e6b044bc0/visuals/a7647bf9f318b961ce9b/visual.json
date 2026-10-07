@@ -281,7 +281,7 @@
                     ],
                     "OrderBy": [
                       {
-                        "Direction": 1,
+                        "Direction": 2,
                         "Expression": {
                           "Measure": {
                             "Expression": {

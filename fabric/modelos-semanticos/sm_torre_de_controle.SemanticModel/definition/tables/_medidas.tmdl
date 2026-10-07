@@ -253,7 +253,7 @@ table _medidas
 
 	measure 'Desvio OTD por Vendedor' = ```
 
-				[OTD % por Vendedor] - [OTD %]
+				IF(NOT ISBLANK([OTD % por Vendedor]), [OTD % por Vendedor] - [OTD %])
 			```
 		formatString: #,0.0%;-#,0.0%;#,0.0%
 		displayFolder: Fato item pedido\Ponte Virtual
@@ -611,13 +611,13 @@ table _medidas
 
 	measure 'Insight Atribuição de Causas' = ```
 
-				"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica — " &
-				FORMAT([OTD % da UF Mais Crítica], "0,0%") & " de OTD, " &
-				FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0,0") & " pontos abaixo da média nacional, com " &
-				FORMAT([Pedidos Atrasados da UF Mais Crítica], "#,0") & " pedidos atrasados. Entre as categorias de maior volume, " &
-				[Categoria Mais Crítica (Nota)] & " tem a pior nota — " &
-				FORMAT([Nota da Categoria Mais Crítica], "0,0") & " estrelas, " &
-				FORMAT([Diferença Nota vs Melhor Categoria], "0,0") & " abaixo da melhor colocada."
+				"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica: " &
+				FORMAT([OTD % da UF Mais Crítica], "0.0%") & " de OTD, " &
+				FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0.0") & " pontos abaixo da média nacional, com " &
+				FORMAT([Pedidos Atrasados da UF Mais Crítica], "#,0") & " pedido(s) atrasado(s). Entre as categorias de maior volume, " &
+				[Categoria Mais Crítica (Nota)] & " tem a pior nota: " &
+				FORMAT([Nota da Categoria Mais Crítica], "0.0") & " estrelas, " &
+				FORMAT([Diferença Nota vs Melhor Categoria], "0.0") & " abaixo da melhor."
 			```
 		displayFolder: Fato item pedido\Insight Atribuição de Causas
 		lineageTag: 33a11c24-4e1e-494e-821e-6160cbf00955
