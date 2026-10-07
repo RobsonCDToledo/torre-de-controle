@@ -168,6 +168,9 @@ Essa última exige cuidado: calcular a taxa do vendedor sobre o conjunto inteiro
 informação do futuro para o passado. A janela precisa ser estritamente anterior a cada
 pedido.
 
+**Resultado e decisões:** `decisoes/ADR-006-ml-sem-vazamento-e-divisao-temporal.md` — divisão temporal,
+trava anti-vazamento e leitura honesta das métricas.
+
 **Registro:** MLflow, nativo no Fabric. Métricas, parâmetros e importância de atributos
 ficam versionados junto ao experimento.
 

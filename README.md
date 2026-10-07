@@ -23,8 +23,8 @@ Direct Lake e todo o workspace versionado em Git.
 | Modelo semântico moderno | Direct Lake sobre o Lakehouse gold, sem processo de atualização |
 | Governança de BI | Workspace versionado em Git, TMDL/PBIR legíveis, dicionário de dados |
 | Self-service governado | Modelo compartilhado com permissão de build, RLS e endpoint SQL |
-| Perguntas em linguagem natural | Sinônimos, descrições de campo e esquema linguístico configurados |
-| Machine learning | Predição de atraso de entrega, com MLflow e sem vazamento temporal |
+| Perguntas em linguagem natural | Avaliado e documentado: Q&A não é suportado em Direct Lake (`ADR-005`) |
+| Machine learning | Predição de atraso no instante da compra, com MLflow, divisão temporal e trava anti-vazamento (`ADR-006`) |
 
 **O repositório é o projeto.** Notebooks, modelo semântico e relatórios estão versionados
 como texto — qualquer pessoa consegue auditar a arquitetura inteira aqui, sem precisar de
@@ -156,7 +156,7 @@ Construído em seis fases, cada uma com entrega publicável. Acompanhe em
 - [x] **Fase 3** · Gold — notebook, esquema estrela, dimensão calendário
 - [x] **Fase 4** · Semântica — Direct Lake, medidas DAX, Painel Executivo
 - [x] **Fase 5** · Self-service — RLS, endosso, dicionário, Q&A avaliado (ADR-005), painéis de Frete e de Atribuição de Causas
-- [ ] **Fase 6** · ML — engenharia de atributos, modelo, MLflow, escrita na gold
+- [x] **Fase 6** · ML — atributos sem vazamento, modelo no MLflow, `predicao_atraso` na gold e painel de previsto × realizado
 
 ---
 
