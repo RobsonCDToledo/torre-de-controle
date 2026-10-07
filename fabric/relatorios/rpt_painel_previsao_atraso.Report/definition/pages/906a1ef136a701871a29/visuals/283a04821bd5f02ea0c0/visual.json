@@ -29,7 +29,6 @@
               },
               "queryRef": "fato_entrega.rota",
               "nativeQueryRef": "Rota",
-              "active": true,
               "displayName": "Rota"
             },
             {
@@ -152,26 +151,6 @@
               "expr": {
                 "Literal": {
                   "Value": "11D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "columnHeaders": [
-        {
-          "properties": {
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
                 }
               }
             }

@@ -6,7 +6,7 @@
     "y": 110,
     "z": 1000,
     "height": 110,
-    "width": 450,
+    "width": 360,
     "tabOrder": 1000
   },
   "visual": {
@@ -29,21 +29,6 @@
               "queryRef": "_medidas.Pedidos Avaliados (Teste)",
               "nativeQueryRef": "Pedidos no teste",
               "displayName": "Pedidos no teste"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_medidas"
-                    }
-                  },
-                  "Property": "Taxa de Atraso Real (Teste)"
-                }
-              },
-              "queryRef": "_medidas.Taxa de Atraso Real (Teste)",
-              "nativeQueryRef": "Atraso real",
-              "displayName": "Atraso real"
             }
           ]
         }
@@ -59,7 +44,7 @@
             "columnCount": {
               "expr": {
                 "Literal": {
-                  "Value": "2L"
+                  "Value": "1L"
                 }
               }
             },
@@ -115,7 +100,7 @@
             "maxTiles": {
               "expr": {
                 "Literal": {
-                  "Value": "2L"
+                  "Value": "1L"
                 }
               }
             },
@@ -207,7 +192,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
+                  "Value": "26D"
                 }
               }
             },
@@ -215,33 +200,19 @@
               "expr": {
                 "Literal": {
                   "Value": "true"
+                }
+              }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
                 }
               }
             }
           },
           "selector": {
             "metadata": "_medidas.Pedidos Avaliados (Teste)"
-          }
-        },
-        {
-          "properties": {
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "22D"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "_medidas.Taxa de Atraso Real (Teste)"
           }
         }
       ],

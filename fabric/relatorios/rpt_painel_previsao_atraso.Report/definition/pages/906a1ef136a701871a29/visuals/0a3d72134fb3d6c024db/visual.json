@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "0a3d72134fb3d6c024db",
   "position": {
-    "x": 970,
+    "x": 780,
     "y": 110,
     "z": 1200,
     "height": 110,
-    "width": 450,
+    "width": 360,
     "tabOrder": 1200
   },
   "visual": {
@@ -23,12 +23,12 @@
                       "Entity": "_medidas"
                     }
                   },
-                  "Property": "Revocação do Modelo"
+                  "Property": "Precisão do Modelo"
                 }
               },
-              "queryRef": "_medidas.Revocação do Modelo",
-              "nativeQueryRef": "Revocação",
-              "displayName": "Revocação"
+              "queryRef": "_medidas.Precisão do Modelo",
+              "nativeQueryRef": "Precisão",
+              "displayName": "Precisão"
             }
           ]
         }
@@ -202,10 +202,17 @@
                   "Value": "true"
                 }
               }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
             }
           },
           "selector": {
-            "metadata": "_medidas.Revocação do Modelo"
+            "metadata": "_medidas.Precisão do Modelo"
           }
         }
       ],

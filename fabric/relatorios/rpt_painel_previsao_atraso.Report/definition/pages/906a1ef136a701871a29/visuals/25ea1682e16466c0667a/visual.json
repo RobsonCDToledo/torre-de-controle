@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
-  "name": "cb7524d792327e4c443d",
+  "name": "25ea1682e16466c0667a",
   "position": {
-    "x": 1155,
+    "x": 1530,
     "y": 110,
-    "z": 1300,
+    "z": 1400,
     "height": 110,
     "width": 360,
-    "tabOrder": 1300
+    "tabOrder": 1400
   },
   "visual": {
     "visualType": "cardVisual",
@@ -23,12 +23,12 @@
                       "Entity": "_medidas"
                     }
                   },
-                  "Property": "Revocação do Modelo"
+                  "Property": "Atrasos Pegos por Previsão (Lift)"
                 }
               },
-              "queryRef": "_medidas.Revocação do Modelo",
-              "nativeQueryRef": "Revocação",
-              "displayName": "Revocação"
+              "queryRef": "_medidas.Atrasos Pegos por Previsão (Lift)",
+              "nativeQueryRef": "Lift sobre o acaso",
+              "displayName": "Lift sobre o acaso"
             }
           ]
         }
@@ -212,7 +212,7 @@
             }
           },
           "selector": {
-            "metadata": "_medidas.Revocação do Modelo"
+            "metadata": "_medidas.Atrasos Pegos por Previsão (Lift)"
           }
         }
       ],
