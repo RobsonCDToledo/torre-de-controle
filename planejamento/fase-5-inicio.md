@@ -84,12 +84,7 @@ corrigidos TopN invertido, `maxTiles`, cor das barras de nota, desvio de OTD em 
 máscara de `FORMAT` (commit `d83d99d`). O `.pbip` local do Desktop não abriu (erro de ligação ao
 modelo `byPath`, não diagnosticado); a edição seguiu pelo Fabric na web.
 
-**Pendências conhecidas, fora do escopo da fase:**
-- "UF Mais Crítica" aponta para UF de volume ínfimo (AM, 3 pedidos); falta um volume mínimo nas
-  4 medidas de UF crítica (candidata real pelo CSV: MA, 389 pedidos, OTD 81%).
-- Filtros Top N do Painel de Frete e Rotas usam `Direction: 1` (crescente); conferir se mostram
-  as rotas mais caras ou as mais baratas.
-- Lead time por mês sem visual de tendência (limitação aceita acima).
+**Lead time por mês** segue sem visual de tendência — limitação aceita, descrita na tabela acima.
 
 ## Decisões resolvidas no início da fase
 

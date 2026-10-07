@@ -379,6 +379,14 @@ de corte "Top N por volume" nos visuais de categoria de produto, e reaproveitada
 nas três medidas de ranking por categoria abaixo, em vez de repetir `CALCULATE(COUNTROWS(...))`
 inline três vezes.
 
+```dax
+Pedidos Entregues por Vendedor =
+CALCULATE([Pedidos Entregues], TREATAS(VALUES(fato_item_pedido[sk_pedido]), fato_entrega[sk_pedido]))
+```
+Formato: `#,0`. **Volume mínimo das medidas "UF Mais Crítica":** só entram no ranking UFs com pelo menos 100
+pedidos entregues. Sem esse corte, o menor OTD cai numa UF de 3 pedidos (um atraso vira 33% de queda) e
+o painel destaca ruído. O corte de 100 é uma escolha de projeto, não um teste estatístico.
+
 ### Cartão de insight — quem é a UF e a categoria mais críticas
 
 Mesma família de "medida de ranking → valor no ranking → comparativo → texto" da seção acima,
@@ -390,10 +398,11 @@ UF Mais Crítica (Vendedor) =
 VAR Ranking =
     ADDCOLUMNS(
         SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
-        "@OTD", [OTD % por Vendedor]
+        "@OTD", [OTD % por Vendedor],
+        "@Entregues", [Pedidos Entregues por Vendedor]
     )
 VAR Filtrado =
-    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]) && [@Entregues] >= 100)
 VAR Pior =
     TOPN(1, Filtrado, [@OTD], ASC)
 RETURN
@@ -407,10 +416,11 @@ OTD % da UF Mais Crítica =
 VAR Ranking =
     ADDCOLUMNS(
         SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
-        "@OTD", [OTD % por Vendedor]
+        "@OTD", [OTD % por Vendedor],
+        "@Entregues", [Pedidos Entregues por Vendedor]
     )
 VAR Filtrado =
-    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]) && [@Entregues] >= 100)
 RETURN
     MINX(Filtrado, [@OTD])
 ```
@@ -434,10 +444,11 @@ VAR Ranking =
     ADDCOLUMNS(
         SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
         "@OTD", [OTD % por Vendedor],
+        "@Entregues", [Pedidos Entregues por Vendedor],
         "@Atrasados", [Pedidos Atrasados por Vendedor]
     )
 VAR Filtrado =
-    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+    FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]) && [@Entregues] >= 100)
 VAR Pior =
     TOPN(1, Filtrado, [@OTD], ASC)
 RETURN

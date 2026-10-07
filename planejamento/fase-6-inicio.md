@@ -46,10 +46,3 @@ quantidade dessas entregas.
 ROC-AUC 0,716 no teste contra 0,622 do baseline; o top 10% de risco captura 22,9% dos atrasos (2,3× o
 acaso); precisão de 10% no limiar. Modelo **modesto**, com deriva temporal (7,8% de atraso no treino contra
 4,3% no teste) — números e leitura completos no `ADR-006`.
-
-## Pendências conhecidas, fora do escopo
-
-- Versão 2 do modelo com poda de atributos pela importância na **validação** (não no teste).
-- Calibração: a probabilidade superestima no período de teste; serve para ordenar, não como risco absoluto.
-- Texto do aviso do painel tem números fixos (7,8%, 4,3% e as datas do teste); atualizar se o modelo for retreinado.
-

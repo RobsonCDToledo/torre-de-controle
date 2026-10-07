@@ -441,6 +441,17 @@ table _medidas
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: e09f00b3-4d1f-4d76-a4f2-1bd5dc98e356
 
+	measure 'Pedidos Entregues por Vendedor' = ```
+
+				CALCULATE(
+					[Pedidos Entregues],
+					TREATAS(VALUES(fato_item_pedido[sk_pedido]), fato_entrega[sk_pedido])
+				)
+			```
+		formatString: #,0
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 8a3c1e52-6f0b-4d7e-9b21-5c4d0e7a1f36
+
 	measure 'Pedidos Atrasados por Vendedor' = ```
 			
 				CALCULATE(
@@ -475,10 +486,11 @@ table _medidas
 				VAR Ranking =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
-						"@OTD", [OTD % por Vendedor]
+						"@OTD", [OTD % por Vendedor],
+						"@Entregues", [Pedidos Entregues por Vendedor]
 					)
 				VAR Filtrado =
-					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]) && [@Entregues] >= 100)
 				VAR Pior =
 					TOPN(1, Filtrado, [@OTD], ASC)
 				RETURN
@@ -492,10 +504,11 @@ table _medidas
 				VAR Ranking =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
-						"@OTD", [OTD % por Vendedor]
+						"@OTD", [OTD % por Vendedor],
+						"@Entregues", [Pedidos Entregues por Vendedor]
 					)
 				VAR Filtrado =
-					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]) && [@Entregues] >= 100)
 				RETURN
 					MINX(Filtrado, [@OTD])
 			```
@@ -517,10 +530,11 @@ table _medidas
 					ADDCOLUMNS(
 						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
 						"@OTD", [OTD % por Vendedor],
+						"@Entregues", [Pedidos Entregues por Vendedor],
 						"@Atrasados", [Pedidos Atrasados por Vendedor]
 					)
 				VAR Filtrado =
-					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]))
+					FILTER(Ranking, NOT ISBLANK(dim_vendedor[uf]) && NOT ISBLANK([@OTD]) && [@Entregues] >= 100)
 				VAR Pior =
 					TOPN(1, Filtrado, [@OTD], ASC)
 				RETURN

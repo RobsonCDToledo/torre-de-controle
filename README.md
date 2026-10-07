@@ -185,8 +185,6 @@ Construído em seis fases, cada uma com entrega publicável. Acompanhe em
 - **Sem Q&A nativo.** Não suportado em Direct Lake; o vocabulário fica no dicionário de dados (`ADR-005`).
 - **Os dados e os relatórios vivem no workspace do Fabric.** O repositório guarda o código e as definições;
   reconstruir exige executar de novo o pipeline, o dataflow e os notebooks em um workspace com capacidade.
-- **"UF mais crítica" não tem volume mínimo**, então aponta para UFs de poucos pedidos (ver
-  `planejamento/fase-5-inicio.md`).
 - **Lead time por mês** não tem visual de tendência.
 - **O modelo de ML foi testado num período de menor atraso** (4,3%) que o de treino (7,8%).
 
