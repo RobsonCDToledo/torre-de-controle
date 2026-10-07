@@ -218,11 +218,6 @@ table _medidas
 
 		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
 
-	measure 'Quantidade de Itens' = COUNTROWS(fato_item_pedido)
-		formatString: #,0
-		displayFolder: Fato item pedido\Financeiro e Frete
-		lineageTag: 37467af9-bb9f-4bd8-9d7c-40c5e26b3974
-
 	measure 'Dias de Atraso (méd) por Vendedor' = ```
 			
 				CALCULATE(
@@ -236,57 +231,6 @@ table _medidas
 		formatString: #,0.0
 		displayFolder: Fato item pedido\Ponte Virtual
 		lineageTag: d978d479-7a24-4e29-a529-dd753283f40b
-
-	measure 'OTD % por Vendedor' = ```
-
-				CALCULATE(
-					[OTD %],
-					TREATAS(
-						VALUES(fato_item_pedido[sk_pedido]),
-						fato_entrega[sk_pedido]
-					)
-				)
-			```
-		formatString: #,0.0%;-#,0.0%;#,0.0%
-		displayFolder: Fato item pedido\Ponte Virtual
-		lineageTag: e09f00b3-4d1f-4d76-a4f2-1bd5dc98e356
-
-	measure 'Desvio OTD por Vendedor' = ```
-
-				IF(NOT ISBLANK([OTD % por Vendedor]), [OTD % por Vendedor] - [OTD %])
-			```
-		formatString: #,0.0%;-#,0.0%;#,0.0%
-		displayFolder: Fato item pedido\Ponte Virtual
-		lineageTag: da47f7ae-d647-45c3-8ba4-d7fddb1cbc14
-
-	measure 'Pedidos Atrasados por Vendedor' = ```
-
-				CALCULATE(
-					COUNTROWS(fato_entrega),
-					fato_entrega[dias_de_atraso] > 0,
-					TREATAS(
-						VALUES(fato_item_pedido[sk_pedido]),
-						fato_entrega[sk_pedido]
-					)
-				)
-			```
-		formatString: #,0
-		displayFolder: Fato item pedido\Ponte Virtual
-		lineageTag: 17a6bce7-5750-4947-9aa7-ccdbfe4dc713
-
-	measure 'Nota Média por Categoria' = ```
-
-				CALCULATE(
-					[Nota Média],
-					TREATAS(
-						VALUES(fato_item_pedido[sk_pedido]),
-						fato_entrega[sk_pedido]
-					)
-				)
-			```
-		formatString: #,0.00
-		displayFolder: Fato item pedido\Ponte Virtual
-		lineageTag: b2b090e5-364a-46b8-a78f-032dcc4a9c79
 
 	measure 'Lead Time Médio Format' = FORMAT([Lead Time Médio], "#.0 Dias")
 		isHidden
@@ -483,8 +427,51 @@ table _medidas
 		displayFolder: Fato item pedido\Insight Frete e Rotas
 		lineageTag: 614d9a9a-3285-4334-add0-23a25554ac68
 
-	measure 'UF Mais Crítica (Vendedor)' = ```
+	measure 'OTD % por Vendedor' = ```
+			
+				CALCULATE(
+					[OTD %],
+					TREATAS(
+						VALUES(fato_item_pedido[sk_pedido]),
+						fato_entrega[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: e09f00b3-4d1f-4d76-a4f2-1bd5dc98e356
 
+	measure 'Pedidos Atrasados por Vendedor' = ```
+			
+				CALCULATE(
+					COUNTROWS(fato_entrega),
+					fato_entrega[dias_de_atraso] > 0,
+					TREATAS(
+						VALUES(fato_item_pedido[sk_pedido]),
+						fato_entrega[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: 17a6bce7-5750-4947-9aa7-ccdbfe4dc713
+
+	measure 'Nota Média por Categoria' = ```
+			
+				CALCULATE(
+					[Nota Média],
+					TREATAS(
+						VALUES(fato_item_pedido[sk_pedido]),
+						fato_entrega[sk_pedido]
+					)
+				)
+			```
+		formatString: #,0.00
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: b2b090e5-364a-46b8-a78f-032dcc4a9c79
+
+	measure 'UF Mais Crítica (Vendedor)' = ```
+			
 				VAR Ranking =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
@@ -501,7 +488,7 @@ table _medidas
 		lineageTag: 58fb2f4d-92a0-4239-b75f-51bfb6c596e5
 
 	measure 'OTD % da UF Mais Crítica' = ```
-
+			
 				VAR Ranking =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
@@ -517,7 +504,7 @@ table _medidas
 		lineageTag: 01b617ff-8a36-4024-b8c1-fd1d76db23ae
 
 	measure 'Desvio OTD da UF Mais Crítica' = ```
-
+			
 				[OTD % da UF Mais Crítica] - [OTD %]
 			```
 		formatString: #,0.0%;-#,0.0%;#,0.0%
@@ -525,7 +512,7 @@ table _medidas
 		lineageTag: 1f15da8b-f77d-4a33-9d2c-3e4fa74ad68c
 
 	measure 'Pedidos Atrasados da UF Mais Crítica' = ```
-
+			
 				VAR Ranking =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_vendedor, dim_vendedor[uf]),
@@ -544,7 +531,7 @@ table _medidas
 		lineageTag: a878e232-84e7-4df0-9f51-cd920ba80a48
 
 	measure 'Categoria Mais Crítica (Nota)' = ```
-
+			
 				VAR RankingVolume =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
@@ -564,7 +551,7 @@ table _medidas
 		lineageTag: 503feef0-9bef-421e-b2a4-e08f716c77c6
 
 	measure 'Nota da Categoria Mais Crítica' = ```
-
+			
 				VAR RankingVolume =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
@@ -583,7 +570,7 @@ table _medidas
 		lineageTag: 61fa81b2-0a73-4251-8288-95f2a8d71c1a
 
 	measure 'Melhor Nota (Top 10 Categorias)' = ```
-
+			
 				VAR RankingVolume =
 					ADDCOLUMNS(
 						SUMMARIZE(dim_produto, dim_produto[categoria_rotulo]),
@@ -602,7 +589,7 @@ table _medidas
 		lineageTag: b420533b-0869-4bff-9904-701e2fc21232
 
 	measure 'Diferença Nota vs Melhor Categoria' = ```
-
+			
 				[Melhor Nota (Top 10 Categorias)] - [Nota da Categoria Mais Crítica]
 			```
 		formatString: #,0.00
@@ -610,7 +597,7 @@ table _medidas
 		lineageTag: af0b6d3a-a65b-49d5-8f11-3180c70f5da1
 
 	measure 'Insight Atribuição de Causas' = ```
-
+			
 				"A UF de origem " & [UF Mais Crítica (Vendedor)] & " é a mais crítica: " &
 				FORMAT([OTD % da UF Mais Crítica], "0.0%") & " de OTD, " &
 				FORMAT(ABS([Desvio OTD da UF Mais Crítica]) * 100, "0.0") & " pontos abaixo da média nacional, com " &
@@ -622,8 +609,21 @@ table _medidas
 		displayFolder: Fato item pedido\Insight Atribuição de Causas
 		lineageTag: 33a11c24-4e1e-494e-821e-6160cbf00955
 
-	measure 'Pedidos Avaliados (Teste)' = ```
+	measure 'Quantidade de Itens' = COUNTROWS(fato_item_pedido)
+		formatString: #,0
+		displayFolder: Fato item pedido\Financeiro e Frete
+		lineageTag: 37467af9-bb9f-4bd8-9d7c-40c5e26b3974
 
+	measure 'Desvio OTD por Vendedor' = ```
+			
+				IF(NOT ISBLANK([OTD % por Vendedor]), [OTD % por Vendedor] - [OTD %])
+			```
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Fato item pedido\Ponte Virtual
+		lineageTag: da47f7ae-d647-45c3-8ba4-d7fddb1cbc14
+
+	measure 'Pedidos Avaliados (Teste)' = ```
+			
 				CALCULATE(COUNTROWS(predicao_atraso), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
 			```
 		formatString: #,0
@@ -631,7 +631,7 @@ table _medidas
 		lineageTag: d20153df-564d-4b44-81a1-761e461cc1a6
 
 	measure 'Atrasos Reais (Teste)' = ```
-
+			
 				CALCULATE(SUM(predicao_atraso[atraso_real]), predicao_atraso[conjunto] = "teste")
 			```
 		formatString: #,0
@@ -639,7 +639,7 @@ table _medidas
 		lineageTag: a07a866f-b69b-4c9c-9ae9-d293ed7247b5
 
 	measure 'Atrasos Previstos (Teste)' = ```
-
+			
 				CALCULATE(SUM(predicao_atraso[previsao_atraso]), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
 			```
 		formatString: #,0
@@ -647,7 +647,7 @@ table _medidas
 		lineageTag: c281a0f0-6b96-41e1-9604-55ef1b561ac1
 
 	measure 'Atrasos Acertados (Teste)' = ```
-
+			
 				CALCULATE(COUNTROWS(predicao_atraso), predicao_atraso[conjunto] = "teste", predicao_atraso[previsao_atraso] = 1, predicao_atraso[atraso_real] = 1)
 			```
 		formatString: #,0
@@ -655,7 +655,7 @@ table _medidas
 		lineageTag: 526fd8c9-37fc-4eeb-963f-9be88417385f
 
 	measure 'Precisão do Modelo' = ```
-
+			
 				DIVIDE([Atrasos Acertados (Teste)], [Atrasos Previstos (Teste)])
 			```
 		formatString: #,0.0%
@@ -663,7 +663,7 @@ table _medidas
 		lineageTag: 1de51b18-1578-4f39-aab5-7dce2cdda99f
 
 	measure 'Revocação do Modelo' = ```
-
+			
 				DIVIDE([Atrasos Acertados (Teste)], [Atrasos Reais (Teste)])
 			```
 		formatString: #,0.0%
@@ -671,7 +671,7 @@ table _medidas
 		lineageTag: e940346c-e311-44ac-9e9e-17a188fae7dd
 
 	measure 'Taxa de Atraso Real (Teste)' = ```
-
+			
 				DIVIDE([Atrasos Reais (Teste)], [Pedidos Avaliados (Teste)])
 			```
 		formatString: #,0.0%
@@ -679,7 +679,7 @@ table _medidas
 		lineageTag: 86ccff8a-81ce-4ae1-8bf2-1907f7724dae
 
 	measure 'Probabilidade Média Prevista (Teste)' = ```
-
+			
 				CALCULATE(AVERAGE(predicao_atraso[probabilidade_atraso]), predicao_atraso[conjunto] = "teste", NOT ISBLANK(predicao_atraso[atraso_real]))
 			```
 		formatString: #,0.0%
@@ -687,7 +687,7 @@ table _medidas
 		lineageTag: 562fc5cb-b4b8-420d-950d-3d059e4c6b41
 
 	measure 'Atrasos Pegos por Previsão (Lift)' = ```
-
+			
 				DIVIDE([Precisão do Modelo], [Taxa de Atraso Real (Teste)])
 			```
 		formatString: #,0.0"×"

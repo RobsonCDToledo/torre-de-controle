@@ -101,4 +101,3 @@ table predicao_atraso
 			schemaName: dbo
 			expressionSource: 'DirectLake - lh_gold'
 
-	annotation PBI_ResultType = Table
