@@ -1,6 +1,6 @@
 # Fase 5 — plano de início
 
-**Status:** itens 1 a 4 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Item 5 implementado; falta a conferência visual no Power BI Desktop (ver abaixo). O escopo já
+**Status:** itens 1 a 4 concluídos (`ADR-003`, `ADR-004`, `ADR-005`). Item 5 implementado e conferido no Fabric — **fase 5 encerrada**. O escopo já
 está fechado em `cronograma.md` e `docs/00-arquitetura.md`; aqui é a ordem e as dependências
 entre as partes.
 
@@ -40,7 +40,7 @@ entre as partes.
 - Mockup em `design/mockups/FreteRotas.dc.html`, composição deliberadamente distinta do Painel
   Executivo (sem repetir a mesma grade de cards).
 
-### 5. Teste de aceite da fase — ✅ implementado, 🔎 conferência visual pendente
+### 5. Teste de aceite da fase — ✅ concluído
 
 Critério do `cronograma.md`: "um analista externo consegue responder uma pergunta nova sem
 pedir ajuda." **Papel do "analista externo" simulado por Claude**, usando só o material
@@ -79,11 +79,17 @@ reaproveitam a bridge `TREATAS` — ver `docs/02-replicar-funcoes-dax.md`.
 existe; falta só um visual de tendência (a evolução mensal do Painel Executivo mostra OTD, não
 lead time). O analista chega à resposta iterando o filtro de período, com um passo a mais.
 
-**Conferência pendente (só o Desktop faz):** o PBIR foi gerado e verificado por script (JSON
-válido, as 11 referências de medida existem no modelo), mas não foi aberto no Power BI Desktop.
-Antes de marcar a fase como fechada: abrir `rpt_painel_atribuicao_causas.pbip`, confirmar que os
-visuais renderizam sobre o fundo, que o top 3 e o top 10 filtram certo, e que os cartões de
-texto cabem. Ajustes finos de posição são esperados.
+**Conferência:** relatório publicado e revisado no Fabric após a primeira renderização. Foram
+corrigidos TopN invertido, `maxTiles`, cor das barras de nota, desvio de OTD em UF sem entrega e
+máscara de `FORMAT` (commit `d83d99d`). O `.pbip` local do Desktop não abriu (erro de ligação ao
+modelo `byPath`, não diagnosticado); a edição seguiu pelo Fabric na web.
+
+**Pendências conhecidas, fora do escopo da fase:**
+- "UF Mais Crítica" aponta para UF de volume ínfimo (AM, 3 pedidos); falta um volume mínimo nas
+  4 medidas de UF crítica (candidata real pelo CSV: MA, 389 pedidos, OTD 81%).
+- Filtros Top N do Painel de Frete e Rotas usam `Direction: 1` (crescente); conferir se mostram
+  as rotas mais caras ou as mais baratas.
+- Lead time por mês sem visual de tendência (limitação aceita acima).
 
 ## Decisões resolvidas no início da fase
 

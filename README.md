@@ -155,7 +155,7 @@ Construído em seis fases, cada uma com entrega publicável. Acompanhe em
 - [x] **Fase 2** · Silver — Dataflow Gen2, tipagem, limpeza, regras de qualidade
 - [x] **Fase 3** · Gold — notebook, esquema estrela, dimensão calendário
 - [x] **Fase 4** · Semântica — Direct Lake, medidas DAX, Painel Executivo
-- [ ] **Fase 5** · Self-service — RLS, endosso, dicionário, perguntas nativas, Painel de Frete
+- [x] **Fase 5** · Self-service — RLS, endosso, dicionário, Q&A avaliado (ADR-005), painéis de Frete e de Atribuição de Causas
 - [ ] **Fase 6** · ML — engenharia de atributos, modelo, MLflow, escrita na gold
 
 ---
