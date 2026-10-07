@@ -1,6 +1,6 @@
 # Torre de Controle
 
-**Plataforma de dados end-to-end em Microsoft Fabric para visibilidade logística.**
+**Plataforma de dados end-to-end em Microsoft Fabric para visibilidade logística.** Projeto concluído em outubro de 2026.
 
 Da ingestão de arquivos brutos até painéis executivos, ambiente de self-service e um
 modelo de predição de atraso de entrega — com arquitetura medalhão, modelo semântico em
@@ -139,7 +139,7 @@ torre-de-controle/
 │   ├── dataflows/         Dataflow Gen2 (bronze → silver)
 │   ├── notebooks/         gold e machine learning
 │   ├── modelos-semanticos/  modelo Direct Lake em TMDL
-│   └── relatorios/        relatórios em PBIR
+│   └── relatorios/        4 relatórios em PBIR: Executivo, Frete e Rotas, Atribuição de Causas, Previsão de Atraso
 ├── scripts/               utilitários locais de preparo de dados
 └── planejamento/          cronograma e escopo por fase
 ```
@@ -157,6 +157,38 @@ Construído em seis fases, cada uma com entrega publicável. Acompanhe em
 - [x] **Fase 4** · Semântica — Direct Lake, medidas DAX, Painel Executivo
 - [x] **Fase 5** · Self-service — RLS, endosso, dicionário, Q&A avaliado (ADR-005), painéis de Frete e de Atribuição de Causas
 - [x] **Fase 6** · ML — atributos sem vazamento, modelo no MLflow, `predicao_atraso` na gold e painel de previsto × realizado
+
+---
+
+## Resultados
+
+- **Modelo dimensional:** 2 fatos (pedido e item de pedido) e 5 dimensões, 99.441 pedidos, validado contra a origem.
+- **Um modelo semântico, quatro relatórios:** Direct Lake sobre a gold, com RLS por UF de origem do vendedor.
+- **Predição de atraso no instante da compra:** ROC-AUC 0,716 no teste contra 0,622 do baseline; o top 10% de
+  risco captura 22,9% dos atrasos (2,3× o acaso). É um modelo **modesto**, e o repositório diz isso:
+  precisão de 10% no limiar, e a probabilidade serve para ordenar pedidos, não como risco absoluto.
+  Detalhes e leitura completa no [ADR-006](docs/decisoes/ADR-006-ml-sem-vazamento-e-divisao-temporal.md).
+
+## Decisões de arquitetura
+
+| ADR | Decisão |
+|---|---|
+| [001](docs/decisoes/ADR-001-ferramenta-por-camada.md) | Uma ferramenta por camada |
+| [002](docs/decisoes/ADR-002-nota-do-pedido.md) | A nota do pedido é a avaliação mais recente |
+| [003](docs/decisoes/ADR-003-uf-de-origem-do-pedido.md) | UF de origem construída na gold |
+| [004](docs/decisoes/ADR-004-rls-por-uf-de-origem.md) | RLS por UF de origem, não de destino |
+| [005](docs/decisoes/ADR-005-qa-nao-suportado-em-direct-lake.md) | Q&A não é suportado em Direct Lake |
+| [006](docs/decisoes/ADR-006-ml-sem-vazamento-e-divisao-temporal.md) | Modelo de atraso sem vazamento, com divisão temporal |
+
+## Limitações conhecidas
+
+- **Sem Q&A nativo.** Não suportado em Direct Lake; o vocabulário fica no dicionário de dados (`ADR-005`).
+- **Os dados e os relatórios vivem no workspace do Fabric.** O repositório guarda o código e as definições;
+  reconstruir exige executar de novo o pipeline, o dataflow e os notebooks em um workspace com capacidade.
+- **"UF mais crítica" não tem volume mínimo**, então aponta para UFs de poucos pedidos (ver
+  `planejamento/fase-5-inicio.md`).
+- **Lead time por mês** não tem visual de tendência.
+- **O modelo de ML foi testado num período de menor atraso** (4,3%) que o de treino (7,8%).
 
 ---
 

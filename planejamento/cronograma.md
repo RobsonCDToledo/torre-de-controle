@@ -69,8 +69,6 @@ previsto e realizado no painel.
 
 ## Fechamento
 
-Com as seis fases concluídas: README final revisado, projeto adicionado à seção **Projetos**
-do LinkedIn com link para o repositório, e uma entrada no portfólio existente.
-
-O banco de temas do plano de recolocação ganha seis posts prontos, um por fase — o que
-resolve seis semanas de conteúdo sem esforço adicional.
+**Status: seis fases concluídas em 07/10/2026.** README final revisado, com resultados, ADRs e
+limitações. Pendente fora do repositório: projeto na seção **Projetos** do LinkedIn, com link para o
+repositório, e entrada no portfólio existente.
