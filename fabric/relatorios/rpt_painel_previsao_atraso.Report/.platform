@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "rpt_painel_previsao_atraso"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "917ef347-1d0b-4f0d-b1f8-498c8f106e17"
+  }
+}

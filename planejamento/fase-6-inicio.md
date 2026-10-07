@@ -21,11 +21,11 @@ Fabric tinha 11 dias restantes em 07/10/2026, o que dá até ~18/10/2026. Tudo q
 - `predicao_atraso` no dicionário de dados, com o aviso do `conjunto`.
 - ADR da regra de vazamento e da divisão temporal, com números reais da execução.
 
-### 3. Levar a predição ao modelo semântico — 🔄 TMDL escrito, falta sincronizar e validar
+### 3. Levar a predição ao modelo semântico — ✅ sincronizado no Fabric sem erro
 - Tabela `predicao_atraso` no modelo, relacionamento com `fato_entrega[sk_pedido]` (1:1), medidas
   de probabilidade média, atrasos previstos, precisão e revocação, sempre filtradas em `teste`.
 
-### 4. Painel de comparação previsto × realizado
+### 4. Painel de comparação previsto × realizado — 🔄 `rpt_painel_previsao_atraso` gerado, falta conferir no Fabric
 - Página nova no relatório existente ou relatório próprio, seguindo "um modelo, muitos relatórios".
 
 ## Atributos (14 numéricos + 3 categóricos)
